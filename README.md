@@ -12,10 +12,7 @@ As we are working with NLP, we will use the [Transformers framework](https://git
 ##### Data:  
 We will be using the [data set](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/data). The data consists of 1375 esssays written by students. Initially, we will simply augment the data set by using the openAI api
 
-
-
-
- The data is available in .csv format (4.43 MB).  The training set is then augmented by using       
+The data is available in .csv format (4.43 MB).  The training set is then augmented by using       
 
 Each row in the dataset contains:
 
