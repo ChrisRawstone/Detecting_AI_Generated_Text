@@ -4,7 +4,7 @@
 Christian Raasteen s204148 - Christoffer Wejendorp s204090 - Jasmin Thari s204155 - Johanne Franck s204088
 
 ##### Goal of project: 
-The goal of the project is to use natural language processing to solve a binary classification task to detecting whether a text is AI generated or not.
+The goal of the project is to use natural language processing to solve a binary classification task to detect whether a text is AI generated or not.
 
 ##### Framework: 
 As we are working with NLP, we will use the [Transformers framework](https://github.com/huggingface/transformers) from the Huggingface group. As a starting point we intend to use one of the many pretrained models in the Framework on our data and then further improve the model performance.
