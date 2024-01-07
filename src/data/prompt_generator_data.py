@@ -1,9 +1,14 @@
-import openai
 import pandas as pd
 import random
 import logging
 from rich.logging import RichHandler
 import json
+from openai import OpenAI
+from tenacity import (
+    retry,
+    stop_after_attempt,
+    wait_random_exponential,
+)  # for exponential backoff
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -11,6 +16,11 @@ logger.setLevel(logging.INFO)
 rich_handler = RichHandler(markup=True)
 rich_handler.setFormatter(logging.Formatter("%(message)s"))  
 logger.addHandler(rich_handler)
+
+# Handlings api errors
+@retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
+def completion_with_backoff(**kwargs):
+    return client.chat.completions.create(**kwargs)
 
 def prompt_data(api_key: str, df_prompt_meta : pd.DataFrame, df_train_data : pd.DataFrame, number_of_prompts : int):
     """
@@ -26,7 +36,7 @@ def prompt_data(api_key: str, df_prompt_meta : pd.DataFrame, df_train_data : pd.
 		saves a csv file with the generated prompts and labels
     """
     
-    openai.api_key = api_key
+    
     AI_Generated_df = pd.DataFrame({'generated_text': [], 'generated': [], 'prompt_id': []})
 
     for i, row in df_train_data.iterrows():
@@ -39,30 +49,20 @@ def prompt_data(api_key: str, df_prompt_meta : pd.DataFrame, df_train_data : pd.
         
         logger.info('--------------------------------------------------------------')
         logger.info("Generating prompt for essay " + str(i) + " of " + str(number_of_prompts)+ " prompts")
-        logger.info('--------------------------------------------------------------')
 
-        if row['prompt_id'] == 0:
-            source_text = df_prompt_meta['source_text'][0]
-            prompt = df_prompt_meta['instructions'][0]
-        else:
-            source_text = df_prompt_meta['source_text'][1]
-            prompt = df_prompt_meta['instructions'][1]
+
+        student_essay = df_train_data["text"][i]
         
-        full_prompt = source_text + "\n" + prompt
+        full_prompt = "A student wrote an essay:\n" + student_essay + "\n" + "Please continue this essay:"
         
         logger.debug("Prompt ID: " + str(row['prompt_id']))
         
-        # Generate completion using OpenAI's API
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": "user",
-                    "content": full_prompt,
-                },
-                
-            ],
-            temperature=0.9999
+
+        # Generate completion using OpenAI's API 
+        completion = completion_with_backoff(
+            model="gpt-3.5-turbo", # Either gpt-4-1106-preview or gpt-3.5-turbo
+            messages=[{"role": "user", "content": full_prompt}],
+            temperature=0.99,
         )
 
         output = completion.choices[0].message.content
@@ -71,16 +71,16 @@ def prompt_data(api_key: str, df_prompt_meta : pd.DataFrame, df_train_data : pd.
         # Add the generated output to the DataFrame
         new_df = pd.DataFrame({'generated_text': [output], 'generated': [1], 'prompt_id': [row['prompt_id']]})
         AI_Generated_df = pd.concat([AI_Generated_df, new_df], ignore_index=True)
-        AI_Generated_df.to_csv('data/raw/AI_Generated_df.csv', index=False)
+        AI_Generated_df.to_csv('data/raw/generated_data/AI_Generated_df.csv', index=False)
 
-        logger.info('--------------------------------------------------------------')
-        logger.info(f"output:\n{output}")
+        logger.info(f"\n{output}")
 
 
 if __name__ == '__main__':
 
     df_prompt_meta = pd.read_csv('data/raw/train_prompts.csv')
     df_train_data = pd.read_csv('data/raw/train_essays.csv')
+    
     
     try: 
         json_file_path = "api_key.json"
@@ -91,7 +91,9 @@ if __name__ == '__main__':
         print("No api_key.json file found. Please create a file with your OpenAI API key and save it as api_key.json in the root folder.")
 
     number_of_prompts = 1375
-    
+
+    client = OpenAI(api_key=api_key)
+
     prompt_data(api_key=api_key, df_prompt_meta=df_prompt_meta, df_train_data = df_train_data, number_of_prompts = number_of_prompts)
 
     
