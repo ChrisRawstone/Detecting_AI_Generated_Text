@@ -4,17 +4,18 @@ from datasets import load_dataset, load_metric
 import torch
 import numpy as np
 from accelerate import Accelerator  # Import the Accelerator class
-# import hydra
+import hydra
 
 
-#@hydra.main(config_path="conf", config_name="config")
 
-def main():
-    
+@hydra.main(config_path="config", config_name="default_config.yaml")
+def main(config):    
     # Check if CUDA is available
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    device = torch.device('mps') if torch.backends.mps.is_available() else torch.device('cpu')
+    # device = torch.device('mps') if torch.backends.mps.is_available() else torch.device('cpu')
     print(f'Using device: {device}')
+
+    parameters = config.experiment
 
     # Load the tokenizer
     tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
@@ -35,22 +36,22 @@ def main():
     test_dataset = test_dataset.map(tokenize_and_format, batched=True)
 
     # Load the model
-    model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
+    model = DistilBertForSequenceClassification.from_pretrained(parameters.model_args.model_type, num_labels=parameters.model_args.num_labels)
     model.to(device)
 
-    # Define training arguments
-    #@hydre
-   
-    training_args = TrainingArguments(
-        output_dir='./results',
-        num_train_epochs=3,
-        per_device_train_batch_size=16,
-        per_device_eval_batch_size=64,
-        warmup_steps=500,
-        weight_decay=0.01,
-        logging_dir='./logs',
-        logging_steps=10,
-    )
+    training_args = TrainingArguments(parameters.training_args)
+
+    # Define training arguments       
+    # training_args = TrainingArguments(
+    #     output_dir='./results',
+    #     num_train_epochs=parameters.num_train_epochs,
+    #     per_device_train_batch_size=16,
+    #     per_device_eval_batch_size=64,
+    #     warmup_steps=500,
+    #     weight_decay=0.01,
+    #     logging_dir='./logs',
+    #     logging_steps=10,
+    # )
 
     # Define the Trainer
     trainer = Trainer(
@@ -65,10 +66,6 @@ def main():
 
     # Evaluate the model
     trainer.evaluate()
-
-
-
-
 
 
 if __name__ == '__main__':
