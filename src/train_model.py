@@ -4,6 +4,8 @@ import torch
 import numpy as np
 from accelerate import Accelerator  # Import the Accelerator class
 import hydra
+from hydra.utils import get_original_cwd 
+import os
 
 metric = load_metric("accuracy")
 
@@ -14,7 +16,7 @@ def compute_metrics(eval_pred):
     print(f"Accuracy: {accuracy['accuracy']}")
     return accuracy
 
-@hydra.main(config_path="config", config_name="default_config.yaml")
+@hydra.main(config_path="config", config_name="default_config.yaml",)
 def main(config):    
     # Check if CUDA is available
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -25,12 +27,10 @@ def main(config):
 
     model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.cls, num_labels=parameters.model_settings.num_labels)
 
-
     # Load only 100 rows of data from the CSV files
-    train_dataset = load_from_disk('data/processed/train_dataset_tokenized')
-    test_dataset = load_from_disk('data/processed/test_dataset_tokenized')
-
-
+    path_to_data = os.path.join(get_original_cwd(), 'data/processed')
+    train_dataset = load_from_disk(os.path.join(path_to_data,"train_dataset_tokenized"))
+    test_dataset = load_from_disk(os.path.join(path_to_data,"test_dataset_tokenized"))
 
     # Load the model
     model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
@@ -88,8 +88,6 @@ def main(config):
 
     # Evaluate the model
     trainer.evaluate()
-
-
 
 if __name__ == '__main__':
     main()
