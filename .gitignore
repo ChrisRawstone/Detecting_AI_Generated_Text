@@ -177,3 +177,5 @@ cython_debug/
 #.idea/
 
 api_key.json
+/data
+notebooks/exploration_of_data.ipynb
