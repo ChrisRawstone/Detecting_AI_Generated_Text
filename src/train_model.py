@@ -58,5 +58,10 @@ def main(config):
     
 
 if __name__ == '__main__':
+    wandb_enabled = True
+    if wandb_enabled:
+        import wandb
+        wandb.init(project="MLOps-DetectAIText",entity="teamdp")
+
     main()
 
