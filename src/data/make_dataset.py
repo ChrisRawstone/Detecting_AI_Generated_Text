@@ -33,6 +33,7 @@ def get_data(sample_size: int = None):
     df.reset_index(inplace=True, drop=True)
     # create key from index
     df["key"] = df.index
+    df['generated'] = df['generated'].astype(int)
 
     # Sample the data if needed
     if sample_size:
