@@ -40,10 +40,13 @@ def get_data(sample_size: int = None):
         df = df.sample(sample_size, random_state=42)
 
     # Split the data into train and test with sklearn
-    X_train, X_test = train_test_split(df[['text','generated']], test_size=0.2, random_state=42)
+    X_train, X_temp = train_test_split(df[['text','generated']], test_size=0.2, random_state=42)
+    X_val, X_test = train_test_split(X_temp, test_size=0.5, random_state=42)
+
 
     X_train.to_csv("data/processed/train.csv", index=False)
     X_test.to_csv("data/processed/test.csv", index=False)
+    X_val.to_csv("data/processed/validation.csv", index=False)
 
 def tokenize_and_format(data: Dataset):
     """This function tokenizes the data and formats it for the model
@@ -79,14 +82,17 @@ def make_dataset(sample_size):
     # Load datasets
     train_dataset = load_dataset('csv', data_files='data/processed/train.csv')['train']
     test_dataset = load_dataset('csv', data_files='data/processed/test.csv')['train']
+    val_dataset = load_dataset('csv', data_files='data/processed/validation.csv')['train']
 
     # Tokenize datasets
     train_dataset = train_dataset.map(tokenize_and_format, batched=True)
     test_dataset = test_dataset.map(tokenize_and_format, batched=True)
+    val_dataset = val_dataset.map(tokenize_and_format, batched=True)
 
     # Save the datasets
     train_dataset.save_to_disk('data/processed/train_dataset_tokenized')
     test_dataset.save_to_disk('data/processed/test_dataset_tokenized')
+    val_dataset.save_to_disk('data/processed/val_dataset_tokenized')
 
 if __name__ == '__main__':
     # Get the data and process it
