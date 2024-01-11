@@ -1,0 +1,2 @@
+defaults:
+    - experiment: debug_hparams

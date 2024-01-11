@@ -179,3 +179,4 @@ cython_debug/
 api_key.json
 /data
 notebooks/exploration_of_data.ipynb
+/outputs
