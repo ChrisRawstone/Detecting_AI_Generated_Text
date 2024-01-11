@@ -14,13 +14,6 @@ def compute_metrics(eval_pred):
     print(f"Accuracy: {accuracy['accuracy']}")
     return accuracy
 
-
-
-
-def main():
-    
-
-
 @hydra.main(config_path="config", config_name="default_config.yaml")
 def main(config):    
     # Check if CUDA is available
