@@ -5,22 +5,21 @@ import pandas as pd
 
 def predict(
     model: torch.nn.Module,
-    file_path: str,
+    df: pd.DataFrame,
 ) -> None:
     """Run prediction for a given model and dataloader.
     
     Args:
         model: model to use for prediction
-        dataloader: dataloader with batches
+        dataframe: dataframe with a column 'text' containing the text to predict on
     
     Returns
         Tensor of shape [N] where N is the number of samples
-
     """
 
     predictions = []
 
-    for index, row in test_csv.iterrows():
+    for index, row in df.iterrows():
         text = row['text'] 
         inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True, max_length=512, return_token_type_ids=False).to(device) # REMEMBER TO CHANGE TO
         
@@ -30,7 +29,7 @@ def predict(
         # Assuming it's binary classification (2 labels)
         probabilities = torch.softmax(logits, dim=1)
         predicted_label = torch.argmax(probabilities, dim=1).item()
-        print(predicted_label)
+
         predictions.append(predicted_label)
 
     return predictions
