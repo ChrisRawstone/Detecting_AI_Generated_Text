@@ -2,10 +2,18 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from transformers import DistilBertTokenizerFast
 from datasets import load_dataset, Dataset
+import click
 
-def get_data():
+@click.group()
+def cli():
+    """Command line interface."""
+    pass
+
+def get_data(sample_size: int = None):
     """This function gets the generated and human data from the raw folder, concats them and splits them into train and test
-
+    Args:
+        sample_size (int, optional): Sample size of the data. Defaults to None.
+    
     Returns:
         X_train: train data
         X_test: test data
@@ -25,6 +33,10 @@ def get_data():
     df.reset_index(inplace=True, drop=True)
     # create key from index
     df["key"] = df.index
+
+    # Sample the data if needed
+    if sample_size:
+        df = df.sample(sample_size, random_state=42)
 
     # Split the data into train and test with sklearn
     X_train, X_test = train_test_split(df[['text','generated']], test_size=0.2, random_state=42)
@@ -50,9 +62,18 @@ def tokenize_and_format(data: Dataset):
     
     return tokenized_inputs
 
-def make_dataset():
+
+@click.command()
+@click.option("--sample_size", type=int, default=None, help="sample size")
+def make_dataset(sample_size):
     """Makes the dataset by getting the data, tokenizing it and saving it to disk
+    
+    Args:
+        sample_size (int, optional): Sample size of the data. Defaults to None.
     """
+
+    # Get the data
+    get_data(sample_size)
 
     # Load datasets
     train_dataset = load_dataset('csv', data_files='data/processed/train.csv')['train']
