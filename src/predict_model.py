@@ -18,8 +18,7 @@ def predict_dataframe(
         probabilities: boolean flag whether to return 
     
     Returns
-        Tensor of shape [N, d] where N is the number of samples and d is the output dimension of the model
-
+        Tensor of shape [N] where N is the number of samples
     """
 
     predictions = []

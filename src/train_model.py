@@ -1,64 +1,56 @@
-
-from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification, Trainer, TrainingArguments
-from datasets import load_dataset, load_metric
-import torch
 import numpy as np
-from accelerate import Accelerator  # Import the Accelerator class
-# import hydra
+from datetime import datetime as dt
+import os
+import torch
+from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
+from datasets import load_dataset, load_metric, load_from_disk
 
+import hydra
+from hydra.utils import get_original_cwd 
+hydra_logger = hydra.utils.log # Use Hydra logger for logging
 
-#@hydra.main(config_path="conf", config_name="config")
+# Load metric for evaluation
+metric = load_metric("accuracy")
 
-def main():
-    
-    # Check if CUDA is available
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    device = torch.device('mps') if torch.backends.mps.is_available() else torch.device('cpu')
-    print(f'Using device: {device}')
+def compute_metrics(eval_pred):
+    logits, labels = eval_pred
+    predictions = np.argmax(logits, axis=-1)
+    accuracy = metric.compute(predictions=predictions, references=labels)
+    hydra_logger.info(f"Accuracy: {accuracy['accuracy']}")
+    return accuracy
 
-    # Load the tokenizer
-    tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
+@hydra.main(config_path="config", config_name="default_config.yaml",)
+def main(config):   
+    device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
+    hydra_logger.info(f"Using device: {device}")
 
-    # Function to tokenize the input texts
-    def tokenize_and_format(examples):
-        # Tokenize the inputs and add the labels
-        tokenized_inputs = tokenizer(examples['text'], padding='max_length', truncation=True)
-        tokenized_inputs['labels'] = examples['generated']
-        return tokenized_inputs
+    parameters = config.experiment
+    model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.cls, num_labels=parameters.model_settings.num_labels)
 
-    # Load datasets
-    train_dataset = load_dataset('csv', data_files='data/processed/train.csv')['train']
-    test_dataset = load_dataset('csv', data_files='data/processed/test.csv')['train']
-
-    # Tokenize datasets
-    train_dataset = train_dataset.map(tokenize_and_format, batched=True)
-    test_dataset = test_dataset.map(tokenize_and_format, batched=True)
+    wandb_enabled = True
+    if wandb_enabled:
+        import wandb
+        wandb.init(project="MLOps-DetectAIText",entity="teamdp",name=config.experiment.timestamp)
+    else:
+        wandb.init(mode="disabled")
+    # Load only 100 rows of data from the CSV files
+    path_to_data = os.path.join(get_original_cwd(), 'data/processed')
+    train_dataset = load_from_disk(os.path.join(path_to_data,"train_dataset_tokenized"))
+    val_dataset = load_from_disk(os.path.join(path_to_data,"val_dataset_tokenized"))
 
     # Load the model
     model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
     model.to(device)
 
-    # Define training arguments
-    #@hydre
-   
-    training_args = TrainingArguments(
-        output_dir='./results',
-        num_train_epochs=3,
-        per_device_train_batch_size=16,
-        per_device_eval_batch_size=64,
-        warmup_steps=500,
-        weight_decay=0.01,
-        logging_dir='./logs',
-        logging_steps=10,
-    )
+    training_args = TrainingArguments(**parameters.training_args)
 
     # Define the Trainer
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
-        eval_dataset=test_dataset
-    )
+        eval_dataset=val_dataset,
+        compute_metrics=compute_metrics)
 
     # Train the model
     trainer.train()
@@ -66,13 +58,13 @@ def main():
     # Evaluate the model
     trainer.evaluate()
 
-
-
-
-
+    #timestamp = dt.now().strftime("%Y%m%d%H%M%S")
+    trainer.save_model("models/model.pt")
+    trainer.save_model("../../latest/model.pt")
+    
 
 if __name__ == '__main__':
 
+
     main()
 
-    
