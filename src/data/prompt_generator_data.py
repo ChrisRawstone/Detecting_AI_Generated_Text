@@ -55,6 +55,8 @@ def prompt_data(api_key : str, df_prompt_meta : pd.DataFrame, df_train_data : pd
 
         student_essay = df_train_data["text"][i]
         
+        ["Professionally","Humanly"]
+
         full_prompt = "A student wrote an essay:\n" + student_essay + "\n" + "Please continue this essay:"
         
         logger.debug("Prompt ID: " + str(row['prompt_id']))
@@ -69,7 +71,6 @@ def prompt_data(api_key : str, df_prompt_meta : pd.DataFrame, df_train_data : pd
         )
 
         output = completion.choices[0].message.content
-
 
         # Add the generated output to the DataFrame
         new_df = pd.DataFrame({'generated_text': [output], 'generated': [1], 'prompt_id': [row['prompt_id']]})

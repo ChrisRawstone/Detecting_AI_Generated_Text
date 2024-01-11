@@ -179,3 +179,8 @@ cython_debug/
 api_key.json
 /data
 notebooks/exploration_of_data.ipynb
+/outputs
+results
+wandb
+models
+notebooks/training_model_test.ipynb
