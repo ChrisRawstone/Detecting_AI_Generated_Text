@@ -27,6 +27,12 @@ def main(config):
     parameters = config.experiment
     model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.cls, num_labels=parameters.model_settings.num_labels)
 
+    wandb_enabled = True
+    if wandb_enabled:
+        import wandb
+        wandb.init(project="MLOps-DetectAIText",entity="teamdp",name=config.experiment.timestamp)
+    else:
+        wandb.init(mode="disabled")
     # Load only 100 rows of data from the CSV files
     path_to_data = os.path.join(get_original_cwd(), 'data/processed')
     train_dataset = load_from_disk(os.path.join(path_to_data,"train_dataset_tokenized"))
@@ -58,10 +64,7 @@ def main(config):
     
 
 if __name__ == '__main__':
-    wandb_enabled = True
-    if wandb_enabled:
-        import wandb
-        wandb.init(project="MLOps-DetectAIText",entity="teamdp")
+
 
     main()
 
