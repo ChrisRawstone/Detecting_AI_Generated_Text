@@ -17,14 +17,14 @@ rich_handler = RichHandler(markup=True)
 rich_handler.setFormatter(logging.Formatter("%(message)s"))  
 logger.addHandler(rich_handler)
 
-# Handlings api errors
+# Handlings api errorss
 @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
-def completion_with_backoff(**kwargs):
+def completion_with_backoff(client,**kwargs):
     return client.chat.completions.create(**kwargs)
 
-def prompt_data(api_key: str, df_prompt_meta : pd.DataFrame, df_train_data : pd.DataFrame, number_of_prompts : int):
+def prompt_data(api_key : str, df_prompt_meta : pd.DataFrame, df_train_data : pd.DataFrame, number_of_prompts : int, starting_position : int = 0, csv_file_name : str = 'data/raw/generated_data/AI_Generated_df.csv'):
     """
-    promt_data generates a prompt for each essay in the training data and returns a DataFrame with the generated prompt and the label
+    promt_data generates a prompt for each essay in the training data and saves a DataFrame with the generated prompt and the label
 
 	Parameters:
 		api_key (str): Key for OpenAI API
@@ -33,11 +33,13 @@ def prompt_data(api_key: str, df_prompt_meta : pd.DataFrame, df_train_data : pd.
         number_of_prompts (int): Number of prompts to generate
 
 	Returns:
-		saves a csv file with the generated prompts and labels
+		None
     """
-    
+
+    client = OpenAI(api_key=api_key) 
     
     AI_Generated_df = pd.DataFrame({'generated_text': [], 'generated': [], 'prompt_id': []})
+
 
     for i, row in df_train_data.iterrows():
 
@@ -58,8 +60,9 @@ def prompt_data(api_key: str, df_prompt_meta : pd.DataFrame, df_train_data : pd.
         logger.debug("Prompt ID: " + str(row['prompt_id']))
         
 
-        # Generate completion using OpenAI's API 
+        # Generate completion using OpenAI's API    
         completion = completion_with_backoff(
+            client=client,
             model="gpt-3.5-turbo", # Either gpt-4-1106-preview or gpt-3.5-turbo
             messages=[{"role": "user", "content": full_prompt}],
             temperature=0.99,
@@ -71,7 +74,7 @@ def prompt_data(api_key: str, df_prompt_meta : pd.DataFrame, df_train_data : pd.
         # Add the generated output to the DataFrame
         new_df = pd.DataFrame({'generated_text': [output], 'generated': [1], 'prompt_id': [row['prompt_id']]})
         AI_Generated_df = pd.concat([AI_Generated_df, new_df], ignore_index=True)
-        AI_Generated_df.to_csv('data/raw/generated_data/AI_Generated_df.csv', index=False)
+        AI_Generated_df.to_csv(csv_file_name, index=False)
 
         logger.info(f"\n{output}")
 
@@ -94,6 +97,5 @@ if __name__ == '__main__':
 
     client = OpenAI(api_key=api_key)
 
-    prompt_data(api_key=api_key, df_prompt_meta=df_prompt_meta, df_train_data = df_train_data, number_of_prompts = number_of_prompts)
-
+    prompt_data(api_key=api_key, df_prompt_meta=df_prompt_meta, df_train_data = df_train_data, number_of_prompts = number_of_prompts, starting_position=1000)
     
