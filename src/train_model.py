@@ -17,29 +17,34 @@ def main(config):
 
     parameters = config.experiment
 
-    # Load the tokenizer
-    tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
-
-    # Function to tokenize the input texts
-    def tokenize_and_format(examples):
-        # Tokenize the inputs and add the labels
-        tokenized_inputs = tokenizer(examples['text'], padding='max_length', truncation=True)
-        tokenized_inputs['labels'] = examples['generated']
-        return tokenized_inputs
-
-    # Load datasets
-    train_dataset = load_dataset('csv', data_files='data/processed/train.csv')['train']
-    test_dataset = load_dataset('csv', data_files='data/processed/test.csv')['train']
-
-    # Tokenize datasets
-    train_dataset = train_dataset.map(tokenize_and_format, batched=True)
-    test_dataset = test_dataset.map(tokenize_and_format, batched=True)
-
-    # Load the model
-    model = DistilBertForSequenceClassification.from_pretrained(parameters.model_args.model_type, num_labels=parameters.model_args.num_labels)
+    model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.cls, num_labels=parameters.model_settings.num_labels)
     model.to(device)
 
-    training_args = TrainingArguments(parameters.training_args)
+    training_args = TrainingArguments(**parameters.training_args)
+
+    # Load the tokenizer
+    # tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
+    #
+    # # Function to tokenize the input texts
+    # def tokenize_and_format(examples):
+    #     # Tokenize the inputs and add the labels
+    #     tokenized_inputs = tokenizer(examples['text'], padding='max_length', truncation=True)
+    #     tokenized_inputs['labels'] = examples['generated']
+    #     return tokenized_inputs
+    #
+    # # Load datasets
+    # train_dataset = load_dataset('csv', data_files='data/processed/train.csv')['train']
+    # test_dataset = load_dataset('csv', data_files='data/processed/test.csv')['train']
+    #
+    # # Tokenize datasets
+    # train_dataset = train_dataset.map(tokenize_and_format, batched=True)
+    # test_dataset = test_dataset.map(tokenize_and_format, batched=True)
+    #
+    # # Load the model
+    # model = DistilBertForSequenceClassification.from_pretrained(parameters.model_args.model_type, num_labels=parameters.model_args.num_labels)
+    # model.to(device)
+    #
+    # training_args = TrainingArguments(parameters.training_args)
 
     # Define training arguments       
     # training_args = TrainingArguments(
