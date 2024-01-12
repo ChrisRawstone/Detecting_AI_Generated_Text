@@ -1,6 +1,6 @@
 outs:
 - hash: md5
-  path: latest
+  path: model/latest
   files:
   - relpath: config.json
     md5: 4b38e54d20260f4032e6257e2ef269db
