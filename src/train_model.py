@@ -37,11 +37,12 @@ def train(config):
 
     else:
         wandb.init(mode="disabled")
-    # Load only 100 rows of data from the CSV files
+    
     path_to_data = os.path.join(get_original_cwd(), 'data/processed')
     train_dataset = load_from_disk(os.path.join(path_to_data,"train_dataset_tokenized"))
     val_dataset = load_from_disk(os.path.join(path_to_data,"val_dataset_tokenized"))
-
+    hydra_logger.info(f"Length of train data: {(len(train_dataset))}")
+    
     # Load the model
     model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
     model.to(device)
