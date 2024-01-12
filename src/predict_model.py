@@ -2,6 +2,7 @@ import torch
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
 from data.make_dataset import tokenize_and_format
 import pandas as pd
+import datasets
 from datasets import load_from_disk
 from torch.utils.data import DataLoader
 
@@ -20,6 +21,8 @@ def predict_dataframe(
     Returns
         Tensor of shape [N] where N is the number of samples
     """
+
+    tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
 
     predictions = []
 
@@ -43,7 +46,7 @@ def predict_dataframe(
 
     return predictions
 
-def predict_tokens(model: torch.nn.Module, tokenized_dataset: Data) -> None:
+def predict_tokens(model: torch.nn.Module, tokenized_dataset : datasets.arrow_dataset.Dataset, device) -> None:
     """Run predictions for a given model on a dataframe that contains tokenized text
     
     Args:
@@ -54,34 +57,20 @@ def predict_tokens(model: torch.nn.Module, tokenized_dataset: Data) -> None:
         Tensor of shape [N] where N is the number of samples
     """
 
-    # Create a DataLoader for the tokenized dataset
-    dataloader = DataLoader(tokenized_dataset, batch_size=32)
-
-    # Switch the model to evaluation mode
-    model.eval()
-
-    # Store predictions
     predictions = []
 
-    # Disable gradient calculations for efficiency
-    with torch.no_grad():
-        for batch in dataloader:
-            # Move batch to the same device as model
-            batch = {k: v.to(model.device) for k, v in batch.items()}
-            
-            # Get model outputs
-            outputs = model(**batch)
+    for i in range(len(tokenized_dataset)):
+        with torch.no_grad():
+            input_ids = torch.tensor(tokenized_dataset[i]['input_ids']).to(device)  # Convert input_ids to a tensor
+            attention_mask = torch.tensor(tokenized_dataset[i]['attention_mask']).to(device)  # Convert attention_mask to a tensor
 
-            # Convert model outputs (logits) to probabilities
-            probabilities = torch.nn.functional.softmax(outputs.logits, dim=1)
+            logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
 
-            # Get the predicted class (with the highest probability)
-            predicted_classes = torch.argmax(probabilities, dim=1)
+            probabilities = torch.softmax(logits, dim=1)
+            predicted_label = torch.argmax(probabilities, dim=1).item()
 
-            # Add predictions to the list
-            predictions.extend(predicted_classes.cpu().numpy())
+            predictions.append(predicted_label)
     
-
     return predictions 
 
 
@@ -96,15 +85,17 @@ if __name__ == '__main__':
     else:
         device = torch.device('cpu')
 
-    tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
-
+    
     model = DistilBertForSequenceClassification.from_pretrained('models/latest', num_labels=2)
     model.to(device)
 
     tokenized_dataset = load_from_disk("data/processed/test_dataset_tokenized")
 
-    predict_tokens(model, tokenized_dataset)
+    print(predict_tokens(model, tokenized_dataset, device))
 
+    
+
+    
     # Load the model
 
 

@@ -61,7 +61,7 @@ def tokenize_and_format(data: Dataset):
     tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
 
     # Tokenize the data
-    tokenized_inputs = tokenizer(data['text'], padding='max_length', truncation=True)
+    tokenized_inputs = tokenizer(data['text'], padding='max_length', truncation=True,return_tensors='pt', max_length=512)
     tokenized_inputs['labels'] = data['generated']
     
     return tokenized_inputs
