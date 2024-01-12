@@ -19,11 +19,11 @@ COPY data.dvc data.dvc
 
 COPY src/ src/
 
-COPY models/ models/
+
 COPY results/ results/
 
 WORKDIR /
 
-RUN pip install . --no-deps --no-cache-dir
+RUN pip install -e. --no-deps --no-cache-dir
 
 ENTRYPOINT ["make", "predict"]
