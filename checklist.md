@@ -8,7 +8,7 @@ Checklist from the course webpage: [MLOps DTU Course 02476](https://github.com/n
 * [ ] Create a dedicated environment for you project to keep track of your packages
 * [X] Create the initial file structure using cookiecutter
 * [X] Fill out the `make_dataset.py` file such that it downloads whatever data you need and
-* [ ] Add a model file and a training script and get that running
+* [ ] Add a model file and a training script and get that running (as well as a predict)
 * [ ] Remember to fill out the `requirements.txt` file with whatever dependencies that you are using
 * [ ] Remember to comply with good coding practices (`pep8`) while doing the project
 * [ ] Do a bit of code typing and remember to document essential parts of your code
@@ -17,7 +17,7 @@ Checklist from the course webpage: [MLOps DTU Course 02476](https://github.com/n
 * [ ] Build the docker files locally and make sure they work as intended
 * [X] Write one or multiple configurations files for your experiments
 * [X] Used Hydra to load the configurations and manage your hyperparameters
-* [ ] When you have something that works somewhat, remember at some point to to some profiling and see if
+* [ ] When you have something that works somewhat, remember at some point to do some profiling and see if
     you can optimize your code
 * [X] Use Weights & Biases to log training progress and other important metrics/artifacts in your code. Additionally,
     consider running a hyperparameter optimization sweep.
@@ -27,7 +27,7 @@ Checklist from the course webpage: [MLOps DTU Course 02476](https://github.com/n
 
 * [X] Write unit tests related to the data part of your code
 * [X] Write unit tests related to model construction and or model training
-* [ ] Calculate the coverage.
+* [X] Calculate the coverage (also on predict test).
 * [ ] Get some continuous integration running on the github repository
 * [ ] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
 * [ ] Create a trigger workflow for automatically building your docker images
@@ -49,4 +49,4 @@ Checklist from the course webpage: [MLOps DTU Course 02476](https://github.com/n
 
 * [ ] Revisit your initial project description. Did the project turn out as you wanted?
 * [ ] Make sure all group members have a understanding about all parts of the project
-* [ ] Uploaded all your code to github
+* [ ] Upload all your code to github
