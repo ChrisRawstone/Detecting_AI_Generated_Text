@@ -1,6 +1,5 @@
 import torch
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
-from src.data.make_dataset import tokenize_and_format
 import pandas as pd
 import datasets
 from datasets import load_from_disk
@@ -125,6 +124,10 @@ if __name__ == '__main__':
     predictions_df = predict_tokens(model, tokenized_dataset, device)
 
     model_name = find_latest_folder('models')
+        
+    if not os.path.exists('results'):
+        os.makedirs('results')
+
     predictions_df.to_json(f"results/predictions_{model_name}.json", orient='table', indent=1)
 
 
