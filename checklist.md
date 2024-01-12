@@ -25,8 +25,8 @@ Checklist from the course webpage: [MLOps DTU Course 02476](https://github.com/n
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code
-* [ ] Write unit tests related to model construction and or model training
+* [X] Write unit tests related to the data part of your code
+* [X] Write unit tests related to model construction and or model training
 * [ ] Calculate the coverage.
 * [ ] Get some continuous integration running on the github repository
 * [ ] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
