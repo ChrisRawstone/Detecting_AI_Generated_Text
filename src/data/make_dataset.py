@@ -43,7 +43,7 @@ def get_data(sample_size: int = None):
     X_train, X_temp = train_test_split(df[['text','generated']], test_size=0.2, random_state=42)
     X_val, X_test = train_test_split(X_temp, test_size=0.5, random_state=42)
 
-
+    
     X_train.to_csv("data/processed/train.csv", index=False)
     X_test.to_csv("data/processed/test.csv", index=False)
     X_val.to_csv("data/processed/validation.csv", index=False)
