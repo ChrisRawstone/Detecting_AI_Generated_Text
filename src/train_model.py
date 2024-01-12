@@ -19,7 +19,7 @@ def compute_metrics(eval_pred):
     hydra_logger.info(f"Accuracy: {accuracy['accuracy']}")
     return accuracy
 
-@hydra.main(config_path="config", config_name="default_config.yaml",)
+@hydra.main(config_path="config", config_name="default_config.yaml")
 def main(config):   
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
     hydra_logger.info(f"Using device: {device}")
@@ -27,6 +27,12 @@ def main(config):
     parameters = config.experiment
     model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.cls, num_labels=parameters.model_settings.num_labels)
 
+    wandb_enabled = True
+    if wandb_enabled:
+        import wandb
+        wandb.init(project="MLOps-DetectAIText",entity="teamdp",name=config.experiment.timestamp)
+    else:
+        wandb.init(mode="disabled")
     # Load only 100 rows of data from the CSV files
     path_to_data = os.path.join(get_original_cwd(), 'data/processed')
     train_dataset = load_from_disk(os.path.join(path_to_data,"train_dataset_tokenized"))
@@ -52,16 +58,10 @@ def main(config):
     # Evaluate the model
     trainer.evaluate()
 
-    #timestamp = dt.now().strftime("%Y%m%d%H%M%S")
+    # Save the model
     trainer.save_model("models/model.pt")
     trainer.save_model("../../latest/model.pt")
     
 
 if __name__ == '__main__':
-    wandb_enabled = True
-    if wandb_enabled:
-        import wandb
-        wandb.init(project="MLOps-DetectAIText",entity="teamdp")
-
     main()
-

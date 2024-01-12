@@ -47,7 +47,7 @@ if __name__ == '__main__':
         device = torch.device('cpu')
     device = torch.device('mps') if torch.backends.mps.is_available() else torch.device('cpu')
 
-    model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
+    model = DistilBertForSequenceClassification.from_pretrained('model/latest', num_labels=2)
     model.to(device)
 
     tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
