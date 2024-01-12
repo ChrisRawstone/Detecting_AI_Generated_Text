@@ -7,7 +7,7 @@ sys.path.append(PROJECT_ROOT)
 from src.predict_model import find_latest_folder
 
 model_name = find_latest_folder('models')
-@pytest.mark.skipif(not os.path.exists(f'results/predictions_{model_name}.json'), reason="Prediction file not found")
+@pytest.mark.skipif(not os.path.exists(f'results/predictions_{model_name}.json'), reason="Prediction file not found. Run 'python src/predict_model.py' to generate predictions.")
 def test_predict_model():
     # Read the predictions from json file as table
     predictions_dataframe = pd.read_json(f"results/predictions_{model_name}.json", orient='table')

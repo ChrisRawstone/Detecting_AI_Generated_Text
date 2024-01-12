@@ -7,7 +7,7 @@ sys.path.append(PROJECT_ROOT)
 from src.data.make_dataset import make_dataset, get_data
 
 def test_get_data():
-    with pytest.raises(FileNotFoundError, match='No generated data found. Please run dvc pull.'):
+    with pytest.raises(FileNotFoundError, match='No generated data found. Please run DVC pull.'):
         get_data(10,'Not/existing/path')
 
 
