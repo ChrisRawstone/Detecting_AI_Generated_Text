@@ -2,8 +2,8 @@ import sys
 import pytest
 import os.path
 import pandas as pd
-from mypaths import _PROJECT_ROOT
-sys.path.append(_PROJECT_ROOT)
+from mypaths import PROJECT_ROOT
+sys.path.append(PROJECT_ROOT)
 
 @pytest.mark.skipif(not os.path.exists('data/processed/train.csv'), reason="Required data files not found")
 def test_data_split():
