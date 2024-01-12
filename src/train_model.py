@@ -20,7 +20,7 @@ def compute_metrics(eval_pred):
     return accuracy
 
 @hydra.main(config_path="config", config_name="default_config.yaml")
-def main(config):   
+def train(config):   
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
     hydra_logger.info(f"Using device: {device}")
 
@@ -64,4 +64,4 @@ def main(config):
     
 
 if __name__ == '__main__':
-    main()
+    train()
