@@ -70,6 +70,10 @@ def find_latest_folder(path):
 
 if __name__ == '__main__':
 
+    # print pwd
+    import os
+    print(os.getcwd())
+
     if torch.backends.mps.is_available():
         device = torch.device('mps')
     elif torch.cuda.is_available():
