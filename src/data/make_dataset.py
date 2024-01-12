@@ -22,7 +22,7 @@ def get_data(sample_size: int = None, path: str = "data/raw/generated_data"):
     # Concat all generated essays
     generated_essays = pd.DataFrame()
     if not os.path.exists(path):
-        raise FileNotFoundError("No generated data found. Please run dvc pull.")
+        raise FileNotFoundError("No generated data found. Please run DVC pull.")
     for i in range(1,6):
         generated_essays = pd.concat([generated_essays, pd.read_csv("data/raw/generated_data/AI_Generated_df{}.csv".format(i))])
     generated_essays = generated_essays.rename(columns={"generated_text":"text"})
