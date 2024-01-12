@@ -43,7 +43,7 @@ def predict_dataframe(
 
     return predictions
 
-def predict_tokens(model: torch.nn.Module, tokenized_dataset: pd.DataFrame) -> None:
+def predict_tokens(model: torch.nn.Module, tokenized_dataset: Data) -> None:
     """Run predictions for a given model on a dataframe that contains tokenized text
     
     Args:
@@ -85,6 +85,8 @@ def predict_tokens(model: torch.nn.Module, tokenized_dataset: pd.DataFrame) -> N
     return predictions 
 
 
+
+
 if __name__ == '__main__':
 
     if torch.backends.mps.is_available():
@@ -103,7 +105,7 @@ if __name__ == '__main__':
 
     predict_tokens(model, tokenized_dataset)
 
-
+    # Load the model
 
 
 
