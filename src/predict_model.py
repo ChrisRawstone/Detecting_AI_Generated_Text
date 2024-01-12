@@ -1,6 +1,6 @@
 import torch
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
-from data.make_dataset import tokenize_and_format
+#from data.make_dataset import tokenize_and_format
 import pandas as pd
 
 def predict(
