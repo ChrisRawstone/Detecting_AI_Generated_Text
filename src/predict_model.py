@@ -94,23 +94,19 @@ if __name__ == '__main__':
     else:
         device = torch.device('cpu')
     
-    
+    model_name = "latest"
 
-    model = DistilBertForSequenceClassification.from_pretrained('models/latest', num_labels=2)
+    model = DistilBertForSequenceClassification.from_pretrained(f'models/{model_name}', num_labels=2)
     model.to(device)
 
     tokenized_dataset = load_from_disk("data/processed/test_dataset_tokenized")
 
-    print(predict_tokens(model, tokenized_dataset, device))
+    predictions_df = predict_tokens(model, tokenized_dataset, device)
 
-    
-
-    
-    # Load the model
+    predictions_df.to_json(f"results/{model_name}.json", orient='table', indent=1)
 
 
 
-# Now, your 'test_csv' DataFrame will have an additional column 'predicted_label' with the predicted labels.
 
 
 
