@@ -8,9 +8,14 @@ RUN apt update && \
 
 COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
+COPY Makefile Makefile
 
 RUN pip install -r requirements.txt --no-cache-dir
-RUN dvc pull
+
+RUN dvc init --no-scm
+COPY .dvc/config .dvc/config
+RUN dvc config core.no_scm true
+COPY data.dvc data.dvc
 
 COPY src/ src/
 
@@ -21,4 +26,4 @@ WORKDIR /
 
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "src/predict_model.py"]
+ENTRYPOINT ["make", "predict"]

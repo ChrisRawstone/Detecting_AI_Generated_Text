@@ -84,7 +84,7 @@ if __name__ == '__main__':
 
     predictions_df = predict(model, tokenized_dataset, device)
 
-    print('Predictions:', predictions_df.head(5))
+    print('Predictions:\n', predictions_df.head(5))
 
     model_name = find_latest_folder('models')
         
