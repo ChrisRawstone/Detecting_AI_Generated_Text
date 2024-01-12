@@ -117,16 +117,15 @@ if __name__ == '__main__':
     else:
         device = torch.device('cpu')
     
-    model_name = "latest"
-
-    model = DistilBertForSequenceClassification.from_pretrained(f'models/{model_name}', num_labels=2)
+    model = DistilBertForSequenceClassification.from_pretrained(f'models/latest', num_labels=2)
     model.to(device)
 
     tokenized_dataset = load_from_disk("data/processed/test_dataset_tokenized")
 
     predictions_df = predict_tokens(model, tokenized_dataset, device)
 
-    predictions_df.to_json(f"results/{model_name}.json", orient='table', indent=1)
+    model_name = find_latest_folder('models')
+    predictions_df.to_json(f"results/predictions_{model_name}.json", orient='table', indent=1)
 
 
 
