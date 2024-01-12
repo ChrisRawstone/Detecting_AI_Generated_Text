@@ -1,52 +1,12 @@
-import torch
-from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
+import os
 import pandas as pd
 import datasets
+import torch
+from transformers import DistilBertForSequenceClassification
+from src.data.make_dataset import tokenize_and_format
 from datasets import load_from_disk
-from torch.utils.data import DataLoader
-import os
-from datetime import datetime
 
-def predict_dataframe(
-    model: torch.nn.Module,
-    df: pd.DataFrame    
-) -> None:
-    """Run predictions for a given model on a dataframe. Non-tokenized!
-    
-    Args:
-        model: model to use for prediction
-        dataframe: dataframe with a column 'text' containing the text to predict on
-        probabilities: boolean flag whether to return 
-    
-    Returns
-        Tensor of shape [N] where N is the number of samples
-    """
-
-    tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
-
-    predictions = []
-
-    for index, row in df.iterrows():
-        text = row['text'] 
-        inputs = tokenizer(text, 
-                           return_tensors='pt', 
-                           truncation=True, 
-                           padding=True, 
-                           max_length=512, 
-                           return_token_type_ids=False).to(device) 
-
-        with torch.no_grad():
-            logits = model(**inputs).logits
-    
-        # Assuming it's binary classification (2 labels)
-        probabilities = torch.softmax(logits, dim=1)
-        predicted_label = torch.argmax(probabilities, dim=1).item()
-
-        predictions.append(predicted_label)
-
-    return predictions
-
-def predict_tokens(model: torch.nn.Module, tokenized_dataset : datasets.arrow_dataset.Dataset, device) -> None:
+def predict(model: torch.nn.Module, tokenized_dataset : datasets.arrow_dataset.Dataset, device) -> None:
     """Run predictions for a given model on a dataframe that contains tokenized text
     
     Args:
@@ -68,7 +28,8 @@ def predict_tokens(model: torch.nn.Module, tokenized_dataset : datasets.arrow_da
 
             logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
 
-            probabilities = torch.softmax(logits, dim=1)
+            probabilities = torch.softmax(logits, dim=1)             
+            
             predicted_label = torch.argmax(probabilities, dim=1).item()
 
             predictions.append(predicted_label)
@@ -121,7 +82,7 @@ if __name__ == '__main__':
 
     tokenized_dataset = load_from_disk("data/processed/test_dataset_tokenized")
 
-    predictions_df = predict_tokens(model, tokenized_dataset, device)
+    predictions_df = predict(model, tokenized_dataset, device)
 
     model_name = find_latest_folder('models')
         
