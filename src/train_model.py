@@ -59,8 +59,8 @@ def train(config):
     trainer.evaluate()
 
     # Save the model
-    trainer.save_model("models/model.pt")
-    trainer.save_model("../../latest/model.pt")
+    trainer.save_model("model")
+    trainer.save_model("../../latest")
     
 
 if __name__ == '__main__':
