@@ -1,6 +1,6 @@
 import torch
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
-from data.make_dataset import tokenize_and_format
+from src.data.make_dataset import tokenize_and_format
 import pandas as pd
 import datasets
 from datasets import load_from_disk
