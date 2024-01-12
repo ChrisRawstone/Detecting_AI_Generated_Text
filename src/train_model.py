@@ -19,7 +19,7 @@ def compute_metrics(eval_pred):
     hydra_logger.info(f"Accuracy: {accuracy['accuracy']}")
     return accuracy
 
-@hydra.main(config_path="config", config_name="default_config.yaml",)
+@hydra.main(config_path="config", config_name="default_config.yaml")
 def main(config):   
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
     hydra_logger.info(f"Using device: {device}")
@@ -58,13 +58,10 @@ def main(config):
     # Evaluate the model
     trainer.evaluate()
 
-    #timestamp = dt.now().strftime("%Y%m%d%H%M%S")
+    # Save the model
     trainer.save_model("models/model.pt")
     trainer.save_model("../../latest/model.pt")
     
 
 if __name__ == '__main__':
-
-
     main()
-
