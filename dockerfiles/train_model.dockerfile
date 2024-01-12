@@ -8,12 +8,17 @@ RUN apt update && \
 COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
 
+
 RUN pip install -r requirements.txt --no-cache-dir
-RUN pip install wandb --no-cache-dir    
+
+RUN dvc init --no-scm
+COPY .dvc/config .dvc/config
+RUN dvc config core.no_scm true
+COPY data.dvc data.dvc
+
+RUN dvc pull --verbose
 
 COPY src/ src/
-COPY data/ data/
-COPY models/ models/
 
 WORKDIR /
 
