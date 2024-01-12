@@ -38,7 +38,7 @@ clean:
 
 ## Process raw data into processed data
 data:
-	python $(PROJECT_NAME)/data/make_dataset.py
+	python $(PROJECT_NAME)/data/make_dataset.py --sample_size 10
 
 #################################################################################
 # Documentation RULES                                                           #
@@ -110,3 +110,10 @@ help:
 		printf "\n"; \
 	}' \
 	| more $(shell test $(shell uname) = Darwin && echo '--no-init --raw-control-chars')
+
+make pull:
+	dvc pull --force
+
+make train: pull data
+	python -u src/train_model.py
+
