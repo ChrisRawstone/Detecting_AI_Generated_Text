@@ -123,10 +123,11 @@ if __name__ == '__main__':
     tokenized_dataset = load_from_disk("data/processed/test_dataset_tokenized")
 
     predictions_df = predict_tokens(model, tokenized_dataset, device)
+    print('Predictions:', predictions_df.head(5))
 
     model_name = find_latest_folder('models')
     predictions_df.to_json(f"results/predictions_{model_name}.json", orient='table', indent=1)
-
+    print('Predictions saved to results folder')
 
 
 
