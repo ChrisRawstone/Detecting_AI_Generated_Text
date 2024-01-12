@@ -27,7 +27,7 @@ Checklist from the course webpage: [MLOps DTU Course 02476](https://github.com/n
 
 * [X] Write unit tests related to the data part of your code
 * [X] Write unit tests related to model construction and or model training
-* [ ] Calculate the coverage.
+* [X] Calculate the coverage (also on predict test).
 * [ ] Get some continuous integration running on the github repository
 * [ ] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
 * [ ] Create a trigger workflow for automatically building your docker images

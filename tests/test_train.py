@@ -1,12 +1,8 @@
-import pytest
-from hydra import initialize, compose
-import sys
-from mypaths import PROJECT_ROOT
-from omegaconf import DictConfig, OmegaConf
-import hydra
 import os
+import sys
+import pytest
+from mypaths import PROJECT_ROOT
 sys.path.append(PROJECT_ROOT)
-from src.train_model import train
 
 @pytest.fixture
 def models_folder():
