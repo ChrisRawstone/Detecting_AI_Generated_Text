@@ -54,8 +54,10 @@ def predict_tokens(model: torch.nn.Module, tokenized_dataset : datasets.arrow_da
         dataframe: dataframe with a column 'text' containing the text to predict on
     
     Returns
-        Tensor of shape [N] where N is the number of samples
+        Dataframe
     """
+
+    predictions_dataframe = pd.DataFrame(columns=['text'])
 
     predictions = []
 
@@ -71,7 +73,14 @@ def predict_tokens(model: torch.nn.Module, tokenized_dataset : datasets.arrow_da
 
             predictions.append(predicted_label)
     
-    return predictions 
+    predictions_dataframe['text'] = tokenized_dataset['text']
+    predictions_dataframe['prediction'] = predictions
+    predictions_dataframe['generated'] = tokenized_dataset['generated']
+
+
+
+
+    return predictions_dataframe 
 
 
 
@@ -84,8 +93,9 @@ if __name__ == '__main__':
         device = torch.device('cuda')
     else:
         device = torch.device('cpu')
-
     
+    
+
     model = DistilBertForSequenceClassification.from_pretrained('models/latest', num_labels=2)
     model.to(device)
 
