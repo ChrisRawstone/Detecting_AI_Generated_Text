@@ -4,7 +4,7 @@ import os
 import torch
 from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
 from datasets import load_dataset, load_metric, load_from_disk
-
+import wandb
 import hydra
 from hydra.utils import get_original_cwd 
 hydra_logger = hydra.utils.log # Use Hydra logger for logging
@@ -29,8 +29,12 @@ def train(config):
 
     wandb_enabled = True
     if wandb_enabled:
-        import wandb
-        wandb.init(project="MLOps-DetectAIText",entity="teamdp",name=config.experiment.timestamp)
+        try:
+            wandb.init(project="MLOps-DetectAIText",entity="teamdp",name=config.experiment.timestamp)
+        except:
+            print("Could not initialize wandb. No API key found.")
+            wandb.init(mode="disabled")
+
     else:
         wandb.init(mode="disabled")
     # Load only 100 rows of data from the CSV files
