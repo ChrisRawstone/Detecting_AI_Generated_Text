@@ -110,3 +110,12 @@ help:
 		printf "\n"; \
 	}' \
 	| more $(shell test $(shell uname) = Darwin && echo '--no-init --raw-control-chars')
+
+make pull:
+	dvc pull --force
+
+make train: pull data
+	python -u src/train_model.py
+
+make predict: pull data
+	python -u src/predict_model.py

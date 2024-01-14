@@ -28,6 +28,8 @@ In this project we focus on keeping a good project structure and make our projec
 
 Please see the [checklist.md](https://github.com/ChrisRawstone/Detecting_AI_Generated_Text/blob/develop/checklist.md) for what learning objectives the project fulfills. 
 
+delete this line
+
 ## Project structure
 
 The directory structure of the project looks like this:

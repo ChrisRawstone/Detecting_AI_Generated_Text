@@ -7,11 +7,20 @@ RUN apt update && \
 
 COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
+COPY Makefile Makefile
+
+RUN pip install -r requirements.txt --no-cache-dir
+
+RUN dvc init --no-scm
+COPY .dvc/config .dvc/config
+RUN dvc config core.no_scm true
+COPY data.dvc data.dvc
+
+
 COPY src/ src/
-COPY data/ data/
 
 WORKDIR /
-RUN pip install -r requirements.txt --no-cache-dir
+
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "src/train_model.py"]
+ENTRYPOINT ["make", "train"]
