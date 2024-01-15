@@ -20,5 +20,5 @@ steps:
   - '--region'
   - 'europe-west1'
   - '--memory'
-  -  '1Gi'
+  -  '2Gi'
 
