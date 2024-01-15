@@ -19,3 +19,6 @@ steps:
   - 'gcr.io/elite-totem-410916/predicter:latest'
   - '--region'
   - 'europe-west1'
+  - '--memory'
+  -  '1Gi'
+
