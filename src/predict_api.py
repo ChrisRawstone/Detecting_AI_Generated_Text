@@ -6,8 +6,6 @@ from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassific
 
 app = FastAPI()
 
-
-
 if torch.backends.mps.is_available():
     device = torch.device("mps")
 elif torch.cuda.is_available():
@@ -18,14 +16,24 @@ else:
 model = DistilBertForSequenceClassification.from_pretrained(f"models/latest", num_labels=2)
 model.to(device)
 
-@app.post("/predict/")
-def predict(text: str):
-    """Inference endpoint 
-    """
-    return predict_string(model,text,device)   
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 
-    
-    
+@app.post("/predict/") 
+async def predict(text: str):
+    """Inference endpoint          
+    """
+    result = predict_string(model,text,device)
+    return result
+
+ 
+
+
+
+
+# use this command to run the post request
+# curl -X 'POST' "http://127.0.0.1:8000/predict/?text=some%20random%20text"
 
 
 
