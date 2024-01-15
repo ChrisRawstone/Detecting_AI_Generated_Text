@@ -57,7 +57,7 @@ def train(config):
     wandb_enabled = True
     if wandb_enabled:
         try:
-            wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=config.experiment.timestamp)
+            wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
         except:
             print("Could not initialize wandb. No API key found.")
             wandb.init(mode="disabled")
