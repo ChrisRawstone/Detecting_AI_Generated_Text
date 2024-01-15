@@ -28,4 +28,6 @@ COPY pyproject.toml pyproject.toml
 
 RUN pip install . --no-cache-dir --no-deps
 
-ENTRYPOINT ["uvicorn", "predict_api:app", "--port","8020", "--host", "0.0.0.0", "--workers", "1"]
+# ENTRYPOINT ["uvicorn", "predict_api:app", "--port","8080", "--host", "0.0.0.0", "--workers", "1"]
+
+CMD exec uvicorn predict_api:app --port $PORT --host 0.0.0.0 --workers 1

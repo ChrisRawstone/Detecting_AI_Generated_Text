@@ -20,7 +20,7 @@ import os
 
 def download_gcs_folder(bucket_name, source_folder):
     """Downloads a folder from the bucket."""
-    storage_client = storage.Client()
+    storage_client = storage.Client.create_anonymous_client()
     bucket = storage_client.bucket(bucket_name)
 
     blobs = bucket.list_blobs(prefix=source_folder)  # Get list of files
