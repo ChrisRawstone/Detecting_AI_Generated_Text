@@ -5,7 +5,7 @@ steps:
   args: ['push', 'gcr.io/elite-totem-410916/trainer']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/elite-totem-410916/predicter:latest', '.', '-f', 'dockerfiles/app/predict_model.dockerfile']
+  args: ['build', '-t', 'gcr.io/elite-totem-410916/predicter:latest', '.', '-f', 'dockerfiles/predict_model.dockerfile']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/elite-totem-410916/predicter:latest']
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
