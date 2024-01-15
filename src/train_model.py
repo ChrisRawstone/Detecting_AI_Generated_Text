@@ -3,10 +3,11 @@ from datetime import datetime as dt
 import os
 import torch
 from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
-from datasets import load_dataset, load_metric, load_from_disk
+from datasets import load_metric, load_from_disk
 import wandb
 import hydra
 from hydra.utils import get_original_cwd
+from google.cloud import storage
 
 hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 
@@ -20,6 +21,25 @@ def compute_metrics(eval_pred):
     accuracy = metric.compute(predictions=predictions, references=labels)
     hydra_logger.info(f"Accuracy: {accuracy['accuracy']}")
     return accuracy
+
+def upload_model_to_gcs(local_model_dir, bucket_name, gcs_path, model_name):
+    client = storage.Client()
+
+    # Create the folder in GCS
+    folder_name = f"{gcs_path}/{model_name}"
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(folder_name)
+
+    # Upload each file from local_model_dir to the GCS folder
+    for local_file in os.listdir(local_model_dir):
+        local_file_path = os.path.join(local_model_dir, local_file)
+        remote_blob_name = os.path.join(folder_name, local_file)
+
+        # Upload the file to GCS
+        blob = bucket.blob(remote_blob_name)
+        blob.upload_from_filename(local_file_path)
+
+    hydra_logger.info(f"Files uploaded to GCS folder: gs://{bucket_name}/{folder_name}")
 
 
 @hydra.main(config_path="config", config_name="default_config.yaml")
@@ -72,8 +92,13 @@ def train(config):
     trainer.evaluate()
 
     # Save the model
+    model_dir = 'model'
     trainer.save_model("model")
     trainer.save_model("../../latest")
+
+    # Upload model to GCS
+    upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name)
+    upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, "latest")
 
 
 if __name__ == "__main__":

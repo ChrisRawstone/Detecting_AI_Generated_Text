@@ -11,3 +11,8 @@ training_args:
   weight_decay: 0.01
   logging_dir: './logs'
   logging_steps: 1
+
+gcp_args:
+  model_name: 'debug'
+  gcs_bucket: 'ai-detection-bucket'
+  gcs_path: 'models'
