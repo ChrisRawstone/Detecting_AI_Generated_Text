@@ -186,3 +186,7 @@ wandb
 
 notebooks/training_model_test.ipynb
 cloudbuid.yaml
+
+models/*
+!models/*latest*
+/models
