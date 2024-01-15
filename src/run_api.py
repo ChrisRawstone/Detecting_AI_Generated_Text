@@ -6,8 +6,6 @@ from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassific
 
 app = FastAPI()
 
-
-
 if torch.backends.mps.is_available():
     device = torch.device("mps")
 elif torch.cuda.is_available():
@@ -15,14 +13,40 @@ elif torch.cuda.is_available():
 else:
     device = torch.device("cpu")
 
-model = DistilBertForSequenceClassification.from_pretrained(f"models/latest", num_labels=2)
-model.to(device)
+# model = DistilBertForSequenceClassification.from_pretrained(f"models/latest", num_labels=2)
+# model.to(device)
+
+from google.cloud import storage
+import os
+
+def download_gcs_folder(bucket_name, source_folder, destination_dir):
+    """Downloads a folder from the bucket."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+
+    blobs = bucket.list_blobs(prefix=source_folder)  # Get list of files
+    for blob in blobs:
+        destination_file_name = os.path.join(destination_dir, blob.name)
+        os.makedirs(os.path.dirname(destination_file_name), exist_ok=True)
+        blob.download_to_filename(destination_file_name)
+
+# Example usage
+bucket_name = 'ai-detection-bucket'
+source_folder = 'models/latest'  # Make sure to include the trailing slash
+destination_dir = ''  # Make sure to include the trailing slash
+
+download_gcs_folder(bucket_name, source_folder, destination_dir)
+
+
 
 @app.post("/predict/")
 def predict(text: str):
     """Inference endpoint 
+
     """
     return predict_string(model,text,device)   
+
+
 
     
     
