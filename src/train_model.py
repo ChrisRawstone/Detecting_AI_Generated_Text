@@ -14,7 +14,7 @@ hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 # Load metric for evaluation
 metric = load_metric("accuracy")
 
-
+# test
 
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
