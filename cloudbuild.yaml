@@ -3,8 +3,7 @@ steps:
   args: ['build', '-t', 'gcr.io/elite-totem-410916/trainer', '.', '-f', 'dockerfiles/train_model.dockerfile']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/elite-totem-410916/trainer']
-  options:
-    machineType: 'N1_HIGHCPU_8'
+
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/elite-totem-410916/predicter:latest', '.', '-f', 'dockerfiles/predict_model.dockerfile']
@@ -23,3 +22,6 @@ steps:
   - 'europe-west1'
   - '--memory'
   -  '2Gi'
+
+options:
+  machineType: 'N1_HIGHCPU_8'
