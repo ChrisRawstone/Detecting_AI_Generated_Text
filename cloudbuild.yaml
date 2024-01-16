@@ -24,4 +24,4 @@ steps:
   -  '2Gi'
 
 options:
-  machineType: 'N1_HIGHCPU_8'
+  machineType: 'n1-standard-1'
