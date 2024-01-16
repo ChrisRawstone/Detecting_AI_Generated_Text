@@ -109,3 +109,7 @@ To run docker container:
 ```
 docker run -e WANDB_API_KEY=<your-api-key> trainer:latest 
 ```
+
+```
+python submit_vertex_job.py --wandb_key <your-api-key>
+```
