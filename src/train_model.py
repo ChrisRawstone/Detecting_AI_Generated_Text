@@ -4,10 +4,10 @@ import os
 import torch
 from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
 from datasets import load_metric, load_from_disk
-import wandb
 import hydra
 from hydra.utils import get_original_cwd
 from google.cloud import storage
+import wandb
 
 hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 
@@ -56,6 +56,7 @@ def train(config):
 
     wandb_enabled = True
     if wandb_enabled:
+        
         try:
             wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
         except:
@@ -63,6 +64,7 @@ def train(config):
             wandb.init(mode="disabled")
 
     else:
+        
         wandb.init(mode="disabled")
 
     path_to_data = os.path.join(get_original_cwd(), "data/processed")
