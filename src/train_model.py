@@ -54,18 +54,18 @@ def train(config):
 
     wandb_enabled = True
     if wandb_enabled:
-        try:
-            import os
-            wandb_api_key = os.environ.get('WANDB_API_KEY')
-            print("WANDB_API_KEY: ", wandb_api_key)
-            print("WANDB_API_KEY: ", len(wandb_api_key))
+        # try:
+        import os
+        wandb_api_key = os.environ.get('WANDB_API_KEY')
+        print("WANDB_API_KEY: ", wandb_api_key)
+        print("WANDB_API_KEY: ", len(wandb_api_key))
 
-            wandb.login(key=wandb_api_key)
+        wandb.login(key=wandb_api_key)
 
-            wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
-        except:
-            print("Could not initialize wandb. No API key found.")
-            wandb.init(mode="disabled")
+        wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
+        # except:
+        #     print("Could not initialize wandb. No API key found.")
+        #     wandb.init(mode="disabled")
     else:
         wandb.init(mode="disabled")
 
@@ -104,7 +104,7 @@ def train(config):
     upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name)
     upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, "latest")
 
-    
+
 
 if __name__ == "__main__":
     train()
