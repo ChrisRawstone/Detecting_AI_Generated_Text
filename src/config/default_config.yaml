@@ -1,8 +1,5 @@
 defaults:
     - experiment: debug_hparams
     - _self_
-hydra:
-  run:
-    dir: ./models/${now:%Y-%m-%d}/${now:%H-%M-%S}
 experiment:
   timestamp : ${now:%Y-%m-%d}/${now:%H-%M-%S}
