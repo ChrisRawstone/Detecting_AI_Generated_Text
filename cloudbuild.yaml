@@ -24,4 +24,4 @@ steps:
   -  '2Gi'
 
 options:
-  machineType: 'n1-standard-1'
+  machineType: 'E2_MEDIUM'
