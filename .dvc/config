@@ -4,5 +4,5 @@
 ['remote "storage"']
     url = gdrive://1aFKTQYqXSXFk5Qz-hCRMQLIFLDYpRPG8
 ['remote "remote_storage"']
-    url = gs://ai-detection-bucket/data
+    url = gs://ai-detection-bucket
     version_aware = true
