@@ -15,6 +15,7 @@ hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 metric = load_metric("accuracy")
 
 
+
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
     predictions = np.argmax(logits, axis=-1)
@@ -61,9 +62,7 @@ def train(config):
         except:
             print("Could not initialize wandb. No API key found.")
             wandb.init(mode="disabled")
-
     else:
-        
         wandb.init(mode="disabled")
 
     path_to_data = os.path.join(get_original_cwd(), "data/processed")

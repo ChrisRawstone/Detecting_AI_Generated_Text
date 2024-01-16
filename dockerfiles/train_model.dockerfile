@@ -23,4 +23,4 @@ WORKDIR /
 
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["make", "train"]
+ENTRYPOINT ["sh","-c","dvc pull && python src/data/make_dataset.py && python src/train_model.py"]
