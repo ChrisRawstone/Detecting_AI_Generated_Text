@@ -1,6 +1,6 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/elite-totem-410916/trainer:latest', '.', '-f', 'dockerfiles/trainer_model.dockerfile']
+  args: ['build', '-t', 'gcr.io/elite-totem-410916/trainer:latest', '.', '-f', 'dockerfiles/train_model.dockerfile']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/elite-totem-410916/trainer:latest']
 
