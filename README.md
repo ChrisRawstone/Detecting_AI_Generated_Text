@@ -89,3 +89,12 @@ The directory structure of the project looks like this:
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
+
+To start a custom job on vertex AI:
+```
+gcloud ai custom-jobs create \
+    --region=europe-west1 \
+    --display-name=test-run \
+    --config=config_cpu.yaml \
+    --args "-e WANDB_API_KEY=<your-api-key>"
+```
