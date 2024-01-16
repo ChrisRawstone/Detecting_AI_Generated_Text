@@ -56,11 +56,10 @@ def train(config):
 
     wandb_enabled = True
     if wandb_enabled:
-        
         try:
             import os
             wandb_api_key = os.environ.get('WANDB_API_KEY')
-            print("WANDB_API_KEY: ", wandb_api_key)
+            #print("WANDB_API_KEY: ", wandb_api_key)
             print("WANDB_API_KEY: ", len(wandb_api_key))
 
             wandb.login(key=wandb_api_key)
