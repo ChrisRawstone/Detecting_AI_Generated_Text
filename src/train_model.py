@@ -44,9 +44,7 @@ def upload_model_to_gcs(local_model_dir, bucket_name, gcs_path, model_name):
 
 @hydra.main(config_path="config", config_name="default_config.yaml")
 def train(config):
-    device = torch.device(
-        "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
-    )
+    device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     hydra_logger.info(f"Using device: {device}")
 
     parameters = config.experiment
@@ -59,7 +57,7 @@ def train(config):
         try:
             import os
             wandb_api_key = os.environ.get('WANDB_API_KEY')
-            #print("WANDB_API_KEY: ", wandb_api_key)
+            print("WANDB_API_KEY: ", wandb_api_key)
             print("WANDB_API_KEY: ", len(wandb_api_key))
 
             wandb.login(key=wandb_api_key)
