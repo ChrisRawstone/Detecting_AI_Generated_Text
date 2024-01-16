@@ -14,9 +14,7 @@ hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 # Load metric for evaluation
 metric = load_metric("accuracy")
 
-import os
-wandb_api_key = os.environ.get('WANDB_API_KEY')
-print("WANDB_API_KEY: ", wandb_api_key)
+
 
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
@@ -60,7 +58,6 @@ def train(config):
     if wandb_enabled:
         
         try:
-            wandb.login(key=wandb_api_key)
             wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
         except:
             print("Could not initialize wandb. No API key found.")
