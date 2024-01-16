@@ -31,10 +31,9 @@ def upload_model_to_gcs(local_model_dir, bucket_name, gcs_path, model_name):
     blob = bucket.blob(folder_name)
 
     # Upload each file from local_model_dir to the GCS folder
-    for local_file in os.listdir(local_model_dir):
-        local_file_path = os.path.join(local_model_dir, local_file)
+    for local_file in os.listdir(os.path.join(local_model_dir, model_name)):
+        local_file_path = os.path.join(local_model_dir, model_name, local_file)
         remote_blob_name = os.path.join(folder_name, local_file)
-
         # Upload the file to GCS
         blob = bucket.blob(remote_blob_name)
         blob.upload_from_filename(local_file_path)
@@ -94,9 +93,9 @@ def train(config):
     trainer.evaluate()
 
     # Save the model
-    model_dir = 'model'
-    trainer.save_model("model")
-    trainer.save_model("../../latest")
+    model_dir = '../../../models'
+    trainer.save_model(f"{model_dir}/{parameters.gcp_args.model_name}")
+    trainer.save_model(f"{model_dir}/latest")
 
     # Upload model to GCS
     upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name)
