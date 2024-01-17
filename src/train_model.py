@@ -8,7 +8,7 @@ from datasets import load_metric, load_from_disk
 import hydra
 from hydra.utils import get_original_cwd
 from google.cloud import storage
-from visualizations.visualize import plot_confusion_matrix_sklearn
+from src.visualizations.visualize import plot_confusion_matrix_sklearn
 import wandb
 import omegaconf
 from hydra import compose, initialize
@@ -75,8 +75,8 @@ def train(config):
         wandb.init(mode="disabled")
 
     path_to_data = os.path.join(PROJECT_ROOT, "data/processed")
-    train_dataset = load_from_disk(os.path.join(path_to_data, "train_dataset_tokenized"))
-    val_dataset = load_from_disk(os.path.join(path_to_data, "val_dataset_tokenized"))
+    train_dataset = load_from_disk(os.path.join(path_to_data, parameters.path_args.path_train_data))
+    val_dataset = load_from_disk(os.path.join(path_to_data, parameters.path_args.path_val_data))
     hydra_logger.info(f"Length of train data: {(len(train_dataset))}")
 
     # Load the model
@@ -110,14 +110,14 @@ def train(config):
         with torch.no_grad():
             input_ids = torch.tensor(val_dataset[i]["input_ids"]).to(device)
             attention_mask = torch.tensor(val_dataset[i]["attention_mask"]).to(device)
-            labels = val_dataset[i]["labels"]  
+            labels = val_dataset[i]["label"]  
             logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
             probs = torch.softmax(logits, dim=1)
             predicted_label = torch.argmax(probs, dim=1).item()
             predictions.append(predicted_label)
             true_labels.append(labels)
-            probabilities.append(list(probs.numpy().flatten()))
-            prob1D.append(probs.numpy().flatten()[0])
+            probabilities.append(list(probs.cpu().numpy().flatten()))
+            prob1D.append(probs.cpu().numpy().flatten()[0])
 
     class_names = ['Human', 'AI Generated']
     # Log metrics to wandb

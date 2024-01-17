@@ -11,6 +11,7 @@ training_args:
   weight_decay: 0.01
   logging_dir: './logs'
   logging_steps: 10
+  
 
 gcp_args:
   model_name: 'experiment_1'
