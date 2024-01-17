@@ -16,3 +16,4 @@ click
 markdown
 evidently
 nltk
+matplotlib
