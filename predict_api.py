@@ -1,11 +1,12 @@
-from src.predict_model import predict_string
+import os
+import pandas as pd
 import torch
-from fastapi import BackgroundTasks, FastAPI
+from fastapi import BackgroundTasks, FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
 from google.cloud import storage
-import os
-import pandas as pd
+from src.predict_model import predict_string, predict_csv
+from http import HTTPStatus
 
 app = FastAPI()
 
@@ -16,10 +17,6 @@ elif torch.cuda.is_available():
 else:
     device = torch.device("cpu")
 
-
-
-from google.cloud import storage
-import os
 
 def download_gcs_folder(bucket_name, source_folder):
     """Downloads a folder from the bucket."""
@@ -34,7 +31,7 @@ def download_gcs_folder(bucket_name, source_folder):
 
 bucket_name = "ai-detection-bucket"
 source_folder = "models/latest"
-download_gcs_folder(bucket_name, source_folder)
+#download_gcs_folder(bucket_name, source_folder)
 
 model = DistilBertForSequenceClassification.from_pretrained(f"models/latest", num_labels=2)
 model.to(device)
@@ -51,26 +48,24 @@ async def predict_string(text: str):
     """
     return predict_string(model, text, device)
 
-@app.post("/predict_csv/") 
-async def predict_csv(data: UploadFile = File(...)):
-    """
-    Inference endpoint
-    """
-    df = pd.read_csv(data)
 
-    predictions = predict_csv(model, df, device)
-    # save predictions to csv
-    predictions.to_csv("predictions.csv", index=False)
-    
-    # response = {
-    #     "input": data,
-    #     "message": HTTPStatus.OK.phrase,
-    #     "status-code": HTTPStatus.OK,
-    #     "fileresponse": FileResponse(file_path, media_type="text/csv")
-    #     "predictions": predictions
-    # }
-    
-    return FileResponse("predictions.csv")
+@app.post("/process_csv/")
+async def process_csv(file: UploadFile = File(...)):
+    temp_file_path = "tempfile.csv"
+    with open(temp_file_path, 'wb') as buffer:
+        content = await file.read()  # Read the file content
+        buffer.write(content)  # Write to a temporary file
+
+    # Read the CSV into a DataFrame
+    df = pd.read_csv(temp_file_path)  
+
+    # Make predictions 
+    predictions_df = predict_csv(model, df, device)
+    predictions_df.to_csv("results/predictions.csv", index=False)
+
+    return FileResponse("results/predictions.csv", media_type="text/csv", filename="predictions.csv")
+
+
 
 
 
