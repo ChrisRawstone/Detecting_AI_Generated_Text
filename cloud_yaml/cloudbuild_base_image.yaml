@@ -4,15 +4,3 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/elite-totem-410916/base_image:latest']
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args:
-  - 'run'
-  - 'deploy'
-  - 'predicter'
-  - '--image'
-  - 'gcr.io/elite-totem-410916/base_image:latest'
-  - '--region'
-  - 'europe-west1'
-  - '--memory'
-  -  '2Gi'
