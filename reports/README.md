@@ -50,36 +50,36 @@ end of the project.
 
 ### Week 1
 
-* [X] Create a git repository
-* [X] Make sure that all team members have write access to the github repository
+* [ ] Create a git repository
+* [ ] Make sure that all team members have write access to the github repository
 * [ ] Create a dedicated environment for you project to keep track of your packages
-* [X] Create the initial file structure using cookiecutter
-* [X] Fill out the `make_dataset.py` file such that it downloads whatever data you need and
-* [X] Add a model file and a training script and get that running
-* [X] Remember to fill out the `requirements.txt` file with whatever dependencies that you are using
-* [X] Remember to comply with good coding practices (`pep8`) while doing the project
-* [X] Do a bit of code typing and remember to document essential parts of your code
-* [X] Setup version control for your data or part of your data
-* [X] Construct one or multiple docker files for your code
-* [X] Build the docker files locally and make sure they work as intended
-* [X] Write one or multiple configurations files for your experiments
-* [X] Used Hydra to load the configurations and manage your hyperparameters
+* [ ] Create the initial file structure using cookiecutter
+* [ ] Fill out the `make_dataset.py` file such that it downloads whatever data you need and
+* [ ] Add a model file and a training script and get that running
+* [ ] Remember to fill out the `requirements.txt` file with whatever dependencies that you are using
+* [ ] Remember to comply with good coding practices (`pep8`) while doing the project
+* [ ] Do a bit of code typing and remember to document essential parts of your code
+* [ ] Setup version control for your data or part of your data
+* [ ] Construct one or multiple docker files for your code
+* [ ] Build the docker files locally and make sure they work as intended
+* [ ] Write one or multiple configurations files for your experiments
+* [ ] Used Hydra to load the configurations and manage your hyperparameters
 * [ ] When you have something that works somewhat, remember at some point to to some profiling and see if
       you can optimize your code
-* [X] Use Weights & Biases to log training progress and other important metrics/artifacts in your code. Additionally,
+* [ ] Use Weights & Biases to log training progress and other important metrics/artifacts in your code. Additionally,
       consider running a hyperparameter optimization sweep.
-* [X] Use Pytorch-lightning (if applicable) to reduce the amount of boilerplate in your code
+* [ ] Use Pytorch-lightning (if applicable) to reduce the amount of boilerplate in your code
 
 ### Week 2
 
-* [X] Write unit tests related to the data part of your code
-* [X] Write unit tests related to model construction and or model training
-* [X] Calculate the coverage ().
+* [ ] Write unit tests related to the data part of your code
+* [ ] Write unit tests related to model construction and or model training
+* [ ] Calculate the coverage ().
 * [ ] Get some continuous integration running on the github repository
-* [X] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
-* [X] Create a trigger workflow for automatically building your docker images
-* [X] Get your model training in GCP using either the Engine or Vertex AI
-* [X] Create a FastAPI application that can do inference using your model
+* [ ] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
+* [ ] Create a trigger workflow for automatically building your docker images
+* [ ] Get your model training in GCP using either the Engine or Vertex AI
+* [ ] Create a FastAPI application that can do inference using your model
 * [ ] If applicable, consider deploying the model locally using torchserve
 * [ ] Deploy your model in GCP using either Functions or Run as the backend
 
@@ -211,7 +211,7 @@ In total we have implemented 4 tests. We are testing data processing with two te
 >
 > Answer:
 
-The total code coverage of our application code is 43%. The tests covers our source code. We are far from 100% coverage of our code since we chose not to make test on the framework that we are using. Even if we were close to 
+The total code coverage of our application code is 43%. The tests covers our source code. We are far from 100% coverage of our code since we chose not to make test on the framework that we are using. Even if we were close to a 100% code coverage this would still not mean that our code was totally bug free. The aim with our tests was to control that we used the correct data, trained and stored a latest model and saved prediction in the expected format.
 
 ### Question 9
 
@@ -226,7 +226,7 @@ The total code coverage of our application code is 43%. The tests covers our sou
 >
 > Answer:
 
---- question 9 fill here ---
+In our project we made use of branches as each member in our group had a branch. We also employed a "develop" branch as an intermediate stage before integrating changes into the master branch. The process involved that all team members pushed their updates to the develop branch or merging it with their own branches. Throughout the project when we confirmed everything was functioning correctly, we merged the develop branch into the master branch. We did not make use of pull requests primarily due to the scale and collaborative style of our team. Our project, being relatively small and with a closely-knit team, allowed for direct communication and immediate feedback on changes. This setup enabled us to discuss and implement changes without the need for the formal review process typically associated with pull requests. However, in larger projects or in environments with distributed teams, pull requests can be incredibly beneficial. They provide a structured way to review and discuss proposed changes, ensure code quality, and maintain a history of decisions and modifications. Additionally the use of pull requests can be used to make sure that all code going into production (master branch) is reviewed which is a huge benefit in large projcts.
 
 ### Question 10
 
@@ -307,6 +307,8 @@ The total code coverage of our application code is 43%. The tests covers our sou
 > *As seen in the second image we are also tracking ... and ...*
 >
 > Answer:
+
+![Confusion matrix](figures/confusion_matrix_debug.png)
 
 --- question 14 fill here ---
 

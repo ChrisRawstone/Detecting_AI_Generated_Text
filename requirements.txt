@@ -14,3 +14,5 @@ dvc-gdrive>=3.0.1
 coverage
 click
 markdown
+evidently
+nltk
