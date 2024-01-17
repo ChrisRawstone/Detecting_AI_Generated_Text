@@ -8,26 +8,16 @@ from omegaconf import OmegaConf
 from src.train_model import train
 
 
-# hydra_logger = hydra.utils.log  # Use Hydra logger for logging
-
-# # Load metric for evaluation
-# metric = load_metric("accuracy")
-
-
-print("YOOYOOYOOYOY ",PROJECT_ROOT)
-sys.path.append(PROJECT_ROOT+"/src")
-
+hydra_logger = hydra.utils.log 
 
 
 def test_latest_folder_existence():
-    print(os.getcwd())
 
-    # @hydra.main(config_path="config", config_name="default_config.yaml")
+    experiment_name = "unit_testing_hparams"
     with initialize(version_base=None, config_path="../src/config"):
-        cfg = compose(config_name="default_config.yaml")
-        
-    train(cfg,push_model_to_gcs=False)
+        cfg = compose(config_name="default_config.yaml", overrides=[f"experiment={experiment_name}"])
 
+    train(cfg)
 
     latest_folder_path = os.path.join("models", "latest")
     assert os.path.exists(

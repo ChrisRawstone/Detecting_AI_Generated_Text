@@ -8,14 +8,18 @@ import hydra
 from hydra.utils import get_original_cwd
 from google.cloud import storage
 import wandb
-
-
+import omegaconf
+from hydra import compose, initialize
+from omegaconf import OmegaConf 
 hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 
 # Load metric for evaluation
 metric = load_metric("accuracy")
 
-# test
+TEST_ROOT = os.path.dirname(__file__)  # root of test folder
+PROJECT_ROOT = os.path.dirname(TEST_ROOT)
+
+
 
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
@@ -42,9 +46,14 @@ def upload_model_to_gcs(local_model_dir, bucket_name, gcs_path, model_name):
 
     hydra_logger.info(f"Files uploaded to GCS folder: gs://{bucket_name}/{folder_name}")
 
-
 @hydra.main(config_path="config", config_name="default_config.yaml")
-def train(config,push_model_to_gcs=True):
+def main(config):
+    train(config)
+
+
+def train(config):
+    print(omegaconf.OmegaConf.to_yaml(config))
+
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     hydra_logger.info(f"Using device: {device}")
 
@@ -70,8 +79,7 @@ def train(config,push_model_to_gcs=True):
     else:
         wandb.init(mode="disabled")
 
-    print(get_original_cwd())
-    path_to_data = os.path.join(get_original_cwd(), "data/processed")
+    path_to_data = os.path.join(PROJECT_ROOT, "data/processed")
     train_dataset = load_from_disk(os.path.join(path_to_data, "train_dataset_tokenized"))
     val_dataset = load_from_disk(os.path.join(path_to_data, "val_dataset_tokenized"))
     hydra_logger.info(f"Length of train data: {(len(train_dataset))}")
@@ -98,14 +106,17 @@ def train(config,push_model_to_gcs=True):
     trainer.evaluate()
 
     # Save the model
-    model_dir = '../../../models'
+    model_dir = PROJECT_ROOT+'/models'
     trainer.save_model(f"{model_dir}/{parameters.gcp_args.model_name}")
     trainer.save_model(f"{model_dir}/latest")
 
     # Upload model to GCS
-    if push_model_to_gcs:
+    if parameters.gcp_args.push_model_to_gcs=="True":
         upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name)
         upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, "latest")
 
+
+
 if __name__ == "__main__":
-    train()
+    main()
+
