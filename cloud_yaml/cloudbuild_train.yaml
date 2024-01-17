@@ -2,17 +2,17 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   
   script: |
-    IMAGE_EXISTS=$(gcloud container images describe gcr.io/elite-totem-410916/base_image:latest --format="value(image_summary.image)%' ' 2>/dev/null")
-    echo this is the value of image exists: $IMAGE_EXISTS
-    if [[ -z "$IMAGE_EXISTS" ]]; then
-      gcloud builds submit --config cloud_yaml/cloudbuild_base_image.yaml .
+    existing_tags=$(gcloud container images list --repository=gcr.io/elite-totem-410916 --filter="name:base_image" --format=json")
+    if [[ "$existing_tags" == "[]" ]]; then
+      printf "tag does not exist"
     else
-      echo "Base image already exists. Skipping build."
+      printf "tag exists"
     fi
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/elite-totem-410916/trainer:latest', '.', '-f', 'dockerfiles/train_model.dockerfile']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/elite-totem-410916/trainer:latest']
+
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['build', '-t', 'gcr.io/elite-totem-410916/trainer:latest', '.', '-f', 'dockerfiles/train_model.dockerfile']
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['push', 'gcr.io/elite-totem-410916/trainer:latest']
 
 
 
