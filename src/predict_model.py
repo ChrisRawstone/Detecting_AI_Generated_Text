@@ -7,33 +7,32 @@ from datasets import load_from_disk
 from typing import Dict
 from transformers import DistilBertTokenizerFast
 
+
 def predict_string(model: torch.nn.Module, text: str, device) -> Dict:
     """Run predictions for a given model on a string
-    
+
     Args:
         model: model to use for prediction
         text: text to predict on
-    
+
     Returns
         Dict
     """
     # Tokenize the text
-    tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
+    tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
 
     # Tokenize the data
-    tokenized_text = tokenizer(text, padding='max_length', truncation=True, return_tensors='pt', max_length=512).to(device)     
+    tokenized_text = tokenizer(text, padding="max_length", truncation=True, return_tensors="pt", max_length=512).to(
+        device
+    )
 
     # Get the model prediction
     with torch.no_grad():
         logits = model(**tokenized_text).logits
         probabilities = torch.softmax(logits, dim=1)
-        prediction = torch.argmax(probabilities, dim=1).item()     
-    
-    return {
-        'text': text,
-        'prediction': prediction,
-        'probabilities': probabilities.tolist()[0]
-    }  
+        prediction = torch.argmax(probabilities, dim=1).item()
+
+    return {"text": text, "prediction": prediction, "probabilities": probabilities.tolist()[0]}
 
 
 def predict(model: torch.nn.Module, tokenized_dataset: datasets.arrow_dataset.Dataset, device) -> None:
@@ -71,6 +70,7 @@ def predict(model: torch.nn.Module, tokenized_dataset: datasets.arrow_dataset.Da
     predictions_dataframe["generated"] = tokenized_dataset["generated"]
     return predictions_dataframe
 
+
 if __name__ == "__main__":
     # print pwd
     import os
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
     print("Predictions:\n", predictions_df.head(5))
 
-    model_name = 'debug'
+    model_name = "debug"
 
     if not os.path.exists("results"):
         os.makedirs("results")

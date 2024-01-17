@@ -12,7 +12,8 @@ from visualizations.visualize import plot_confusion_matrix_sklearn
 import wandb
 import omegaconf
 from hydra import compose, initialize
-from omegaconf import OmegaConf 
+from omegaconf import OmegaConf
+
 hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 
 # Load metric for evaluation
@@ -21,12 +22,14 @@ metric = load_metric("accuracy")
 TEST_ROOT = os.path.dirname(__file__)  # root of test folder
 PROJECT_ROOT = os.path.dirname(TEST_ROOT)
 
+
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
     predictions = np.argmax(logits, axis=-1)
     accuracy = metric.compute(predictions=predictions, references=labels)
     hydra_logger.info(f"Accuracy: {accuracy['accuracy']}")
     return accuracy
+
 
 def upload_model_to_gcs(local_model_dir, bucket_name, gcs_path, model_name):
     client = storage.Client()
@@ -46,6 +49,7 @@ def upload_model_to_gcs(local_model_dir, bucket_name, gcs_path, model_name):
 
     hydra_logger.info(f"Files uploaded to GCS folder: gs://{bucket_name}/{folder_name}")
 
+
 @hydra.main(config_path="config", config_name="default_config.yaml")
 def main(config):
     train(config)
@@ -54,7 +58,9 @@ def main(config):
 def train(config):
     print(omegaconf.OmegaConf.to_yaml(config))
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+    device = torch.device(
+        "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
+    )
     hydra_logger.info(f"Using device: {device}")
 
     parameters = config.experiment
@@ -108,7 +114,7 @@ def train(config):
         with torch.no_grad():
             input_ids = torch.tensor(val_dataset[i]["input_ids"]).to(device)
             attention_mask = torch.tensor(val_dataset[i]["attention_mask"]).to(device)
-            labels = val_dataset[i]["labels"]  
+            labels = val_dataset[i]["labels"]
             logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
             probs = torch.softmax(logits, dim=1)
             predicted_label = torch.argmax(probs, dim=1).item()
@@ -117,27 +123,38 @@ def train(config):
             probabilities.append(list(probs.numpy().flatten()))
             prob1D.append(probs.numpy().flatten()[0])
 
-    class_names = ['Human', 'AI Generated']
+    class_names = ["Human", "AI Generated"]
     # Log metrics to wandb
-    wandb.log({"confusion matrix" : wandb.plot.confusion_matrix(probs=None,
-                        y_true=true_labels, preds=predictions,
-                        class_names=class_names)})
+    wandb.log(
+        {
+            "confusion matrix": wandb.plot.confusion_matrix(
+                probs=None, y_true=true_labels, preds=predictions, class_names=class_names
+            )
+        }
+    )
     wandb.log({"roc": wandb.plot.roc_curve(true_labels, probabilities, labels=class_names)})
-    
-    plot_confusion_matrix_sklearn(true_labels, predictions, class_names, run=wandb.run) # Saves to wandb
-    plot_confusion_matrix_sklearn(true_labels, predictions, class_names, save_path=os.path.join(get_original_cwd(), "reports/figures"), name=f"confusion_matrix_{parameters.gcp_args.model_name}.png") # Saves to reports/figures
+
+    plot_confusion_matrix_sklearn(true_labels, predictions, class_names, run=wandb.run)  # Saves to wandb
+    plot_confusion_matrix_sklearn(
+        true_labels,
+        predictions,
+        class_names,
+        save_path=os.path.join(get_original_cwd(), "reports/figures"),
+        name=f"confusion_matrix_{parameters.gcp_args.model_name}.png",
+    )  # Saves to reports/figures
 
     # Save the model
-    model_dir = PROJECT_ROOT+'/models'
+    model_dir = PROJECT_ROOT + "/models"
     trainer.save_model(f"{model_dir}/{parameters.gcp_args.model_name}")
     trainer.save_model(f"{model_dir}/latest")
 
     # Upload model to GCS
-    if parameters.gcp_args.push_model_to_gcs=="True":
-        upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name)
+    if parameters.gcp_args.push_model_to_gcs == "True":
+        upload_model_to_gcs(
+            model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name
+        )
         upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, "latest")
 
 
 if __name__ == "__main__":
     main()
-

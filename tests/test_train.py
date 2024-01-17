@@ -4,15 +4,14 @@ import pytest
 from mypaths import PROJECT_ROOT
 import hydra
 from hydra import compose, initialize
-from omegaconf import OmegaConf 
+from omegaconf import OmegaConf
 from src.train_model import train
 
 
-hydra_logger = hydra.utils.log 
+hydra_logger = hydra.utils.log
 
 
 def test_latest_folder_existence():
-
     experiment_name = "unit_testing_hparams"
     with initialize(version_base=None, config_path="../src/config"):
         cfg = compose(config_name="default_config.yaml", overrides=[f"experiment={experiment_name}"])

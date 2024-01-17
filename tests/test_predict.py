@@ -3,7 +3,9 @@ import pytest
 import os.path
 import pandas as pd
 from mypaths import PROJECT_ROOT
+
 sys.path.append(PROJECT_ROOT)
+
 
 @pytest.mark.skipif(
     not os.path.exists(f"results/predictions_debug.json"),
