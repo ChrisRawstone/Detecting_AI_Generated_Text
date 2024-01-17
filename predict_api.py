@@ -1,12 +1,12 @@
 import os
 import pandas as pd
 import torch
-from fastapi import BackgroundTasks, FastAPI, UploadFile, File
+from datetime import datetime
+from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
-from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
+from transformers import DistilBertForSequenceClassification
 from google.cloud import storage
 from src.predict_model import predict_string, predict_csv
-from http import HTTPStatus
 
 app = FastAPI()
 
@@ -31,7 +31,6 @@ def download_gcs_folder(bucket_name, source_folder):
 
 bucket_name = "ai-detection-bucket"
 source_folder = "models/latest"
-#download_gcs_folder(bucket_name, source_folder)
 
 model = DistilBertForSequenceClassification.from_pretrained(f"models/latest", num_labels=2)
 model.to(device)
@@ -61,7 +60,18 @@ async def process_csv(file: UploadFile = File(...)):
 
     # Make predictions 
     predictions_df = predict_csv(model, df, device)
-    predictions_df.to_csv("results/predictions.csv", index=False)
+
+    # Generate a timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    local_predictions_file = f"results/predictions_{timestamp}.csv"
+    predictions_df.to_csv(local_predictions_file, index=False)
+
+    # Upload to GCS
+    storage_client = storage.Client.create_anonymous_client()
+    bucket = storage_client.bucket(bucket_name)
+    gcs_file_path = f"inference_predictions/predictions_{timestamp}.csv"
+    blob = bucket.blob(gcs_file_path)
+    blob.upload_from_filename(local_predictions_file)
 
     return FileResponse("results/predictions.csv", media_type="text/csv", filename="predictions.csv")
 
