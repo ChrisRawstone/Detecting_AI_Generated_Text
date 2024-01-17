@@ -64,18 +64,11 @@ def train(config):
 
     wandb_enabled = True
     if wandb_enabled:
-        # try:
-        # import os
-        # wandb_api_key = os.environ.get('WANDB_API_KEY')
-        # print("WANDB_API_KEY: ", wandb_api_key)
-        # print("WANDB_API_KEY: ", len(wandb_api_key))
-
-        # wandb.login(key=wandb_api_key)
-
-        wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
-        # except:
-        #     print("Could not initialize wandb. No API key found.")
-        #     wandb.init(mode="disabled")
+        try:
+            wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
+        except:
+            print("Could not initialize wandb. No API key found.")
+            wandb.init(mode="disabled")
     else:
         wandb.init(mode="disabled")
 
