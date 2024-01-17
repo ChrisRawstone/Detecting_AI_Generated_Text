@@ -101,7 +101,7 @@ def get_data(sample_size: int = None, path: str = "data/raw/"):
         X_train: train data
         X_test: test data
     """
-    # Concat all our self generated essays
+
     original_essays = get_data_original_data(path)
     generated_essays = get_data_generated_data_first_iteration(path)
     DAIGTProperTrainDataset_essays = get_DAIGTProperTrainDataset(path)
@@ -110,13 +110,19 @@ def get_data(sample_size: int = None, path: str = "data/raw/"):
     # Concat all the dataframes
     all_essays = pd.concat([original_essays, generated_essays])
     all_essays = pd.concat([all_essays, DAIGTProperTrainDataset_essays])
-    all_essays = pd.concat([all_essays, AugmenteddataforLLM_essays])
+    # all_essays = pd.concat([all_essays, AugmenteddataforLLM_essays])
+    data_drift_essays = AugmenteddataforLLM_essays
 
     # Reset the index
+    data_drift_essays.reset_index(inplace=True, drop=True)
     all_essays.reset_index(inplace=True, drop=True)
+
     # create key from index
     all_essays["key"] = all_essays.index
     all_essays["label"] = all_essays["label"].astype(int)
+
+    data_drift_essays["key"] = data_drift_essays.index
+    data_drift_essays["label"] = data_drift_essays["label"].astype(int)
 
     # Sample the data if needed
     if sample_size:
@@ -126,10 +132,8 @@ def get_data(sample_size: int = None, path: str = "data/raw/"):
     X_train, X_temp = train_test_split(all_essays[["text", "label"]], test_size=0.2, random_state=42)
     X_val, X_test = train_test_split(X_temp, test_size=0.5, random_state=42)
 
-    return X_train, X_test, X_val
-    # X_train.to_csv("data/processed/train.csv", index=False)
-    # X_test.to_csv("data/processed/test.csv", index=False)
-    # X_val.to_csv("data/processed/validation.csv", index=False)
+    return X_train, X_test, X_val, data_drift_essays
+
 
 
 def tokenize_and_format(data: Dataset):
@@ -163,7 +167,7 @@ def make_dataset(sample_size):
     """
 
     # Get the data
-    X_train, X_test, X_val = get_data(sample_size)
+    X_train, X_test, X_val, data_drift_essays = get_data(sample_size)
 
     # Load datasets
     train_dataset = Dataset.from_pandas(X_train)
@@ -175,16 +179,31 @@ def make_dataset(sample_size):
     val_dataset = val_dataset.map(tokenize_and_format, batched=True)
     test_dataset = test_dataset.map(tokenize_and_format, batched=True)
 
-    if sample_size is not None:
+
+
+    if sample_size is None:
         # Save the datasets
-        train_dataset.save_to_disk("data/processed/small_data/train_dataset_tokenized")
-        val_dataset.save_to_disk("data/processed/small_data/val_dataset_tokenized")
-        test_dataset.save_to_disk("data/processed/small_data/test_dataset_tokenized")
+        train_dataset.save_to_disk("data/processed/tokenized_data/full_data/train_dataset_tokenized")
+        val_dataset.save_to_disk("data/processed/tokenized_data/full_data/val_dataset_tokenized")
+        test_dataset.save_to_disk("data/processed/tokenized_data/full_data/test_dataset_tokenized")
+
+        X_train.to_csv("data/processed/csv_files/full_data/train.csv", index=False)
+        X_test.to_csv("data/processed/csv_files/full_data/test.csv", index=False)
+        X_val.to_csv("data/processed/csv_files/full_data/validation.csv", index=False)
 
     else:
-        train_dataset.save_to_disk("data/processed/full_data/train_dataset_tokenized")
-        val_dataset.save_to_disk("data/processed/full_data/val_dataset_tokenized")
-        test_dataset.save_to_disk("data/processed/full_data/test_dataset_tokenized")
+        train_dataset.save_to_disk("data/processed/tokenized_data/small_data/train_dataset_tokenized")
+        val_dataset.save_to_disk("data/processed/tokenized_data/small_data/val_dataset_tokenized")
+        test_dataset.save_to_disk("data/processed/tokenized_data/small_data/test_dataset_tokenized")
+
+        X_train.to_csv("data/processed/csv_files/small_data/train.csv", index=False)
+        X_test.to_csv("data/processed/csv_files/small_data/test.csv", index=False)
+        X_val.to_csv("data/processed/csv_files/small_data/validation.csv", index=False)
+
+        data_drift_essays.to_csv("data/processed/csv_files/data_drift_files/data_drift_essays.csv", index=False)
+        
+
+
 
 
 if __name__ == "__main__":
