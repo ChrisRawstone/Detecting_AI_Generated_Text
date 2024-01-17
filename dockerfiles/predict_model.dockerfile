@@ -14,6 +14,7 @@ RUN pip install fastapi
 RUN pip install pydantic
 RUN pip install uvicorn
 RUN pip install evidently
+RUN pip install python-multipart
 
 COPY src/ src/
 COPY predict_api.py predict_api.py
