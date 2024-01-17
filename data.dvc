@@ -10,90 +10,160 @@ outs:
       remote_storage:
         etag: 08b6ed8bcd84d883031001
         version_id: '1705068892190390'
-  - relpath: processed/test.csv
-    md5: 8b099144735df9a72899e9c6f042fed8
-    size: 234632
+  - relpath: processed/full_data/test_dataset_tokenized/data-00000-of-00001.arrow
+    md5: 0f2417c8088ea9e7f94fd1a2335685a2
+    size: 287528224
     cloud:
       remote_storage:
-        etag: 08b6ea90a7a3e283031001
-        version_id: '1705420731462966'
-  - relpath: processed/test_dataset_tokenized/data-00000-of-00001.arrow
-    md5: cec36c5abc7991af4814e3e8e0e1d179
-    size: 493048
+        etag: 088ca6ccbba4e483031001
+        version_id: '1705489762292492'
+  - relpath: processed/full_data/test_dataset_tokenized/dataset_info.json
+    md5: 61384ff1911383a26b96f3bbeace1da8
+    size: 581
     cloud:
       remote_storage:
-        etag: 08efb799a7a3e283031001
-        version_id: '1705420731603951'
-  - relpath: processed/test_dataset_tokenized/dataset_info.json
-    md5: 7535d330d0fbd40a9c0c4ed830541eca
-    size: 1068
+        etag: 08ddcec2d1a3e483031001
+        version_id: '1705489539835741'
+  - relpath: processed/full_data/test_dataset_tokenized/state.json
+    md5: 87c42278d1cd2c7e0d656c237b3e4da3
+    size: 247
     cloud:
       remote_storage:
-        etag: 08d2ec86a7a3e283031001
-        version_id: '1705420731299410'
-  - relpath: processed/test_dataset_tokenized/state.json
-    md5: 04cee1fca55df83f6f4d48ab08631ab9
-    size: 250
+        etag: 08d69dc5d1a3e483031001
+        version_id: '1705489539878614'
+  - relpath: processed/full_data/train_dataset_tokenized/data-00000-of-00005.arrow
+    md5: 4919dfe9af729641a65a5be292a46f4c
+    size: 459780592
     cloud:
       remote_storage:
-        etag: 08cd89bee6a5e283031001
-        version_id: '1705421401195725'
-  - relpath: processed/train.csv
-    md5: ca2a3c38f942ee7ce82deb80670e37c3
-    size: 1807458
+        etag: 08f98089e2a4e483031001
+        version_id: '1705489842978937'
+  - relpath: processed/full_data/train_dataset_tokenized/data-00001-of-00005.arrow
+    md5: 88383ed083dc2904747d21c6fa91dca6
+    size: 459846872
     cloud:
       remote_storage:
-        etag: 0885daf3a6a3e283031001
-        version_id: '1705420730985733'
-  - relpath: processed/train_dataset_tokenized/data-00000-of-00001.arrow
-    md5: 4d48f97a757e42cdeda7210c776a51c5
-    size: 3866816
+        etag: 088c89fedfa4e483031001
+        version_id: '1705489838605452'
+  - relpath: processed/full_data/train_dataset_tokenized/data-00002-of-00005.arrow
+    md5: 0ff79449a644164630f30fd53110cdf7
+    size: 459901488
     cloud:
       remote_storage:
-        etag: 08c1b3aaa7a3e283031001
-        version_id: '1705420731881921'
-  - relpath: processed/train_dataset_tokenized/dataset_info.json
-    md5: 1858499bcd6e38eb467aabbb87e18cd8
-    size: 1074
+        etag: 08dee6b0e1a4e483031001
+        version_id: '1705489841533790'
+  - relpath: processed/full_data/train_dataset_tokenized/data-00003-of-00005.arrow
+    md5: 53ada820455585b4322546cd952b854d
+    size: 459655504
     cloud:
       remote_storage:
-        etag: 08caf686a7a3e283031001
-        version_id: '1705420731300682'
-  - relpath: processed/train_dataset_tokenized/state.json
-    md5: 7fe5c25571b5145bad7b45ecd3b5a14f
-    size: 250
+        etag: 08dbbec9e4a4e483031001
+        version_id: '1705489848229723'
+  - relpath: processed/full_data/train_dataset_tokenized/data-00004-of-00005.arrow
+    md5: 14ac6b7ae6bc69d58843dc27adad80f2
+    size: 459708832
     cloud:
       remote_storage:
-        etag: 08fea0c4e6a5e283031001
-        version_id: '1705421401297022'
-  - relpath: processed/val_dataset_tokenized/data-00000-of-00001.arrow
-    md5: e4ca3f1587a0cc2269b173e0bb728383
-    size: 484640
+        etag: 0896d680e3a4e483031001
+        version_id: '1705489844939542'
+  - relpath: processed/full_data/train_dataset_tokenized/dataset_info.json
+    md5: 61384ff1911383a26b96f3bbeace1da8
+    size: 581
     cloud:
       remote_storage:
-        etag: 08a5bb99a7a3e283031001
-        version_id: '1705420731604389'
-  - relpath: processed/val_dataset_tokenized/dataset_info.json
-    md5: 84eb917b29825723857ef27224a3fb8b
-    size: 1074
+        etag: 088cc6c2d1a3e483031001
+        version_id: '1705489539834636'
+  - relpath: processed/full_data/train_dataset_tokenized/state.json
+    md5: ec107f7ba9b7c1bb41c804b1fd39d15a
+    size: 483
     cloud:
       remote_storage:
-        etag: 08a2a487a7a3e283031001
-        version_id: '1705420731306530'
-  - relpath: processed/val_dataset_tokenized/state.json
-    md5: 9abcc79d24bd2b200a2cc66aba69f5eb
-    size: 250
+        etag: 08bfadc2d1a3e483031001
+        version_id: '1705489539831487'
+  - relpath: processed/full_data/val_dataset_tokenized/data-00000-of-00001.arrow
+    md5: 29da46b85ccd3efbb2964e0de9652b16
+    size: 286861344
     cloud:
       remote_storage:
-        etag: 08b0a4b3e6a5e283031001
-        version_id: '1705421401018928'
-  - relpath: processed/validation.csv
-    md5: 8c7d0433a9d4fd20343f788ac85709cd
-    size: 226202
+        etag: 08b8cac9a9a4e483031001
+        version_id: '1705489724499256'
+  - relpath: processed/full_data/val_dataset_tokenized/dataset_info.json
+    md5: 61384ff1911383a26b96f3bbeace1da8
+    size: 581
     cloud:
       remote_storage:
-        etag: 08e2f182a7a3e283031001
-        version_id: '1705420731234530'
+        etag: 08e9b6aed1a3e483031001
+        version_id: '1705489539505001'
+  - relpath: processed/full_data/val_dataset_tokenized/state.json
+    md5: 728c7ad549b8b4e2cd63749b169b4ce6
+    size: 247
+    cloud:
+      remote_storage:
+        etag: 08b9d6c2d1a3e483031001
+        version_id: '1705489539836729'
+  - relpath: processed/small_data/test_dataset_tokenized/data-00000-of-00001.arrow
+    md5: 16e76be223154a56711574168795af7f
+    size: 47432
+    cloud:
+      remote_storage:
+        etag: 08b4e9c8d1a3e483031001
+        version_id: '1705489539937460'
+  - relpath: processed/small_data/test_dataset_tokenized/dataset_info.json
+    md5: 61384ff1911383a26b96f3bbeace1da8
+    size: 581
+    cloud:
+      remote_storage:
+        etag: 08da90c1d1a3e483031001
+        version_id: '1705489539811418'
+  - relpath: processed/small_data/test_dataset_tokenized/state.json
+    md5: 372be6b5018729ecb2a3907749b853d5
+    size: 247
+    cloud:
+      remote_storage:
+        etag: 08acbec2d1a3e483031001
+        version_id: '1705489539833644'
+  - relpath: processed/small_data/train_dataset_tokenized/data-00000-of-00001.arrow
+    md5: 1671aff22278465b5230743137a30e61
+    size: 391496
+    cloud:
+      remote_storage:
+        etag: 08cdd9d6d1a3e483031001
+        version_id: '1705489540164813'
+  - relpath: processed/small_data/train_dataset_tokenized/dataset_info.json
+    md5: 61384ff1911383a26b96f3bbeace1da8
+    size: 581
+    cloud:
+      remote_storage:
+        etag: 089f9cc5d1a3e483031001
+        version_id: '1705489539878431'
+  - relpath: processed/small_data/train_dataset_tokenized/state.json
+    md5: 4e5fd4059c169721ebc3f38fc804c359
+    size: 247
+    cloud:
+      remote_storage:
+        etag: 08ee95c5d1a3e483031001
+        version_id: '1705489539877614'
+  - relpath: processed/small_data/val_dataset_tokenized/data-00000-of-00001.arrow
+    md5: 7f75c2880376d83c363b052a62494d6d
+    size: 53440
+    cloud:
+      remote_storage:
+        etag: 08e288c8d1a3e483031001
+        version_id: '1705489539925090'
+  - relpath: processed/small_data/val_dataset_tokenized/dataset_info.json
+    md5: 61384ff1911383a26b96f3bbeace1da8
+    size: 581
+    cloud:
+      remote_storage:
+        etag: 089e90c6d1a3e483031001
+        version_id: '1705489539893278'
+  - relpath: processed/small_data/val_dataset_tokenized/state.json
+    md5: de13354aa5371223c36cf31a2cebfb15
+    size: 247
+    cloud:
+      remote_storage:
+        etag: 089a9ac3d1a3e483031001
+        version_id: '1705489539845402'
   - relpath: raw/.DS_Store
     md5: ad4e66c0a8218e96023bcaabf521fae3
     size: 6148
