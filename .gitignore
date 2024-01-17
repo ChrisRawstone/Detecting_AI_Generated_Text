@@ -190,3 +190,4 @@ cloudbuid.yaml
 models/*
 !models/*latest*
 /models
+kaggle

@@ -1,0 +1,24 @@
+model_settings:
+  pretrained_model: 'distilbert-base-uncased' # model_type
+  num_labels: 2
+
+training_args:
+  output_dir: './results'
+  num_train_epochs: 1
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
+  warmup_steps: 5
+  weight_decay: 0.01
+  logging_dir: './logs'
+  logging_steps: 20
+general_args:
+  path_train_data: "tokenized_data/small_data/train_dataset_tokenized"
+  path_val_data: "tokenized_data/small_data/val_dataset_tokenized"
+  path_test_data: "tokenized_data/small_data/test_dataset_tokenized"
+  wandb_enabled: "False"
+gcp_args:
+  model_name: 'unit-testing-model'
+  gcs_bucket: 'ai-detection-bucket'
+  gcs_path: 'models'
+  push_model_to_gcs : "False"
+

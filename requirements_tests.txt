@@ -1,0 +1,6 @@
+# empty for now 
+# '''
+# The second file is all additional packages required to run the tests. 
+# In your simple case it may very well be that the second file is empty, 
+# however sometimes additional packages are used for testing that are not strictly required for the scripts to run.
+# '''

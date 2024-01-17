@@ -1,0 +1,20 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/elite-totem-410916/predicter:latest', '.', '-f', 'dockerfiles/predict_model.dockerfile']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/elite-totem-410916/predicter:latest']
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - 'run'
+  - 'deploy'
+  - 'predicter'
+  - '--image'
+  - 'gcr.io/elite-totem-410916/predicter:latest'
+  - '--region'
+  - 'europe-west1'
+  - '--memory'
+  -  '2Gi'
+
+

@@ -16,3 +16,4 @@ mkdocstrings[python]>=0.18
 openai==0.28.0
 pandas
 numpy
+coverage

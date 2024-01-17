@@ -1,29 +1,26 @@
-# Base image
-FROM python:3.11-slim
+FROM --platform=linux/amd64 python:3.11-slim 
+
+WORKDIR /app
 
 RUN apt update && \
     apt install --no-install-recommends -y build-essential gcc && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
-
 COPY requirements.txt requirements.txt
-COPY pyproject.toml pyproject.toml
-COPY Makefile Makefile
 
 RUN pip install -r requirements.txt --no-cache-dir
 
-RUN dvc init --no-scm
-COPY .dvc/config .dvc/config
-RUN dvc config core.no_scm true
-COPY data.dvc data.dvc
+RUN pip install fastapi
+RUN pip install pydantic
+RUN pip install uvicorn
+RUN pip install evidently
 
 COPY src/ src/
+COPY predict_api.py predict_api.py
+COPY pyproject.toml pyproject.toml 
 
+RUN pip install . --no-cache-dir --no-deps
 
-COPY results/ results/
+EXPOSE 8080
 
-WORKDIR /
-
-RUN pip install -e. --no-deps --no-cache-dir
-
-ENTRYPOINT ["make", "predict"]
+CMD exec uvicorn predict_api:app --port $PORT --host 0.0.0.0 --workers 1
