@@ -4,13 +4,13 @@ import torch
 from google.cloud import storage
 from datasets import load_metric, load_from_disk
 from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
-from src.visualizations.visualize import plot_confusion_matrix_sklearn
 from hydra.utils import get_original_cwd
 import hydra
 import omegaconf
 from omegaconf import OmegaConf
 import wandb
 from src.predict_model import predict
+from src.visualizations.visualize import plot_confusion_matrix_sklearn
 
 hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 
