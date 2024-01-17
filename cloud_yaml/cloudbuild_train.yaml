@@ -1,6 +1,6 @@
 steps:
 - name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: bash
+  
   script: |
     IMAGE_EXISTS=$(gcloud container images describe gcr.io/elite-totem-410916/base_image:latest --format="value(image_summary.image)%' ' 2>/dev/null")
     if [[ -z "$IMAGE_EXISTS" ]]; then
