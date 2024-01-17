@@ -126,7 +126,7 @@ def train(config):
                         class_names=class_names)})
     wandb.log({"roc": wandb.plot.roc_curve(true_labels, probabilities, labels=class_names)})
     plot_confusion_matrix_sklearn(true_labels, predictions, class_names, run=wandb.run) # Saves to wandb
-    plot_confusion_matrix_sklearn(true_labels, predictions, class_names, save_path=os.path.join(get_original_cwd(), "reports/figures"), name=f"confusion_matrix_{parameters.gcp_args.model_name}.png") # Saves to reports/figures
+    plot_confusion_matrix_sklearn(true_labels, predictions, class_names, save_path=os.path.join(PROJECT_ROOT, "reports/figures"), name=f"confusion_matrix_{parameters.gcp_args.model_name}.png") # Saves to reports/figures
 
     # Save the model
     model_dir = PROJECT_ROOT+'/models'
