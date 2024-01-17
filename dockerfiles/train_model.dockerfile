@@ -23,4 +23,4 @@ WORKDIR /
 
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["sh","-c","dvc pull data/processed && python src/train_model.py experiment=experiment_1"]
+ENTRYPOINT ["sh","-c","dvc pull data/processed/tokenized_data/full_data && python src/train_model.py experiment=experiment_1"]

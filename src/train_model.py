@@ -4,13 +4,13 @@ import torch
 from google.cloud import storage
 from datasets import load_metric, load_from_disk
 from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
-from visualizations.visualize import plot_confusion_matrix_sklearn
+from src.visualizations.visualize import plot_confusion_matrix_sklearn
 from hydra.utils import get_original_cwd
 import hydra
 import omegaconf
 from omegaconf import OmegaConf
 import wandb
-from predict_model import predict
+from src.predict_model import predict
 
 hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 
@@ -118,7 +118,7 @@ def train(config):
         wandb_log_metrics(all_predictions, class_names)
        
     plot_confusion_matrix_sklearn(all_predictions['label'],all_predictions['prediction'],class_names,
-                                  save_path=os.path.join(get_original_cwd(), "reports/figures"),
+                                  save_path=os.path.join(PROJECT_ROOT, "reports/figures"),
                                   name=f"confusion_matrix_{parameters.gcp_args.model_name}.png")  # Saves to reports/figures
     
     # Save the model
