@@ -21,8 +21,6 @@ metric = load_metric("accuracy")
 TEST_ROOT = os.path.dirname(__file__)  # root of test folder
 PROJECT_ROOT = os.path.dirname(TEST_ROOT)
 
-
-
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
     predictions = np.argmax(logits, axis=-1)
@@ -132,6 +130,7 @@ def train(config):
                         y_true=true_labels, preds=predictions,
                         class_names=class_names)})
     wandb.log({"roc": wandb.plot.roc_curve(true_labels, probabilities, labels=class_names)})
+    
     plot_confusion_matrix_sklearn(true_labels, predictions, class_names, run=wandb.run) # Saves to wandb
     plot_confusion_matrix_sklearn(true_labels, predictions, class_names, save_path=os.path.join(get_original_cwd(), "reports/figures"), name=f"confusion_matrix_{parameters.gcp_args.model_name}.png") # Saves to reports/figures
 
@@ -144,7 +143,6 @@ def train(config):
     if parameters.gcp_args.push_model_to_gcs=="True":
         upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name)
         upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, "latest")
-
 
 
 if __name__ == "__main__":
