@@ -7,7 +7,6 @@ from datasets import load_from_disk
 from typing import Dict
 from transformers import DistilBertTokenizerFast
 
-
 def predict_string(model: torch.nn.Module, text: str, device) -> Dict:
     """Run predictions for a given model on a string
 
@@ -22,10 +21,8 @@ def predict_string(model: torch.nn.Module, text: str, device) -> Dict:
     tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
 
     # Tokenize the data
-    tokenized_text = tokenizer(text, padding="max_length", truncation=True, return_tensors="pt", max_length=512).to(
-        device
-    )
-
+    tokenized_text = tokenizer(text, padding="max_length", truncation=True, return_tensors="pt", max_length=512).to(device)
+    
     # Get the model prediction
     with torch.no_grad():
         logits = model(**tokenized_text).logits
@@ -35,7 +32,7 @@ def predict_string(model: torch.nn.Module, text: str, device) -> Dict:
     return {"text": text, "prediction": prediction, "probabilities": probabilities.tolist()[0]}
 
 
-def predict(model: torch.nn.Module, tokenized_dataset: datasets.arrow_dataset.Dataset, device) -> None:
+def predict(model: torch.nn.Module, tokenized_dataset: datasets.arrow_dataset.Dataset, device) -> pd.DataFrame:
     """Run predictions for a given model on a dataframe that contains tokenized text
 
     Args:
@@ -49,34 +46,28 @@ def predict(model: torch.nn.Module, tokenized_dataset: datasets.arrow_dataset.Da
     predictions_dataframe = pd.DataFrame(columns=["text"])
 
     predictions = []
-
+    probabilities = []
     for i in range(len(tokenized_dataset)):
         with torch.no_grad():
             input_ids = torch.tensor(tokenized_dataset[i]["input_ids"]).to(device)  # Convert input_ids to a tensor
-            attention_mask = torch.tensor(tokenized_dataset[i]["attention_mask"]).to(
-                device
-            )  # Convert attention_mask to a tensor
+            attention_mask = torch.tensor(tokenized_dataset[i]["attention_mask"]).to(device)  # Convert attention_mask to a tensor
 
             logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
 
-            probabilities = torch.softmax(logits, dim=1)
+            probs = torch.softmax(logits, dim=1)
 
-            predicted_label = torch.argmax(probabilities, dim=1).item()
+            predicted_label = torch.argmax(probs, dim=1).item()
 
             predictions.append(predicted_label)
+            probabilities.append(list(probs.cpu().numpy().flatten()))
 
     predictions_dataframe["text"] = tokenized_dataset["text"]
     predictions_dataframe["prediction"] = predictions
-    predictions_dataframe["generated"] = tokenized_dataset["generated"]
+    predictions_dataframe["probabilities"] = probabilities
+    predictions_dataframe["label"] = tokenized_dataset["label"]
     return predictions_dataframe
 
-
 if __name__ == "__main__":
-    # print pwd
-    import os
-
-    print(os.getcwd())
-
     if torch.backends.mps.is_available():
         device = torch.device("mps")
     elif torch.cuda.is_available():

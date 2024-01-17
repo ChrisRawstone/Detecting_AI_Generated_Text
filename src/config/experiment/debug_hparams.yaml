@@ -11,11 +11,13 @@ training_args:
   weight_decay: 0.01
   logging_dir: './logs'
   logging_steps: 20
+
 general_args:
   path_train_data: "small_data/train_dataset_tokenized"
   path_val_data: "small_data/val_dataset_tokenized"
   path_test_data: "small_data/test_dataset_tokenized"
   wandb_enabled: "False"
+
 gcp_args:
   model_name: 'debug'
   gcs_bucket: 'ai-detection-bucket'
