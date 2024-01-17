@@ -1,16 +1,13 @@
 steps:
-- name: 'gcr.io/cloud-builders/git'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    IMAGE_EXISTS=$(gcloud container images describe gcr.io/elite-totem-410916/predicter:latest --format="value(image_summary.image)%' ' 2>/dev/null")
-    if [[ $(git diff --name-only $COMMIT_SHA^..$COMMIT_SHA | grep requirements.txt) || -z "$IMAGE_EXISTS" ]]; then
-      gcloud builds submit --config cloudbuild.yaml .
+- name: 'bash'
+  script: |
+    IMAGE_EXISTS=$(gcloud container images describe gcr.io/elite-totem-410916/base_image:latest --format="value(image_summary.image)%' ' 2>/dev/null")
+    if [[ -z "$IMAGE_EXISTS" ]]; then
+      gcloud builds submit --config cloud_yaml/cloudbuild_base_image.yaml .
     else
-      echo "No changes in requirements.txt and base image already exists. Skipping build."
+      echo "Base image already exists. Skipping build."
     fi
-
+  
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/elite-totem-410916/predicter:latest', '.', '-f', 'dockerfiles/predict_model.dockerfile']
 - name: 'gcr.io/cloud-builders/docker'
