@@ -56,7 +56,7 @@ def wandb_log_metrics(all_predictions, class_names):
     wandb.log({"accuracy": metric.compute(predictions=all_predictions['prediction'], references=all_predictions['label'])['accuracy']})
     wandb.log({"confusion matrix": wandb.plot.confusion_matrix(
             probs=None, y_true=all_predictions['label'], preds=all_predictions['prediction'], class_names=class_names)})
-    wandb.log({"roc": wandb.plot.roc_curve(all_predictions['label'], all_predictions['prediction'], labels=class_names)})
+    wandb.log({"roc": wandb.plot.roc_curve(list(all_predictions['label']), list(all_predictions['probabilities']), labels=class_names)})
     plot_confusion_matrix_sklearn(all_predictions['label'], all_predictions['prediction'], class_names, run=wandb.run)  # Saves to wandb
 
 def train(config):
