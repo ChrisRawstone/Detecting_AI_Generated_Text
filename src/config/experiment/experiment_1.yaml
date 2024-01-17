@@ -1,4 +1,4 @@
-model:
+model_settings:
   pretrained_model: 'distilbert-base-uncased'
   num_labels: 2
 
