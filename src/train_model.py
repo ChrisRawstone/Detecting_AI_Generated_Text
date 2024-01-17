@@ -68,7 +68,7 @@ def train(config):
         parameters.model_settings.cls, num_labels=parameters.model_settings.num_labels
     )
 
-    wandb_enabled = True
+    wandb_enabled = parameters.general_args.wandb_enabled
     if wandb_enabled:
         try:
             wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
@@ -79,8 +79,8 @@ def train(config):
         wandb.init(mode="disabled")
 
     path_to_data = os.path.join(PROJECT_ROOT, "data/processed")
-    train_dataset = load_from_disk(os.path.join(path_to_data, parameters.path_args.path_train_data))
-    val_dataset = load_from_disk(os.path.join(path_to_data, parameters.path_args.path_val_data))
+    train_dataset = load_from_disk(os.path.join(path_to_data, parameters.general_args.path_train_data))
+    val_dataset = load_from_disk(os.path.join(path_to_data, parameters.general_args.path_val_data))
     hydra_logger.info(f"Length of train data: {(len(train_dataset))}")
 
     # Load the model
@@ -114,7 +114,7 @@ def train(config):
         with torch.no_grad():
             input_ids = torch.tensor(val_dataset[i]["input_ids"]).to(device)
             attention_mask = torch.tensor(val_dataset[i]["attention_mask"]).to(device)
-            labels = val_dataset[i]["labels"]  
+            labels = val_dataset[i]["label"]  
             logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
             probs = torch.softmax(logits, dim=1)
             predicted_label = torch.argmax(probs, dim=1).item()
@@ -134,7 +134,7 @@ def train(config):
     )
     wandb.log({"roc": wandb.plot.roc_curve(true_labels, probabilities, labels=class_names)})
     plot_confusion_matrix_sklearn(true_labels, predictions, class_names, run=wandb.run) # Saves to wandb
-    plot_confusion_matrix_sklearn(true_labels, predictions, class_names, save_path=os.path.join(get_original_cwd(), "reports/figures"), name=f"confusion_matrix_{parameters.gcp_args.model_name}.png") # Saves to reports/figures
+    plot_confusion_matrix_sklearn(true_labels, predictions, class_names, save_path=os.path.join(PROJECT_ROOT, "reports/figures"), name=f"confusion_matrix_{parameters.gcp_args.model_name}.png") # Saves to reports/figures
 
     # Save the model
     model_dir = PROJECT_ROOT + "/models"
