@@ -12,23 +12,41 @@ import wandb
 from src.predict_model import predict
 from src.visualizations.visualize import plot_confusion_matrix_sklearn
 import logging
+import colorlog
+from transformers.utils import logging as transformer_logging
 
-# handler = colorlog.StreamHandler()
-# handler.setFormatter(hydra_colorlog.ColoredFormatter(
-# 	'%(log_color)s%(levelname)s:%(name)s:%(message)s'))
 
-# hydra_logger = hydra.utils.log  # Use Hydra logger for logging
-
-# hydra_logger.addHandler(handler)
 
 log = logging.getLogger(__name__)
 
+
+
+
+logger = transformer_logging.get_logger("transformers")
+
+logger.setLevel(transformer_logging.WARNING)
 
 # Load metric for evaluation
 metric = load_metric("accuracy")
 
 TEST_ROOT = os.path.dirname(__file__)  # root of test folder
 PROJECT_ROOT = os.path.dirname(TEST_ROOT)
+
+def enable_wandb(parameters):
+    wandb_enabled = parameters.general_args.wandb_enabled
+    if wandb_enabled == 'True':
+        try:
+            wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
+            wandb_enabled = True
+        except:
+            print("Could not initialize wandb. No API key found.")
+            wandb.init(mode="disabled")
+            wandb_enabled = False
+    else:
+        wandb.init(mode="disabled")
+        wandb_enabled = False
+    
+    return wandb_enabled
 
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
@@ -78,18 +96,8 @@ def train(config):
     parameters = config.experiment
     model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.pretrained_model, num_labels=parameters.model_settings.num_labels)
 
-    wandb_enabled = parameters.general_args.wandb_enabled
-    if wandb_enabled == 'True':
-        try:
-            wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
-            wandb_enabled = True
-        except:
-            print("Could not initialize wandb. No API key found.")
-            wandb.init(mode="disabled")
-            wandb_enabled = False
-    else:
-        wandb.init(mode="disabled")
-        wandb_enabled = False
+    
+    wandb_enabled = enable_wandb(parameters)
 
     path_to_data = os.path.join(PROJECT_ROOT, "data/processed")
     train_dataset = load_from_disk(os.path.join(path_to_data, parameters.general_args.path_train_data))
@@ -109,7 +117,7 @@ def train(config):
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
         compute_metrics=compute_metrics
-        
+
         )
 
     # Train the model
@@ -120,6 +128,8 @@ def train(config):
 
     # Use the trained model for predictions
     model.eval()
+
+    save_model(trainer, parameters)
 
     # Get predictions on the validation dataset
     all_predictions = predict(model, val_dataset, device)
@@ -134,7 +144,7 @@ def train(config):
                                   name=f"confusion_matrix_{parameters.gcp_args.model_name}.png")  # Saves to reports/figures
     
     # Save the model
-    save_model(trainer, parameters)
+    
     
 @hydra.main(config_path="config", config_name="default_config.yaml")
 def main(config):
