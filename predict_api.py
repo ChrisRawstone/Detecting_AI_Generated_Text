@@ -7,8 +7,10 @@ from fastapi.responses import FileResponse
 from transformers import DistilBertForSequenceClassification
 from google.cloud import storage
 from src.predict_model import predict_string, predict_csv
+# from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
+bucket_name = "ai-detection-bucket"
 
 if torch.backends.mps.is_available():
     device = torch.device("mps")
@@ -18,7 +20,7 @@ else:
     device = torch.device("cpu")
 
 
-def download_gcs_folder(bucket_name, source_folder):
+def download_gcs_folder(source_folder: str):
     """Downloads a folder from the bucket."""
     storage_client = storage.Client.create_anonymous_client()
     bucket = storage_client.bucket(bucket_name)
@@ -29,11 +31,12 @@ def download_gcs_folder(bucket_name, source_folder):
         blob.download_to_filename(blob.name)
 
 
-bucket_name = "ai-detection-bucket"
-source_folder = "models/latest"
-
-model = DistilBertForSequenceClassification.from_pretrained(f"models/latest", num_labels=2)
-model.to(device)
+def load_model(model_name: str = "latest", source_folder: str = "models"):
+    source_path = os.path.join(source_folder, model_name)
+    download_gcs_folder(source_path)
+    model = DistilBertForSequenceClassification.from_pretrained(source_path, num_labels=2)
+    model.to(device)
+    return model
 
 
 @app.get("/")
@@ -41,15 +44,17 @@ def read_root():
     return {"Hello": "World"}
 
 @app.post("/predict_string/") 
-async def predict_string(text: str):
+async def predict_string(text: str, model_name: str = "latest"):
     """
     Inference endpoint          
     """
+    model = load_model(model_name = model_name)
+
     return predict_string(model, text, device)
 
 
 @app.post("/process_csv/")
-async def process_csv(file: UploadFile = File(...)):
+async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
     temp_file_path = "tempfile.csv"
     with open(temp_file_path, 'wb') as buffer:
         content = await file.read()  # Read the file content
@@ -57,6 +62,8 @@ async def process_csv(file: UploadFile = File(...)):
 
     # Read the CSV into a DataFrame
     df = pd.read_csv(temp_file_path)  
+
+    model = load_model(model_name = model_name)
 
     # Make predictions 
     predictions_df = predict_csv(model, df, device)
@@ -75,7 +82,7 @@ async def process_csv(file: UploadFile = File(...)):
 
     return FileResponse("results/predictions.csv", media_type="text/csv", filename="predictions.csv")
 
-
+# Instrumentator().instrument(app).expose(app)
 
 
 
