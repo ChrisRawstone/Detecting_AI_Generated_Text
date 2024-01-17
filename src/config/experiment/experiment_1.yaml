@@ -16,3 +16,4 @@ gcp_args:
   model_name: 'experiment_1'
   gcs_bucket: 'ai-detection-bucket'
   gcs_path: 'models'
+  

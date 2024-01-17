@@ -10,11 +10,17 @@ from hydra.utils import get_original_cwd
 from google.cloud import storage
 from visualizations.visualize import plot_confusion_matrix_sklearn
 import wandb
-
+import omegaconf
+from hydra import compose, initialize
+from omegaconf import OmegaConf 
 hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 
 # Load metric for evaluation
 metric = load_metric("accuracy")
+
+TEST_ROOT = os.path.dirname(__file__)  # root of test folder
+PROJECT_ROOT = os.path.dirname(TEST_ROOT)
+
 
 
 def compute_metrics(eval_pred):
@@ -42,9 +48,14 @@ def upload_model_to_gcs(local_model_dir, bucket_name, gcs_path, model_name):
 
     hydra_logger.info(f"Files uploaded to GCS folder: gs://{bucket_name}/{folder_name}")
 
-
 @hydra.main(config_path="config", config_name="default_config.yaml")
+def main(config):
+    train(config)
+
+
 def train(config):
+    print(omegaconf.OmegaConf.to_yaml(config))
+
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     hydra_logger.info(f"Using device: {device}")
 
@@ -55,22 +66,22 @@ def train(config):
 
     wandb_enabled = True
     if wandb_enabled:
-        try:
-            import os
-            wandb_api_key = os.environ.get('WANDB_API_KEY')
-            print("WANDB_API_KEY: ", wandb_api_key)
-            print("WANDB_API_KEY: ", len(wandb_api_key))
+        # try:
+        # import os
+        # wandb_api_key = os.environ.get('WANDB_API_KEY')
+        # print("WANDB_API_KEY: ", wandb_api_key)
+        # print("WANDB_API_KEY: ", len(wandb_api_key))
 
-            wandb.login(key=wandb_api_key)
+        # wandb.login(key=wandb_api_key)
 
-            wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
-        except:
-            print("Could not initialize wandb. No API key found.")
-            wandb.init(mode="disabled")
+        wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
+        # except:
+        #     print("Could not initialize wandb. No API key found.")
+        #     wandb.init(mode="disabled")
     else:
         wandb.init(mode="disabled")
 
-    path_to_data = os.path.join(get_original_cwd(), "data/processed")
+    path_to_data = os.path.join(PROJECT_ROOT, "data/processed")
     train_dataset = load_from_disk(os.path.join(path_to_data, "train_dataset_tokenized"))
     val_dataset = load_from_disk(os.path.join(path_to_data, "val_dataset_tokenized"))
     hydra_logger.info(f"Length of train data: {(len(train_dataset))}")
@@ -125,13 +136,17 @@ def train(config):
     plot_confusion_matrix_sklearn(true_labels, predictions, class_names, save_path=os.path.join(get_original_cwd(), "reports/figures"), name=f"confusion_matrix_{parameters.gcp_args.model_name}.png") # Saves to reports/figures
 
     # Save the model
-    model_dir = '../../../models'
+    model_dir = PROJECT_ROOT+'/models'
     trainer.save_model(f"{model_dir}/{parameters.gcp_args.model_name}")
     trainer.save_model(f"{model_dir}/latest")
 
     # Upload model to GCS
-    upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name)
-    upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, "latest")
+    if parameters.gcp_args.push_model_to_gcs=="True":
+        upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name)
+        upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, "latest")
+
+
 
 if __name__ == "__main__":
-    train()
+    main()
+
