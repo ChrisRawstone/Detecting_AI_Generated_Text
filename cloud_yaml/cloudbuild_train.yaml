@@ -4,10 +4,11 @@ steps:
   args:
   - '-c'
   - |
-    if [[ $(git diff --name-only $COMMIT_SHA^..$COMMIT_SHA | grep requirements.txt) ]]; then
-      gcloud builds submit --config cloud_yaml/cloudbuild_base_image.yaml .
+    IMAGE_EXISTS=$(gcloud container images describe gcr.io/elite-totem-410916/predicter:latest --format="value(image_summary.image)%' ' 2>/dev/null")
+    if [[ $(git diff --name-only $COMMIT_SHA^..$COMMIT_SHA | grep requirements.txt) || -z "$IMAGE_EXISTS" ]]; then
+      gcloud builds submit --config cloudbuild.yaml .
     else
-      echo "No changes in requirements.txt. Using latest base image."
+      echo "No changes in requirements.txt and base image already exists. Skipping build."
     fi
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/elite-totem-410916/trainer:latest', '.', '-f', 'dockerfiles/train_model.dockerfile']
