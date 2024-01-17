@@ -120,14 +120,9 @@ if __name__ == "__main__":
     model.to(device)
 
     # load the test dataset
-
     test_df = pd.read_csv("data/processed/test.csv")
 
     predict_csv(model, test_df, device, batch_size=32)
-
-
-
-
 
     tokenized_dataset = load_from_disk("data/processed/test_dataset_tokenized")
 
