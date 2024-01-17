@@ -96,5 +96,35 @@ gcloud ai custom-jobs create \
     --region=europe-west1 \
     --display-name=test-run \
     --config=config_cpu.yaml \
-    --args "-e WANDB_API_KEY=<your-api-key>"
+    --args="-e WANDB_API_KEY=<your-api-key>"
+```
+
+To build docker container:
+
+```
+docker build -f dockerfiles/train_model.dockerfile . -t trainer:latest
+```
+
+To run docker container:
+```
+docker run -e WANDB_API_KEY=<your-api-key> trainer:latest 
+```
+
+```
+python submit_vertex_job.py --wandb_key <your-api-key>
+```
+
+To build docker container:
+
+```
+docker build -f dockerfiles/train_model.dockerfile . -t trainer:latest
+```
+
+To run docker container:
+```
+docker run -e WANDB_API_KEY=<your-api-key> trainer:latest 
+```
+
+```
+python submit_vertex_job.py --wandb_key <your-api-key>
 ```
