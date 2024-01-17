@@ -66,7 +66,7 @@ def train(config):
     hydra_logger.info(f"Using device: {device}")
 
     parameters = config.experiment
-    model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.cls, num_labels=parameters.model_settings.num_labels)
+    model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.pretrained_model, num_labels=parameters.model_settings.num_labels)
 
     wandb_enabled = parameters.general_args.wandb_enabled
     if wandb_enabled == 'True':

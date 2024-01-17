@@ -16,7 +16,6 @@ COPY .dvc/config .dvc/config
 RUN dvc config core.no_scm true
 COPY data.dvc data.dvc
 
-
 COPY src/ src/
 
 WORKDIR /
