@@ -6,10 +6,11 @@ steps:
 
     existing_tags=$(gcloud container images list --repository=gcr.io/elite-totem-410916 --filter="name:base_image" --format=json)
 
-    if [[ "$existing_tags" == "[]" ]]; then
-      printf "tag does not exist\n"
+
+    if [[ $(git diff --name-only $COMMIT_SHA^..$COMMIT_SHA | grep requirements.txt) || "$existing_tags" == "[]" ]]]]; then
+      gcloud builds submit --config cloudbuild.yaml --substitutions=_IMAGE_EXISTS="$IMAGE_EXISTS"
     else
-      printf "tag exists\n"
+      echo "No changes in requirements.txt or Docker image already exists. Skipping build."
     fi
 
 # - name: 'gcr.io/cloud-builders/docker'
