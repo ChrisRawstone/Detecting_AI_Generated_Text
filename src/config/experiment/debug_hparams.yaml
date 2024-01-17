@@ -1,5 +1,5 @@
 model_settings:
-  cls: 'distilbert-base-uncased' # model_type
+  pretrained_model: 'distilbert-base-uncased' # model_type
   num_labels: 2
 
 training_args:

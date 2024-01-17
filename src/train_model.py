@@ -4,13 +4,13 @@ import torch
 from google.cloud import storage
 from datasets import load_metric, load_from_disk
 from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
-from src.visualizations.visualize import plot_confusion_matrix_sklearn
 from hydra.utils import get_original_cwd
 import hydra
 import omegaconf
 from omegaconf import OmegaConf
 import wandb
 from src.predict_model import predict
+from src.visualizations.visualize import plot_confusion_matrix_sklearn
 
 hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 
@@ -66,7 +66,7 @@ def train(config):
     hydra_logger.info(f"Using device: {device}")
 
     parameters = config.experiment
-    model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.cls, num_labels=parameters.model_settings.num_labels)
+    model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.pretrained_model, num_labels=parameters.model_settings.num_labels)
 
     wandb_enabled = parameters.general_args.wandb_enabled
     if wandb_enabled == 'True':
