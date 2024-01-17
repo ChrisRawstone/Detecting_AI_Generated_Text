@@ -6,7 +6,7 @@ steps:
 
     existing_tags=$(gcloud container images list --repository=gcr.io/elite-totem-410916 --filter="name:base_image" --format=json)
     commit_hash=$(git log -n 1 --format="%H" -- requirements.txt)
-    changes=$(git diff --quiet $commit_hash -- requirements.txt)
+    changes=$(git diff $commit_hash -- requirements.txt)
 
     if [[ "$existing_tags" == "[]" || "$changes" != "" ]]; then
       gcloud builds submit --config cloud_yaml/cloudbuild_base_image.yaml

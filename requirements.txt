@@ -7,7 +7,7 @@
 matplotlib==3.8.2
 #nltk==3.8.1
 numpy==1.26.3
-#omegaconf==2.3.0
+omegaconf==2.3.0
 #openai==0.28.0
 #pandas==2.1.4
 #protobuf==4.25.2
