@@ -11,8 +11,18 @@ from omegaconf import OmegaConf
 import wandb
 from src.predict_model import predict
 from src.visualizations.visualize import plot_confusion_matrix_sklearn
+import logging
 
-hydra_logger = hydra.utils.log  # Use Hydra logger for logging
+# handler = colorlog.StreamHandler()
+# handler.setFormatter(hydra_colorlog.ColoredFormatter(
+# 	'%(log_color)s%(levelname)s:%(name)s:%(message)s'))
+
+# hydra_logger = hydra.utils.log  # Use Hydra logger for logging
+
+# hydra_logger.addHandler(handler)
+
+log = logging.getLogger(__name__)
+
 
 # Load metric for evaluation
 metric = load_metric("accuracy")
@@ -24,7 +34,7 @@ def compute_metrics(eval_pred):
     logits, labels = eval_pred
     predictions = np.argmax(logits, axis=-1)
     accuracy = metric.compute(predictions=predictions, references=labels)
-    hydra_logger.info(f"Accuracy: {accuracy['accuracy']}")
+    log.info(f"Accuracy: {accuracy['accuracy']}")
     return accuracy
 
 def upload_model_to_gcs(local_model_dir, bucket_name, gcs_path, model_name):
@@ -40,7 +50,7 @@ def upload_model_to_gcs(local_model_dir, bucket_name, gcs_path, model_name):
         # Upload the file to GCS
         blob = bucket.blob(remote_blob_name)
         blob.upload_from_filename(local_file_path)
-    hydra_logger.info(f"Files uploaded to GCS folder: gs://{bucket_name}/{folder_name}")
+    log.info(f"Files uploaded to GCS folder: gs://{bucket_name}/{folder_name}")
 
 def save_model(trainer, parameters): 
     model_dir = PROJECT_ROOT + "/models"
@@ -63,7 +73,7 @@ def train(config):
     print(omegaconf.OmegaConf.to_yaml(config))
 
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
-    hydra_logger.info(f"Using device: {device}")
+    log.info(f"Using device: {device}")
 
     parameters = config.experiment
     model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.pretrained_model, num_labels=parameters.model_settings.num_labels)
@@ -84,7 +94,7 @@ def train(config):
     path_to_data = os.path.join(PROJECT_ROOT, "data/processed")
     train_dataset = load_from_disk(os.path.join(path_to_data, parameters.general_args.path_train_data))
     val_dataset = load_from_disk(os.path.join(path_to_data, parameters.general_args.path_val_data))
-    hydra_logger.info(f"Length of train data: {(len(train_dataset))}")
+    log.info(f"Length of train data: {(len(train_dataset))}")
 
     # Load the model
     model = DistilBertForSequenceClassification.from_pretrained("distilbert-base-uncased", num_labels=2)
@@ -98,7 +108,9 @@ def train(config):
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
-        compute_metrics=compute_metrics)
+        compute_metrics=compute_metrics
+        
+        )
 
     # Train the model
     trainer.train()
