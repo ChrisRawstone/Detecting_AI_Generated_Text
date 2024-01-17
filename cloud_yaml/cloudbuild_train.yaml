@@ -2,11 +2,14 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   
   script: |
-    existing_tags=$(gcloud container images list --repository=gcr.io/elite-totem-410916 --filter="name:base_image" --format=json")
+    #!/bin/bash
+
+    existing_tags=$(gcloud container images list --repository=gcr.io/elite-totem-410916 --filter="name:base_image" --format=json)
+
     if [[ "$existing_tags" == "[]" ]]; then
-      printf "tag does not exist"
+      printf "tag does not exist\n"
     else
-      printf "tag exists"
+      printf "tag exists\n"
     fi
 
 # - name: 'gcr.io/cloud-builders/docker'
