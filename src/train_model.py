@@ -2,19 +2,19 @@ import numpy as np
 from datetime import datetime as dt
 import os
 import torch
+from torch.utils.data import DataLoader
 from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
 from datasets import load_metric, load_from_disk
 import hydra
 from hydra.utils import get_original_cwd
 from google.cloud import storage
+from visualizations.visualize import plot_confusion_matrix_sklearn
 import wandb
 
 hydra_logger = hydra.utils.log  # Use Hydra logger for logging
 
 # Load metric for evaluation
 metric = load_metric("accuracy")
-
-
 
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
@@ -90,6 +90,34 @@ def train(config):
 
     # Evaluate the model
     trainer.evaluate()
+
+    # Use the trained model for predictions
+    model.eval()
+    predictions = []
+    true_labels = []
+    probabilities = []
+    prob1D = []
+    for i in range(len(val_dataset)):
+        with torch.no_grad():
+            input_ids = torch.tensor(val_dataset[i]["input_ids"]).to(device)
+            attention_mask = torch.tensor(val_dataset[i]["attention_mask"]).to(device)
+            labels = val_dataset[i]["labels"]  
+            logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
+            probs = torch.softmax(logits, dim=1)
+            predicted_label = torch.argmax(probs, dim=1).item()
+            predictions.append(predicted_label)
+            true_labels.append(labels)
+            probabilities.append(list(probs.numpy().flatten()))
+            prob1D.append(probs.numpy().flatten()[0])
+
+    class_names = ['Human', 'AI Generated']
+    # Log metrics to wandb
+    wandb.log({"confusion matrix" : wandb.plot.confusion_matrix(probs=None,
+                        y_true=true_labels, preds=predictions,
+                        class_names=class_names)})
+    wandb.log({"roc": wandb.plot.roc_curve(true_labels, probabilities, labels=class_names)})
+    plot_confusion_matrix_sklearn(true_labels, predictions, class_names, run=wandb.run) # Saves to wandb
+    plot_confusion_matrix_sklearn(true_labels, predictions, class_names, save_path=os.path.join(get_original_cwd(), "reports/figures"), name=f"confusion_matrix_{parameters.gcp_args.model_name}.png") # Saves to reports/figures
 
     # Save the model
     model_dir = '../../../models'
