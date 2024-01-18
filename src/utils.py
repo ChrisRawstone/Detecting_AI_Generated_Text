@@ -7,10 +7,12 @@ import logging
 import colorlog
 from google.cloud import storage
 from src.visualizations.visualize import plot_confusion_matrix_sklearn
+
 TEST_ROOT = os.path.dirname(__file__)  # root of test folder
 PROJECT_ROOT = os.path.dirname(TEST_ROOT)
 
 log = logging.getLogger(__name__)
+
 
 def upload_to_gcs(local_model_dir: str, bucket_name: str, gcs_path: str, file_name: str, specific_file: str = ""):
     """
@@ -135,6 +137,7 @@ def load_csv(file_name: str = "train.csv", source_folder: str = "data/processed/
     df = pd.read_csv(os.path.join(source_folder, file_name))
     return df
 
+
 def enable_wandb(parameters):
     """
     Initializes Weights and Biases (wandb) for experiment tracking if enabled.
@@ -163,6 +166,7 @@ def enable_wandb(parameters):
         wandb_enabled = False
 
     return wandb_enabled
+
 
 def compute_metrics(eval_pred):
     """

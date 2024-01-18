@@ -16,7 +16,7 @@ nltk.download("omw-1.4")
 from utils import upload_to_gcs, download_gcs_folder
 
 
-def data_drift(reference_data: pd.DataFrame, current_data:pd.DataFrame, column_mapping: ColumnMapping):
+def data_drift(reference_data: pd.DataFrame, current_data: pd.DataFrame, column_mapping: ColumnMapping):
     """
     Analyzes data drift between a reference dataset and a current dataset, generating three types of reports:
     1. Data Drift Report: Compares numerical and categorical distributions using Kolmogorov-Smirnov (KS) and Population
@@ -52,7 +52,9 @@ def data_drift(reference_data: pd.DataFrame, current_data:pd.DataFrame, column_m
     return data_drift_report, data_quality_report, target_drift_report
 
 
-def save_reports(data_drift_report: Report, data_quality_report: Report, target_drift_report: Report, column_mapping: ColumnMapping):
+def save_reports(
+    data_drift_report: Report, data_quality_report: Report, target_drift_report: Report, column_mapping: ColumnMapping
+):
     """
     Saves three data drift analysis reports to HTML files and uploads them to Google Cloud Storage (GCS).
 
