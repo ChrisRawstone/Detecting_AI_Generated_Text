@@ -1,13 +1,18 @@
 steps:
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+- name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
-  args: ['cloud_yaml/bash_script.sh']
+  args: ['-c', 'docker pull gcr.io/elite-totem-410916/base_image:latest || exit 0']
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+            'build',
+            '-t', 'gcr.io/elite-totem-410916/base_image:latest',
+            '--cache-from', 'gcr.io/elite-totem-410916/base_image:latest',
+            '.',
+            '-f', 
+            'dockerfiles/base_image.dockerfile'
+        ]
 
- 
-#- name: 'gcr.io/cloud-builders/docker'
-#  args: ['build', '-t', 'gcr.io/elite-totem-410916/trainer:latest', '.', '-f', 'dockerfiles/train_model.dockerfile']
-#- name: 'gcr.io/cloud-builders/docker'
-#  args: ['push', 'gcr.io/elite-totem-410916/trainer:latest']
-
-
-
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/elite-totem-410916/trainer:latest', '.', '-f', 'dockerfiles/train_model.dockerfile']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/elite-totem-410916/trainer:latest']
