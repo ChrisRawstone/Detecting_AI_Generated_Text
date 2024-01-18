@@ -10,10 +10,6 @@ COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt --no-cache-dir
 
-RUN pip install fastapi
-RUN pip install pydantic
-RUN pip install uvicorn
-
 COPY src/ src/ 
 COPY reports_api.py reports_api.py
 COPY pyproject.toml pyproject.toml 
