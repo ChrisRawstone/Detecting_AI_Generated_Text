@@ -83,8 +83,12 @@ def download_gcs_folder(source_folder: str, specific_file: str = "", bucket_name
     else:
         blobs = bucket.list_blobs(prefix=source_folder)  # Get list of files
         for blob in blobs:
-            os.makedirs(os.path.dirname(blob.name), exist_ok=True)
-            blob.download_to_filename(blob.name)
+            if blob.name == source_folder+"/": 
+                pass
+            else:
+                print(blob.name)
+                os.makedirs(os.path.dirname(blob.name), exist_ok=True)
+                blob.download_to_filename(blob.name)
 
 
 def load_model(model_name: str = "latest", source_folder: str = "models", device="cpu"):
@@ -296,6 +300,3 @@ def wandb_log_metrics(all_predictions, class_names):
     plot_confusion_matrix_sklearn(
         all_predictions["label"], all_predictions["prediction"], class_names, run=wandb.run
     )  # Saves to wandb
-
-if __name__ == "__main__":
-    model=load_model(model_name="experiment_1_GPU", device="cpu")
