@@ -50,11 +50,11 @@ async def predict_string(text: str, model_name: str = "latest"):
     """
     model = load_model(model_name = model_name)
 
-    return predict_string(model, text, device)
+    return predict_string()
 
 
 @app.post("/process_csv/")
-async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
+async def process_csv(file: UploadFile = File(...), model_name: str = "latest", true_label_provided: bool = False):
     temp_file_path = "tempfile.csv"
     with open(temp_file_path, 'wb') as buffer:
         content = await file.read()  # Read the file content
