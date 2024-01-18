@@ -76,7 +76,6 @@ def train(config):
     parameters = config.experiment
     model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.pretrained_model, num_labels=parameters.model_settings.num_labels)
 
-    
     wandb_enabled = enable_wandb(parameters)
 
     path_to_data = os.path.join(PROJECT_ROOT, "data/processed")
@@ -96,9 +95,7 @@ def train(config):
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
-        compute_metrics=compute_metrics
-
-        )
+        compute_metrics=compute_metrics)
 
     # Train the model
     trainer.train()
