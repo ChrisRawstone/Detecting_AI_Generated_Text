@@ -5,6 +5,3 @@ workerPoolSpecs:
     replicaCount: 1
     containerSpec:
         imageUri: gcr.io/elite-totem-410916/trainer:latest
-        env:
-        - name: WANDB_API_KEY
-          value: "c187178e0437c71d461606e312d20dc9f1c6794f"
