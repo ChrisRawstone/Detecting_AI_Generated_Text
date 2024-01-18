@@ -7,6 +7,7 @@ from datasets import load_from_disk
 from typing import Dict
 from transformers import DistilBertTokenizerFast
 
+
 def predict_string(model: torch.nn.Module, text: str, device) -> Dict:
     """Run predictions for a given model on a string
 
@@ -21,44 +22,43 @@ def predict_string(model: torch.nn.Module, text: str, device) -> Dict:
     tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
 
     # Tokenize the data
-    tokenized_text = tokenizer(text, padding="max_length", truncation=True, return_tensors="pt", max_length=512).to(device)
-    
+    tokenized_text = tokenizer(text, padding="max_length", truncation=True, return_tensors="pt", max_length=512).to(
+        device
+    )
+
     # Get the model prediction
     with torch.no_grad():
         logits = model(**tokenized_text).logits
         probabilities = torch.softmax(logits, dim=1)
-        prediction = torch.argmax(probabilities, dim=1).item()     
-    
-    return {
-        'text': text,
-        'prediction': prediction,
-        'probabilities': probabilities.tolist()[0]
-    }  
+        prediction = torch.argmax(probabilities, dim=1).item()
 
-def predict_csv(model: torch.nn.Module, dataframe: pd.DataFrame, device, batch_size: int=32) -> pd.DataFrame: 
+    return {"text": text, "prediction": prediction, "probabilities": probabilities.tolist()[0]}
+
+
+def predict_csv(model: torch.nn.Module, dataframe: pd.DataFrame, device, batch_size: int = 32) -> pd.DataFrame:
     """Run predictions for a given model on a csv file
-    
+
     Args:
         model: model to use for prediction
-        csv: pandas dataframe with a column 'text' containing the text to predict on 
+        csv: pandas dataframe with a column 'text' containing the text to predict on
         device: device to use for prediction
         tokenizer: pre-loaded tokenizer.
         batch_size: size of the batches for prediction
-    
+
     Returns
         pd.DataFrame with predictions
     """
     # Tokenize the text
-    tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
+    tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
 
     # Tokenize the text in batches
     def tokenize_batch(batch):
-        return tokenizer(batch, padding=True, truncation=True, return_tensors='pt', max_length=512)
+        return tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=512)
 
     # Process in batches
     predictions = []
     for i in range(0, len(dataframe), batch_size):
-        batch = dataframe['text'][i:i+batch_size].tolist()
+        batch = dataframe["text"][i : i + batch_size].tolist()
         tokenized = tokenize_batch(batch)
         tokenized = {k: v.to(device) for k, v in tokenized.items()}
 
@@ -68,10 +68,10 @@ def predict_csv(model: torch.nn.Module, dataframe: pd.DataFrame, device, batch_s
             batch_predictions = torch.argmax(probabilities, dim=1).tolist()
             predictions.extend(batch_predictions)
 
-    dataframe['prediction'] = predictions
+    dataframe["prediction"] = predictions
 
     return dataframe
-    
+
 
 def predict(model: torch.nn.Module, tokenized_dataset: datasets.arrow_dataset.Dataset, device) -> None:
     """Run predictions for a given model on a dataframe that contains tokenized text
@@ -91,7 +91,9 @@ def predict(model: torch.nn.Module, tokenized_dataset: datasets.arrow_dataset.Da
     for i in range(len(tokenized_dataset)):
         with torch.no_grad():
             input_ids = torch.tensor(tokenized_dataset[i]["input_ids"]).to(device)  # Convert input_ids to a tensor
-            attention_mask = torch.tensor(tokenized_dataset[i]["attention_mask"]).to(device)  # Convert attention_mask to a tensor
+            attention_mask = torch.tensor(tokenized_dataset[i]["attention_mask"]).to(
+                device
+            )  # Convert attention_mask to a tensor
 
             logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
 
@@ -107,6 +109,7 @@ def predict(model: torch.nn.Module, tokenized_dataset: datasets.arrow_dataset.Da
     predictions_dataframe["probabilities"] = probabilities
     predictions_dataframe["label"] = tokenized_dataset["label"]
     return predictions_dataframe
+
 
 if __name__ == "__main__":
     if torch.backends.mps.is_available():
@@ -127,7 +130,6 @@ if __name__ == "__main__":
     tokenized_dataset = load_from_disk("data/processed/tokenized_data/small_data/test_dataset_tokenized")
 
     predictions_df = predict(model, tokenized_dataset, device)
-
 
     print("Predictions:\n", predictions_df.head(5))
 
