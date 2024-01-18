@@ -6,6 +6,8 @@ else
     echo "Base image already exists. Now checking for potential changes to requirements."
 fi
 
+
+
 # Check if requirements.txt has changed in current commit
 changes=$(git diff HEAD^ HEAD -- requirements.txt)
 #changes=1
