@@ -13,7 +13,6 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 
-
 app = FastAPI()
 bucket_name = "ai-detection-bucket"
 
