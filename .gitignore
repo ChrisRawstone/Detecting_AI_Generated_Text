@@ -185,6 +185,8 @@ wandb
 /Data_GCS
 /Data_GCS vhj'
 
+src/data_drifting
+
 
 notebooks/training_model_test.ipynb
 cloudbuid.yaml

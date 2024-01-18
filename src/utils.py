@@ -2,19 +2,21 @@ import os
 import pandas as pd
 from google.cloud import storage
 
-def upload_to_gcs(local_model_dir: str, bucket_name: str, gcs_path: str, file_name: str):
+def upload_to_gcs(local_model_dir: str, bucket_name: str, gcs_path: str, file_name: str, specific_file: str = ''):
     client = storage.Client()
     folder_name = f"{gcs_path}/{file_name}"
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(folder_name)
-
-    # Upload each file from local_model_dir to the GCS folder
-    for local_file in os.listdir(os.path.join(local_model_dir, file_name)):
-        local_file_path = os.path.join(local_model_dir, file_name, local_file)
-        remote_blob_name = os.path.join(folder_name, local_file)
-        # Upload the file to GCS
-        blob = bucket.blob(remote_blob_name)
+    if specific_file: 
+        local_file_path = os.path.join(local_model_dir, specific_file)
         blob.upload_from_filename(local_file_path)
+    else: 
+        for local_file in os.listdir(os.path.join(local_model_dir, file_name)):
+            local_file_path = os.path.join(local_model_dir, file_name, local_file)
+            remote_blob_name = os.path.join(folder_name, local_file)
+            # Upload the file to GCS
+            blob = bucket.blob(remote_blob_name)
+            blob.upload_from_filename(local_file_path)
 
 def download_gcs_folder(source_folder: str, specific_file: str='', bucket_name: str = "ai-detection-bucket"):
     """Downloads a folder from the bucket."""
