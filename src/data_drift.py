@@ -31,24 +31,23 @@ def download_data_from_gcs(local_download_dir, bucket_name, gcs_path, data_name)
         blob.download_to_filename(local_file_path)
 
 # Importing data
-download_data_from_gcs(local_download_dir="Data_GCS", bucket_name="ai-detection-bucket", gcs_path="data", data_name="processed/csv_files/data_drift_essays.csv")
-download_data_from_gcs(local_download_dir="Data_GCS", bucket_name="ai-detection-bucket", gcs_path="data", data_name="processed/csv_files/medium_data/train.csv")
+download_data_from_gcs(local_download_dir="Data_GCS", bucket_name="ai-detection-bucket", gcs_path="data", data_name="processed/csv_files")
+download_data_from_gcs(local_download_dir="Data_GCS", bucket_name="ai-detection-bucket", gcs_path="data", data_name="processed/csv_files/medium_data")
 download_data_from_gcs(local_download_dir="Data_GCS", bucket_name="ai-detection-bucket", gcs_path="data", data_name="inference_predictions/predictions_20240117_175237.csv")
 
 
 def read_csv_files_from_directory(directory_path):
     if os.path.isdir(directory_path):
         files_in_directory = os.listdir(directory_path)
-        print(files_in_directory)
         csv_files = [os.path.join(directory_path, file) for file in files_in_directory if file.endswith('.csv')]
-        print(csv_files)
         for csv_file in csv_files:
+            print(csv_file)
             data_frame = pd.read_csv(csv_file)
     return data_frame
 
 # Read CSV files from the specified directories
 reference_data = read_csv_files_from_directory("Data_GCS/processed/csv_files/medium_data/train.csv")
-current_data = read_csv_files_from_directory("Data_GCS/processed/csv_files/data_drift_essays.csv")
+current_data = read_csv_files_from_directory("Data_GCS/processed/csv_files")
 prediction_data = read_csv_files_from_directory("Data_GCS/inference_predictions/predictions_20240117_175237.csv")
 
 current_data = read_csv_files_from_directory("Data_GCS/processed/csv_files")
