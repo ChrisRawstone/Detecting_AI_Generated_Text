@@ -108,9 +108,10 @@ def load_model(model_name: str = "latest", source_folder: str = "models", device
 
     source_path = os.path.join(source_folder, model_name)
 
-    if not os.path.exists(f"models/{model_name}"):
-        download_gcs_folder(source_path)
-        print("Downloaded model from GCS")
+    #create directory if not exists
+    os.makedirs(f"models/{model_name}", exist_ok=True)
+    download_gcs_folder(source_path)
+    print("Downloaded model from GCS")
 
     model = DistilBertForSequenceClassification.from_pretrained(source_path, num_labels=2)
     model.to(device)
@@ -165,16 +166,6 @@ def download_latest_added_file(bucket_name: str="ai-detection-bucket",source_fol
     # return the path to the latest file
 
     return latest_file
-
-if __name__ == "__main__":
-    test=download_latest_added_file()
-
-
-
-    
-    
-        
-
 
 
 def enable_wandb(parameters):
@@ -305,3 +296,6 @@ def wandb_log_metrics(all_predictions, class_names):
     plot_confusion_matrix_sklearn(
         all_predictions["label"], all_predictions["prediction"], class_names, run=wandb.run
     )  # Saves to wandb
+
+if __name__ == "__main__":
+    model=load_model(model_name="experiment_1_GPU", device="cpu")

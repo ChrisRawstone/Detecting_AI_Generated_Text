@@ -47,7 +47,7 @@ def read_root():
 async def process_string(data: TextModel, model_name: str = "experiment_1_GPU"):
     """
     Inference endpoint
-    """
+    """    
     # check if model exists
     model = load_model(model_name=model_name, device=device)
 
@@ -72,7 +72,7 @@ async def process_string(data: TextModel, model_name: str = "experiment_1_GPU"):
 
 
 @app.post("/process_csv/")
-async def process_csv(file: UploadFile = File(...), model_name: str = "experiment_1_GPU"):
+async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
     temp_file_path = "tempfile.csv"
     with open(temp_file_path, "wb") as buffer:
         content = await file.read()  # Read the file content
