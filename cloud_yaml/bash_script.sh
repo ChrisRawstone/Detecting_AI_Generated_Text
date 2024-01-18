@@ -6,6 +6,9 @@ else
     echo "Base image already exists. Now checking for potential changes to requirements."
 fi
 # Check if requirements.txt has changed bwtenn last push and now
+# add remote:
+ 
+
 changes=$(git diff @{1} ^@{1} -- requirements.txt)
 #changes=$(git diff origin/chwe  origin/chwe@{1} ^origin/chwe@{1} -- requirements.txt)
 #changes=$(git diff origin/master  origin/master@{1} ^origin/master@{1} -- requirements.txt)
