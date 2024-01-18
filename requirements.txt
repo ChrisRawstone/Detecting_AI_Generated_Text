@@ -17,4 +17,4 @@ markdown
 evidently
 nltk
 matplotlib
-hydra_colorlog
+hydra_colorlog==1.2.0
