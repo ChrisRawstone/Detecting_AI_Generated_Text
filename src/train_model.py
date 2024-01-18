@@ -109,6 +109,7 @@ def train(config):
     # Use the trained model for predictions
     model.eval()
 
+    # Save the model
     save_model(trainer, parameters)
 
     # Get predictions on the validation dataset
@@ -118,8 +119,6 @@ def train(config):
     class_names = ["Human", "AI Generated"]
     if wandb_enabled:
         wandb_log_metrics(all_predictions, class_names)
-        
-    # Save the model
     
     
 @hydra.main(config_path="config", config_name="default_config.yaml")

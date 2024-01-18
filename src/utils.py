@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from google.cloud import storage
 
-def upload_to_gcs(local_model_dir, bucket_name, gcs_path, file_name):
+def upload_to_gcs(local_model_dir: str, bucket_name: str, gcs_path: str, file_name: str):
     client = storage.Client()
     folder_name = f"{gcs_path}/{file_name}"
     bucket = client.bucket(bucket_name)
@@ -43,8 +43,6 @@ def load_model(model_name: str = "latest", source_folder: str = "models", device
     return model
 
 def load_csv(file_name: str = "train.csv", source_folder: str = "data/processed/csv_files/medium_data"):
-    #source_path = os.path.join(source_folder, file_name)
-
     # make directory if not exists oneline
     os.makedirs(source_folder, exist_ok=True)
     download_gcs_folder(source_folder, speficic_file=file_name)
