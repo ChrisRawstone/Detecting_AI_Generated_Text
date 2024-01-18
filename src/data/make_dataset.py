@@ -196,6 +196,10 @@ def make_dataset(sample_size):
         val_dataset.save_to_disk("data/processed/tokenized_data/medium_data/val_dataset_tokenized")
         test_dataset.save_to_disk("data/processed/tokenized_data/medium_data/test_dataset_tokenized")
 
+        X_train.to_csv("data/processed/csv_files/medium_data/train.csv", index=False)
+        X_test.to_csv("data/processed/csv_files/medium_data/test.csv", index=False)
+        X_val.to_csv("data/processed/csv_files/medium_data/validation.csv", index=False)
+
 
     else:
         train_dataset.save_to_disk("data/processed/tokenized_data/small_data/train_dataset_tokenized")
