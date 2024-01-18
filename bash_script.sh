@@ -9,7 +9,7 @@ fi
 
 
 # Check if requirements.txt has changed in current commit
-changes=$(git diff HEAD^ HEAD -- requirements.txt)
+#changes=$(git diff HEAD^ HEAD -- requirements.txt)
 #changes=1
 
 if [ "$changes" != "" ]; then
