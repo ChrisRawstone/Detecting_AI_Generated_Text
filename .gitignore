@@ -184,6 +184,7 @@ results
 wandb
 /Data_GCS
 /Data_GCS vhj'
+/inference_predictions
 
 src/data_drifting
 
