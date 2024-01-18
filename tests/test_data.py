@@ -13,7 +13,9 @@ def test_get_data():
         get_data(10, "Not/existing/path")
 
 
-@pytest.mark.skipif(not os.path.exists("data/processed/csv_files/small_data/train.csv"), reason="Required data files not found")
+@pytest.mark.skipif(
+    not os.path.exists("data/processed/csv_files/small_data/train.csv"), reason="Required data files not found"
+)
 def test_make_dataset():
     X_train = pd.read_csv("data/processed/csv_files/small_data/train.csv")
     X_test = pd.read_csv("data/processed/csv_files/small_data/test.csv")

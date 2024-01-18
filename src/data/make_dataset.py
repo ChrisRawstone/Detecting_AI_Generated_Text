@@ -135,7 +135,6 @@ def get_data(sample_size: int = None, path: str = "data/raw/"):
     return X_train, X_test, X_val, data_drift_essays
 
 
-
 def tokenize_and_format(data: Dataset):
     """This function tokenizes the data and formats it for the model
 
@@ -179,8 +178,6 @@ def make_dataset(sample_size):
     val_dataset = val_dataset.map(tokenize_and_format, batched=True)
     test_dataset = test_dataset.map(tokenize_and_format, batched=True)
 
-
-
     if sample_size is None:
         # Save the datasets
         train_dataset.save_to_disk("data/processed/tokenized_data/full_data/train_dataset_tokenized")
@@ -190,7 +187,7 @@ def make_dataset(sample_size):
         X_train.to_csv("data/processed/csv_files/full_data/train.csv", index=False)
         X_test.to_csv("data/processed/csv_files/full_data/test.csv", index=False)
         X_val.to_csv("data/processed/csv_files/full_data/validation.csv", index=False)
-    
+
     if sample_size == 2000:
         train_dataset.save_to_disk("data/processed/tokenized_data/medium_data/train_dataset_tokenized")
         val_dataset.save_to_disk("data/processed/tokenized_data/medium_data/val_dataset_tokenized")
@@ -199,7 +196,6 @@ def make_dataset(sample_size):
         X_train.to_csv("data/processed/csv_files/medium_data/train.csv", index=False)
         X_test.to_csv("data/processed/csv_files/medium_data/test.csv", index=False)
         X_val.to_csv("data/processed/csv_files/medium_data/validation.csv", index=False)
-
 
     else:
         train_dataset.save_to_disk("data/processed/tokenized_data/small_data/train_dataset_tokenized")
@@ -211,11 +207,6 @@ def make_dataset(sample_size):
         X_val.to_csv("data/processed/csv_files/small_data/validation.csv", index=False)
 
         data_drift_essays.to_csv("data/processed/csv_files/data_drift_files/data_drift_essays.csv", index=False)
-
-    
-        
-
-
 
 
 if __name__ == "__main__":

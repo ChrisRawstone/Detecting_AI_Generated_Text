@@ -13,16 +13,13 @@ RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install fastapi
 RUN pip install pydantic
 RUN pip install uvicorn
-RUN pip install evidently
-RUN pip install python-multipart
 
 COPY src/ src/
-COPY static/ static/
-COPY predict_api.py predict_api.py
+COPY reports_api.py reports_api.py
 COPY pyproject.toml pyproject.toml 
 
 RUN pip install . --no-cache-dir --no-deps
 
 EXPOSE 8080
 
-CMD exec uvicorn predict_api:app --port $PORT --host 0.0.0.0 --workers 1
+CMD exec uvicorn reports_api:app --port $PORT --host 0.0.0.0 --workers 1

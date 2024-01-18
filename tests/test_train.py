@@ -6,7 +6,9 @@ import hydra
 from hydra import compose, initialize
 from omegaconf import OmegaConf
 from src.train_model import train
+
 hydra_logger = hydra.utils.log
+
 
 def test_latest_folder_existence():
     experiment_name = "unit_testing_hparams"
@@ -19,6 +21,7 @@ def test_latest_folder_existence():
     assert os.path.exists(
         latest_folder_path
     ), f"The 'latest' directory does not exist in the model directory. Did you train a model?"
-    
+
+
 if __name__ == "__main__":
     test_latest_folder_existence()
