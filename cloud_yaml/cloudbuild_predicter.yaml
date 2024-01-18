@@ -11,9 +11,11 @@ steps:
             '-f', 
             'dockerfiles/base_image.dockerfile'
         ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/elite-totem-410916/base_image:latest']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/elite-totem-410916/predicter_chwe:latest', '.', '-f', 'dockerfiles/predicter.dockerfile']
+  args: ['build', '-t', 'gcr.io/elite-totem-410916/predicter_chwe:latest', '.', '-f', 'dockerfiles/predict_model.dockerfile']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/elite-totem-410916/predicter_chwe:latest']
 
@@ -24,7 +26,7 @@ steps:
 #   - 'deploy'
 #   - 'predicter'
 #   - '--image'
-#   - 'gcr.io/elite-totem-410916/predicter:latest'
+#   - 'gcr.io/elite-totem-410916/predicter_chwe:latest'
 #   - '--region'
 #   - 'europe-west1'
 #   - '--memory'
