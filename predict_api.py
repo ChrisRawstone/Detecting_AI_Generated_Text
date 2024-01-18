@@ -2,12 +2,17 @@ import os
 import pandas as pd
 import torch
 from datetime import datetime
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Request
 from fastapi.responses import FileResponse
 from transformers import DistilBertForSequenceClassification
 from google.cloud import storage
 from src.predict_model import predict_string, predict_csv
 # from prometheus_fastapi_instrumentator import Instrumentator
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+
+
 
 app = FastAPI()
 bucket_name = "ai-detection-bucket"
@@ -20,6 +25,16 @@ else:
     device = torch.device("cpu")
 
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+class TextModel(BaseModel):
+    text: str
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    with open('static/index.html', 'r') as f:
+        html_content = f.read()
+    return HTMLResponse(content=html_content)
 
 def download_gcs_folder(source_folder: str):
     """Downloads a folder from the bucket."""
@@ -47,14 +62,26 @@ def read_root():
     return {"Hello": "World"}
 
 @app.post("/predict_string/") 
-async def process_string(text: str, model_name: str = "latest"):
+async def process_string(data: TextModel, model_name: str = "latest"):
     """
     Inference endpoint          
     """
     # check if model exists
     model = load_model(model_name = model_name)
 
-    return predict_string(model, text, device)
+    result = predict_string(model, data.text, device)
+
+    # Extract prediction and probabilities from the result
+    prediction = result["prediction"]
+    probabilities = result["probabilities"]
+
+    # Check if the prediction is 1 (human) or 0 (AI)
+    prediction_label = "human" if prediction == 1 else "AI"
+
+    # Get the probability for being human
+    human_probability = probabilities[1] * 100  # Convert to percentage
+
+    return f"This input is {prediction_label} with {human_probability:.2f}% probability"
 
 @app.post("/process_csv/")
 async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
