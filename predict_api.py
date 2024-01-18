@@ -44,7 +44,7 @@ async def process_string(data: TextModel, model_name: str = "latest"):
     Inference endpoint          
     """
     # check if model exists
-    model = load_model(model_name = model_name)
+    model = load_model(model_name = model_name, device = device)
 
     result = predict_string(model, data.text, device)
 
@@ -53,12 +53,18 @@ async def process_string(data: TextModel, model_name: str = "latest"):
     probabilities = result["probabilities"]
 
     # Check if the prediction is 1 (human) or 0 (AI)
-    prediction_label = "human" if prediction == 1 else "AI"
+    prediction_label = "human" if prediction == 0 else "AI"
 
     # Get the probability for being human
-    human_probability = probabilities[1] * 100  # Convert to percentage
+    human_probability = probabilities[0] * 100  # Convert to percentage
 
-    return f"This input is {prediction_label} with {human_probability:.2f}% probability"
+
+    if prediction_label == "human":
+        probability = human_probability
+    else:
+        probability = 100-human_probability
+
+    return f"This input is {prediction_label} with {probability:.2f}% probability"
 
 @app.post("/process_csv/")
 async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):

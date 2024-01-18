@@ -17,6 +17,7 @@ RUN pip install evidently
 RUN pip install python-multipart
 
 COPY src/ src/
+COPY static/ static/
 COPY predict_api.py predict_api.py
 COPY pyproject.toml pyproject.toml 
 
