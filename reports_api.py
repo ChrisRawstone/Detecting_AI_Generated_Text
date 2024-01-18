@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Request
-#from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse
 from google.cloud import storage
 from src.predict_model import predict_string, predict_csv
 from evidently import ColumnMapping
@@ -10,6 +10,7 @@ from src.utils import download_gcs_folder, download_latest_added_file
 from src.data_drift import data_drift, save_reports, classification_report
 
 import pandas as pd
+import os
 
 app = FastAPI()
 bucket_name = "ai-detection-bucket"
@@ -21,10 +22,10 @@ latest_file_name=download_latest_added_file()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"to get a report use the following endpoint": "/get_reports"}
 
-@app.get("/data_drift_reports")
-async def data_drift_reports(report_type: str = "data_drift"):
+@app.get("/get_reports")
+async def get_reports(report_type: str = "data_drift"):
     """
     Data drift reports endpoint
     """
@@ -35,15 +36,15 @@ async def data_drift_reports(report_type: str = "data_drift"):
     current_data = pd.read_csv(latest_file_name)
     current_data["label"] = current_data["prediction"]
       
-    if report_type == "data_drift":
-        column_mapping = ColumnMapping(target="label", text_features=["text"])
-  
-        data_drift_report, data_quality_report, target_drift_report = data_drift(reference_data, current_data, column_mapping)
-        save_reports(data_drift_report, data_quality_report, target_drift_report, column_mapping)
+    if report_type == "data_drift":      
+        data_drift(reference_data, current_data)
+        return {"message": "data drift reports generated"}        
 
     elif report_type == "classification":
         column_mapping_classification = ColumnMapping(target="label", text_features=["text"], prediction="prediction")
         classification_report(reference_data, current_data, column_mapping_classification)
+        return {"message": "classification report generated"}
+        
     else:
         return {"message": "report_type must be either data_drift or classification"}
 

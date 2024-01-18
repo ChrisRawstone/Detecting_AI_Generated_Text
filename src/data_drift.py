@@ -14,8 +14,9 @@ nltk.download("wordnet")
 nltk.download("omw-1.4")
 from src.utils import upload_to_gcs, download_gcs_folder
 
-def data_drift(reference_data, current_data, column_mapping):
+def data_drift(reference_data, current_data):
     # Generating reports
+    column_mapping = ColumnMapping(target="label", text_features=["text"])
     data_drift_report = Report(metrics=[DataDriftPreset(num_stattest="ks", cat_stattest="psi", num_stattest_threshold=0.2, cat_stattest_threshold=0.2)])
     data_drift_report.run(reference_data=reference_data, current_data=current_data, column_mapping=column_mapping)
 
@@ -24,9 +25,10 @@ def data_drift(reference_data, current_data, column_mapping):
 
     target_drift_report = Report(metrics=[TargetDriftPreset()])
     target_drift_report.run(reference_data=reference_data, current_data=current_data, column_mapping=column_mapping)
-    return data_drift_report, data_quality_report, target_drift_report
+    save_reports(data_drift_report, data_quality_report, target_drift_report, column_mapping,reference_data, current_data)
+    #return data_drift_report, data_quality_report, target_drift_report
 
-def save_reports(data_drift_report, data_quality_report, target_drift_report, column_mapping):
+def save_reports(data_drift_report, data_quality_report, target_drift_report, column_mapping, reference_data, current_data):
     # Saving reports
     base_directory = "src/data_drifting"
     os.makedirs(base_directory, exist_ok=True)
