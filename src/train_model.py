@@ -14,13 +14,8 @@ from src.visualizations.visualize import plot_confusion_matrix_sklearn
 import logging
 import colorlog
 from transformers.utils import logging as transformer_logging
-
-
-
+from utils import upload_to_gcs
 log = logging.getLogger(__name__)
-
-
-
 
 logger = transformer_logging.get_logger("transformers")
 
@@ -55,21 +50,6 @@ def compute_metrics(eval_pred):
     log.info(f"Accuracy: {accuracy['accuracy']}")
     return accuracy
 
-def upload_model_to_gcs(local_model_dir, bucket_name, gcs_path, model_name):
-    client = storage.Client()
-    folder_name = f"{gcs_path}/{model_name}"
-    bucket = client.bucket(bucket_name)
-    blob = bucket.blob(folder_name)
-
-    # Upload each file from local_model_dir to the GCS folder
-    for local_file in os.listdir(os.path.join(local_model_dir, model_name)):
-        local_file_path = os.path.join(local_model_dir, model_name, local_file)
-        remote_blob_name = os.path.join(folder_name, local_file)
-        # Upload the file to GCS
-        blob = bucket.blob(remote_blob_name)
-        blob.upload_from_filename(local_file_path)
-    log.info(f"Files uploaded to GCS folder: gs://{bucket_name}/{folder_name}")
-
 def save_model(trainer, parameters): 
     model_dir = PROJECT_ROOT + "/models"
     trainer.save_model(f"{model_dir}/{parameters.gcp_args.model_name}")
@@ -77,8 +57,8 @@ def save_model(trainer, parameters):
 
     # Upload model to GCS
     if parameters.gcp_args.push_model_to_gcs == "True":
-        upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name)
-        upload_model_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, "latest")
+        upload_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name)
+        upload_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, "latest")
 
 def wandb_log_metrics(all_predictions, class_names):
     wandb.log({"accuracy": metric.compute(predictions=all_predictions['prediction'], references=all_predictions['label'])['accuracy']})
