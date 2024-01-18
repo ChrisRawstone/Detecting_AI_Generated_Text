@@ -8,7 +8,10 @@ RUN apt update && \
 
 COPY requirements.txt requirements.txt
 
-RUN pip install -r requirements.txt --no-cache-dir
+# Install dependencies (this will be cached if requirements.txt doesn't change)
+
+RUN --mount=type=cache,target=~/pip/.cache pip install -r requirements.txt --no-cache-dir
+#RUN pip install -r requirements.txt
 
 
 
