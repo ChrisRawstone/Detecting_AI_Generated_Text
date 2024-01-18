@@ -9,20 +9,8 @@ fi
 
 
 # Check if requirements.txt has changed in current commit
-#changes=$(git diff HEAD^ HEAD -- requirements.txt)
-#changes=1
-
-if [ "$changes" != "" ]; then
-    num_logs=1    
-else
-    num_logs=2
-fi
-
-echo $num_logs
-
-commit_hash=$(git log -n $num_logs --format="%H" -- requirements.txt)
-changes=$(git diff $commit_hash -- requirements.txt)
-if "$changes" != "" ]]; then
+changes=$(git diff origin/chwe  origin/chwe@{1} ^origin/chwe@{1} -- requirements.txt)
+if [[ "$changes" != "" ]]; then
     gcloud builds submit --config cloud_yaml/cloudbuild_base_image.yaml
 else
     echo "No changes in requirements.txt and Docker image already exists. Skipping build."
