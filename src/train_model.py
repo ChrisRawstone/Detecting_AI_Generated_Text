@@ -7,7 +7,6 @@ from transformers import DistilBertForSequenceClassification, Trainer, TrainingA
 from hydra.utils import get_original_cwd
 import hydra
 import omegaconf
-from omegaconf import OmegaConf
 import wandb
 from src.predict_model import predict
 from src.visualizations.visualize import plot_confusion_matrix_sklearn
@@ -76,7 +75,6 @@ def train(config):
     parameters = config.experiment
     model = DistilBertForSequenceClassification.from_pretrained(parameters.model_settings.pretrained_model, num_labels=parameters.model_settings.num_labels)
 
-    
     wandb_enabled = enable_wandb(parameters)
 
     path_to_data = os.path.join(PROJECT_ROOT, "data/processed")
@@ -96,9 +94,7 @@ def train(config):
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
-        compute_metrics=compute_metrics
-
-        )
+        compute_metrics=compute_metrics)
 
     # Train the model
     trainer.train()
@@ -109,6 +105,7 @@ def train(config):
     # Use the trained model for predictions
     model.eval()
 
+    # Save the model
     save_model(trainer, parameters)
 
     # Get predictions on the validation dataset
@@ -118,8 +115,6 @@ def train(config):
     class_names = ["Human", "AI Generated"]
     if wandb_enabled:
         wandb_log_metrics(all_predictions, class_names)
-        
-    # Save the model
     
     
 @hydra.main(config_path="config", config_name="default_config.yaml")

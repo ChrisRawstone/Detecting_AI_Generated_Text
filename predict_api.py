@@ -4,14 +4,12 @@ import torch
 from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Request
 from fastapi.responses import FileResponse
-from transformers import DistilBertForSequenceClassification
 from google.cloud import storage
 from src.predict_model import predict_string, predict_csv
 # from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-
 
 app = FastAPI()
 bucket_name = "ai-detection-bucket"

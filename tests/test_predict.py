@@ -7,23 +7,7 @@ from transformers import DistilBertForSequenceClassification
 from datasets import load_from_disk
 from mypaths import PROJECT_ROOT
 from src.predict_model import predict
-
-def download_model_from_gcs(local_download_dir, bucket_name, gcs_path, model_name):
-    from google.cloud import storage
-    import os
-    client = storage.Client()
-    folder_name = f"{gcs_path}/{model_name}"
-    bucket = client.bucket(bucket_name)
-
-    # Create local download directory if it doesn't exist
-    os.makedirs(os.path.join(local_download_dir, model_name), exist_ok=True)
-
-    # Download each file from the GCS folder to the local download directory
-    blobs = bucket.list_blobs(prefix=folder_name)
-    for blob in blobs:
-        local_file_path = os.path.join(local_download_dir, model_name, os.path.basename(blob.name))
-        blob.download_to_filename(local_file_path)
-
+from src.utils import download_model_from_gcs
 
 @pytest.mark.skipif(
     not os.path.exists(f"data/processed/tokenized_data/small_data/test_dataset_tokenized"),

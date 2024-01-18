@@ -68,7 +68,7 @@ def predict_csv(model: torch.nn.Module, dataframe: pd.DataFrame, device, batch_s
             batch_predictions = torch.argmax(probabilities, dim=1).tolist()
             predictions.extend(batch_predictions)
 
-    dataframe['predictions'] = predictions
+    dataframe['prediction'] = predictions
 
     return dataframe
     

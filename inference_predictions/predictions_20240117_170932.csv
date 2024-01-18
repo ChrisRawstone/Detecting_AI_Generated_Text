@@ -1,4 +1,4 @@
-text,label
+text,label,predictions
 "In recent years, the debate between home schooling versus attending a traditional school has become increasingly prevalent. Both methods of education have their own unique advantages, and choosing which one is right for your specific situation can be a difficult decision. So, what exactly are the benefits of home schooling when compared to traditional schooling?
 
 One of the most obvious benefits of home schooling is customization. Parents who choose this option are able to tailor their children's curriculum to fit their individual needs and abilities. Home schooling allows parents to build a lesson plan that caters to not only their child's strengths, but also focuses on areas that their child needs help with. Additionally, home schooling allows parents to accommodate their children's unique interests and provide advanced instruction in topics of their interest. 
@@ -7,7 +7,7 @@ Another major benefit of home schooling is the freedom for learners to work at t
 
 Finally, home schooling provides learners with a more flexible schedule and the option to structure learning around other activities. Home schooling gives students the freedom to decide when and where they want to work, making it easier for them to choose hands-on and out-of-the-classroom activities. 
 
-Although both traditional school and home schooling have their advantages, those who opt for home schooling are able to take advantage of more individualized and flexible instruction. Home schooling allows learners the freedom to customize their own unique learning experience and create a more personalized educational setting.",1
+Although both traditional school and home schooling have their advantages, those who opt for home schooling are able to take advantage of more individualized and flexible instruction. Home schooling allows learners the freedom to customize their own unique learning experience and create a more personalized educational setting.",1,1
 "A Word Of Advice
 
 Why do people ask for advice? To feel reassured? Or maybe they just want help in their situation. No one will ever be sure of the answer why, but there are always specific people that you should get advice from. There will always be people in your life to give you advice. Parents, adults, teachers, and your legal guardian are always good examples. Dependency is a great thing and is used in day to day life. Its a great support system for tasks the might seem puzzling. Say you often second guess said persona's advice. You should always seek multiple opinions because sometimes you can get advice from the wrong source.
@@ -18,7 +18,7 @@ The internet is also another good place to get good advice. It has millions of t
 
 Multiple opinions can form a better choice. If you give power to other people to formulate an opinion it helps get a situation have a greater outcome. In America we use democracy to form our nation. Democracy is very useful and its what we use for our political tendencies. Voting is how we decide everything and it is a majority rule system. America's president every four years is decided by voting and is a very fair system. but its all opinion based and thats what makes it so great. America is fueled by the voice of its own people. But even that in its own way is advice.
 
-At the end of the day advice comes in many different forms. It can be verbal, political and just plane out personal. Multiple voices formulate a greater outcome. Advice can be found anywhere and everywhere. Even though advice from others is great there is no better advice but your own, but you should always get your advice from good sources. But that is just a word of advice.",0
+At the end of the day advice comes in many different forms. It can be verbal, political and just plane out personal. Multiple voices formulate a greater outcome. Advice can be found anywhere and everywhere. Even though advice from others is great there is no better advice but your own, but you should always get your advice from good sources. But that is just a word of advice.",0,0
 "Most people ask more than one person for advice there are many reasons for this but I'm going to say three reasons why I think people asking more than one person for advice is good.
 
 One reason I think must people do this is to see which idea was the most responses. Another reason is you could test every idea that you get.
@@ -57,7 +57,7 @@ Some people will disagree with my three reasons but I don't like to listen to th
 
 Maybe this helped you maybe it didn't.
 
-To see which ideas was the most responsive ideas, you could test every idea you asked for and some might agree with one of the other ones you took advice from those are my three reasons on why most people take advice from more than one person.",0
+To see which ideas was the most responsive ideas, you could test every idea you asked for and some might agree with one of the other ones you took advice from those are my three reasons on why most people take advice from more than one person.",0,0
 "January24,2011
 
 Dear TEACHER_NAME
@@ -72,7 +72,7 @@ What if you get injured in game or playing outside? If students could take their
 
 Well TEACHER_NAME
 
-i have giving you several reasons why should you let us students bring phones to school. Know its your decision to",0
+i have giving you several reasons why should you let us students bring phones to school. Know its your decision to",0,0
 "Receiving multiple opinions from different people can help out a lot. Sometimes when people ask for advice, they don't always want to follow that specific person's advice. This is why receiving multiple opinions is better for some people. Seeking multiple opinions can help because it can allow you to understand through different point of views, It can help to get ideas on what you should do, and it allows people to understand where you're coming from. This is why people seek multiple opinions.
 
 Seeking multiple opinions can allow you to see, listen to, and understand different people's point of views and how their advice can be beneficial in different ways. They might have a different perspective on what you think you should do, or what someone else thinks you should do, because we all think differently. Understanding where people are coming from, even if you disagree can also help you come up with one executive decision. For example, there could be an occasion where you want these nice shoes , but you don't have enough money so you go and ask for people's advice on what you should do. One person says, ask a family member for the money. You ask another person, they say steal the shoes from the store. In this scenario it allows you to think and understand what both people are trying to say and the benefits of each and then you can come down to which is a better choice. Stealing shoes from the store could get you in a lot of trouble, So the clear choice is to ask a family member.
@@ -81,7 +81,7 @@ Seeking multiple opinions can also allow people to see where you are coming from
 
 Seeking multiple opinions can help you make a better choice because you can get ideas and see what choice you can make based off of those opinions. Like if you were to need opinions on what color to paint your room, people would most likely give you different colors. Sometimes multiple people give you the same opinion when that occurs in a case like this, you'd usually go with whatever people think the most. For example, if six people said you should paint your room blue, and everybody else said different colors, you'd most likely paint it blue based of what peoples opinions were. Receiving opinions in this case is very beneficial to see what people think, and gather ideas
 
-In conclusion, There are many ways seeking multiple opinions can help you make a better choice. Seeking multiple opinons help because, you can see things in different people's point of view, you can collect and gather peoples opinions and turn them into ideas, and it gives people a chance to show empathy, and be in your shoes.",0
+In conclusion, There are many ways seeking multiple opinions can help you make a better choice. Seeking multiple opinons help because, you can see things in different people's point of view, you can collect and gather peoples opinions and turn them into ideas, and it gives people a chance to show empathy, and be in your shoes.",0,0
 "Dear principal
 
 Have you ever had a goal that was bigger than life well me and my friends have some to we want to play sports but these demands on B or better in all subjects is making that hard .we think that you shouldn't change the policy on B or better to B ,that would really make the players work over time and most would not have the time to play and to turn in B plus work.
@@ -90,7 +90,7 @@ by doing so the players would have a bad time and they wouldn't have the fun tha
 
 With this new policy comes a lot of problems like some of the star players are C students and i don't think that they could Get a B in every class. most of the students not playing sports are below the C average and they have extra time to do it in twenty thirty maybe even hours more than most sports players in the school .Also the people who do have all B' s aren't playing sports because to caught up in work to get those b' s.
 
-Most students will have to leave sports all together because they cant make the grades ,Maybe making the teams lose the best players in the school. Most of these kids are natural players taking this away will make them turn to other alternatives such as playin",0
+Most students will have to leave sports all together because they cant make the grades ,Maybe making the teams lose the best players in the school. Most of these kids are natural players taking this away will make them turn to other alternatives such as playin",0,0
 "Dear Senator, 
 
 I am writing to you today to express my view that the United States should change from the Electoral College system to electing the president by popular vote. While the Electoral College was designed with the goal of ensuring smaller states have more influence in presidential elections, I believe its current implementation no longer serves that purpose and can undermine the principle of one person, one vote.
@@ -103,7 +103,7 @@ In conclusion, while the Electoral College may have served an important purpose 
 
 Thank you for your consideration.
 
-[My name]",1
+[My name]",1,1
 "Phones and Driving
 
 In today's current society almost everyone in the world has access or owns a cellular device. That device that can call text or email right from your pocket. While it is so very useful it can also become quite distracting to someone who might be driving. Which leads to the point that Drivers should not be able to access their phones while driving. In these cases its smart to look at the annual driver and cell phone related instances that have happened over the years as well as the averages of crashes involving phones and the driver.
@@ -112,10 +112,10 @@ Cell Phone users while they are driving are 5.36 times more likely to get into a
 
 In 2015 alone there were 3,477 people killed in a distracted driver accident. 476 of which in those cases were cell phone users.(""Learn the Facts About Distracted Driving."" EndDD, www. enddd. org/the-facts-about-distracted-driving/?gclid=Cj0KCQjwoaz3BRDnARIsAF1RfLevzm7d8WG_o9fmbSLCDrfzuhq4pSz6LYGnFCL65o0N-OBsj-T8u8YaAh1_EALw_wcB.). These numbers when taking into account how those deaths could have been prevented by simply putting the phone down while driving are extremely high. That is 13 percent of all drivers that died last year were on their phones. And those people would still be alive had they put the phone down.
 
-These statistics do not lie when saying how people die due to cellular phones being used while driving. With that when 13 percent of the annual driving related deaths are all cellphone based and with the ever growing world that number will go up. That is unless the Driver puts the phone downs while he drives.            ",0
+These statistics do not lie when saying how people die due to cellular phones being used while driving. With that when 13 percent of the annual driving related deaths are all cellphone based and with the ever growing world that number will go up. That is unless the Driver puts the phone downs while he drives.            ",0,0
 "No they should not use the technology in class rooms because thats a invashion of pricicy. And they dont need to know every little thing going on in our lives. Becouse every one need there privicy and if schools use that technology there taking that away completly. And why would you use that in a class room any way to spy on people thats a little creepy you know and also why would the teacher even what that becouse thats looking at them too. So there for in my choice the technology is not valuale and should not be put into classrooms or anywhere for that matter becouse every needs that privcy and no one will be able to get that if that technology is around. Another reason we should have it is becouse why would you want people to know your exact emotions anyways if they can read your emotions they can pretty much tell what your thinking by that.
 
-So that is the reaons I think we should not have the facial action coding systems.",0
+So that is the reaons I think we should not have the facial action coding systems.",0,0
 "What if something goes wrong? The driverless cars are a good idea, but I don't think they are going to be safe. The article gives its negatives and positive things about the driverless cars, but in my opinion I don't think is a good idea to manufacture these cars. The driverless cars are not a good idea because what if something goes wrong with the technology of the car, they even have to change things in the law and add, driverless cars don't sound safe as it seems.
 
 The driverless cars are not a good idea becuase what if something goes wrong with the technology of the car, like the passage says, if the technology fails and someone is injured, who is it fault the driver or the manufacture. If the driver gets in the accident and they don't know if the technology failed or if it was the drivers fault, it would be a mess becuase if the driver doesn't want to pay becuase its too expensive and the factory that made doesn't wanto to pay either they will have to go to court. Technology is not always perfect so I don't think they should use technology in a car just because some people don't want to drive.
@@ -124,4 +124,4 @@ They have to change a few thing in the law, according to the article most drivin
 
 The driverless cars don't sound so safe because the driver is not the only one in control, the car is too. The article says that the driver has its eyes on the road and the car on the driver, but if the technology fails and the car makes a mistake and becuase of the car mistake the driver would be paying the consequences of that mistake. Everybody makes mistakes so if the factory that was making the cars makes a lot of mistakes on the cars and nobody catches the problems, its going to make a lot of people pay that mistake.
 
-The driverless cars are not a good idea becuase they don't sound safe as it seems, it has a lot of negatives things that can cause a lot of problems, and they have to change and add things to the law.          ",0
+The driverless cars are not a good idea becuase they don't sound safe as it seems, it has a lot of negatives things that can cause a lot of problems, and they have to change and add things to the law.          ",0,0
