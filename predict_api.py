@@ -72,7 +72,7 @@ async def process_string(data: TextModel, model_name: str = "experiment_1_GPU"):
 
 
 @app.post("/process_csv/")
-async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
+async def process_csv(file: UploadFile = File(...), model_name: str = "experiment_1_GPU"):
     temp_file_path = "tempfile.csv"
     with open(temp_file_path, "wb") as buffer:
         content = await file.read()  # Read the file content
