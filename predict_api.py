@@ -10,10 +10,10 @@ from src.predict_model import predict_string, predict_csv
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from src.utils import load_model
+from src.utils import load_model, upload_to_gcs, download_gcs_folder
 
 app = FastAPI()
-bucket_name = "ai-detection-bucket"
+#bucket_name = "ai-detection-bucket"
 
 if torch.backends.mps.is_available():
     device = torch.device("mps")
@@ -33,7 +33,6 @@ async def read_root(request: Request):
     with open('static/index.html', 'r') as f:
         html_content = f.read()
     return HTMLResponse(content=html_content)
-
 
 @app.get("/")
 def read_root():
@@ -84,12 +83,14 @@ async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
 
     # Generate a timestamp
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # make the results directory if it doesn't exist
+    os.makedirs("results", exist_ok=True)
     local_predictions_file = f"results/predictions_{timestamp}.csv"
     predictions_df.to_csv(local_predictions_file, index=False)
-
-    # Upload to GCS
+    
+    # Upload to GCS # should probably be in a separate function but works
     storage_client = storage.Client.create_anonymous_client()
-    bucket = storage_client.bucket(bucket_name)
+    bucket = storage_client.bucket("ai-detection-bucket")
     gcs_file_path = f"inference_predictions/predictions_{timestamp}.csv"
     blob = bucket.blob(gcs_file_path)
     blob.upload_from_filename(local_predictions_file)
