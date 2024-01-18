@@ -1,5 +1,5 @@
 # read from the base image
-FROM base_image:latest
+FROM gcr.io/elite-totem-410916/base_image:latest
 
 
 COPY src/ src/

@@ -1,29 +1,33 @@
 steps:
-- name: 'bash'
-  script: |
-    IMAGE_EXISTS=$(gcloud container images describe gcr.io/elite-totem-410916/base_image:latest --format="value(image_summary.image)%' ' 2>/dev/null")
-    if [[ -z "$IMAGE_EXISTS" ]]; then
-      gcloud builds submit --config cloud_yaml/cloudbuild_base_image.yaml .
-    else
-      echo "Base image already exists. Skipping build."
-    fi
-  
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/elite-totem-410916/predicter:latest', '.', '-f', 'dockerfiles/predict_model.dockerfile']
+  entrypoint: 'bash'
+  args: ['-c', 'docker pull gcr.io/elite-totem-410916/base_image:latest || exit 0']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/elite-totem-410916/predicter:latest']
+  args: [
+            'build',
+            '-t', 'gcr.io/elite-totem-410916/base_image:latest',
+            '--cache-from', 'gcr.io/elite-totem-410916/base_image:latest',
+            '.',
+            '-f', 
+            'dockerfiles/base_image.dockerfile'
+        ]
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args:
-  - 'run'
-  - 'deploy'
-  - 'predicter'
-  - '--image'
-  - 'gcr.io/elite-totem-410916/predicter:latest'
-  - '--region'
-  - 'europe-west1'
-  - '--memory'
-  -  '2Gi'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/elite-totem-410916/predicter_chwe:latest', '.', '-f', 'dockerfiles/predicter.dockerfile']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/elite-totem-410916/predicter_chwe:latest']
+
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   entrypoint: gcloud
+#   args:
+#   - 'run'
+#   - 'deploy'
+#   - 'predicter'
+#   - '--image'
+#   - 'gcr.io/elite-totem-410916/predicter:latest'
+#   - '--region'
+#   - 'europe-west1'
+#   - '--memory'
+#   -  '2Gi'
 
 
