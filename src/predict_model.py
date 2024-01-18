@@ -109,34 +109,3 @@ def predict(model: torch.nn.Module, tokenized_dataset: datasets.arrow_dataset.Da
     predictions_dataframe["probabilities"] = probabilities
     predictions_dataframe["label"] = tokenized_dataset["label"]
     return predictions_dataframe
-
-
-if __name__ == "__main__":
-    if torch.backends.mps.is_available():
-        device = torch.device("mps")
-    elif torch.cuda.is_available():
-        device = torch.device("cuda")
-    else:
-        device = torch.device("cpu")
-
-    model = DistilBertForSequenceClassification.from_pretrained(f"models/latest", num_labels=2)
-    model.to(device)
-
-    # load the test dataset
-    test_df = pd.read_csv("data/processed/csv_files/small_data/test.csv")
-
-    predict_csv(model, test_df, device, batch_size=32)
-
-    tokenized_dataset = load_from_disk("data/processed/tokenized_data/small_data/test_dataset_tokenized")
-
-    predictions_df = predict(model, tokenized_dataset, device)
-
-    print("Predictions:\n", predictions_df.head(5))
-
-    model_name = "debug"
-
-    if not os.path.exists("results"):
-        os.makedirs("results")
-
-    predictions_df.to_json(f"results/predictions_{model_name}.json", orient="table", indent=1)
-    print("Predictions saved to results folder")

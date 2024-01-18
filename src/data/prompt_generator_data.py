@@ -30,8 +30,7 @@ def prompt_data(
     df_train_data: pd.DataFrame,
     number_of_prompts: int,
     starting_position: int = 0,
-    csv_file_name: str = "data/raw/generated_data/AI_Generated_df.csv",
-):
+    csv_file_name: str = "data/raw/generated_data/AI_Generated_df.csv"):
     """
     promt_data generates a prompt for each essay in the training data and saves a DataFrame with the generated prompt and the label
 
