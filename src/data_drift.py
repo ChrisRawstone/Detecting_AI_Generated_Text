@@ -12,7 +12,7 @@ import nltk
 nltk.download("words")
 nltk.download("wordnet")
 nltk.download("omw-1.4")
-from utils import upload_to_gcs, download_gcs_folder
+from src.utils import upload_to_gcs, download_gcs_folder
 
 def data_drift(reference_data, current_data, column_mapping):
     # Generating reports
@@ -56,9 +56,8 @@ if __name__ == "__main__":
     reference_data["prediction"] = reference_data["label"]
 
     current_data = pd.read_csv("inference_predictions/predictions_20240117_170932.csv")
-    current_data["label"] = current_data["predictions"]
-    current_data["prediction"] = current_data["predictions"]
-        
+    current_data["label"] = current_data["prediction"]
+            
     column_mapping = ColumnMapping(target="label", text_features=["text"])
     data_drift_report, data_quality_report, target_drift_report = data_drift(reference_data, current_data, column_mapping)
     save_reports(data_drift_report, data_quality_report, target_drift_report, column_mapping)
