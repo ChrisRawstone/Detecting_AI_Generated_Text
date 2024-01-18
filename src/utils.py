@@ -110,6 +110,7 @@ def load_model(model_name: str = "latest", source_folder: str = "models", device
 
     if not os.path.exists(f"models/{model_name}"):
         download_gcs_folder(source_path)
+        print("Downloaded model from GCS")
 
     model = DistilBertForSequenceClassification.from_pretrained(source_path, num_labels=2)
     model.to(device)
