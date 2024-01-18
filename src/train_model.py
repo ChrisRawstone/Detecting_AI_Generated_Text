@@ -13,7 +13,7 @@ from src.visualizations.visualize import plot_confusion_matrix_sklearn
 import logging
 import colorlog
 from transformers.utils import logging as transformer_logging
-from utils import upload_to_gcs
+from src.utils import upload_to_gcs
 log = logging.getLogger(__name__)
 
 logger = transformer_logging.get_logger("transformers")
