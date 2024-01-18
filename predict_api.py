@@ -19,18 +19,20 @@ elif torch.cuda.is_available():
 else:
     device = torch.device("cpu")
 
-
-
-def download_gcs_folder(source_folder: str):
+def download_gcs_folder(source_folder: str, speficic_file: str=''):
     """Downloads a folder from the bucket."""
     storage_client = storage.Client.create_anonymous_client()
     bucket = storage_client.bucket(bucket_name)
 
-    blobs = bucket.list_blobs(prefix=source_folder)  # Get list of files
-    for blob in blobs:
+    if speficic_file:
+        blob = bucket.blob(os.path.join(source_folder, speficic_file))
         os.makedirs(os.path.dirname(blob.name), exist_ok=True)
         blob.download_to_filename(blob.name)
-
+    else:
+        blobs = bucket.list_blobs(prefix=source_folder)  # Get list of files
+        for blob in blobs:
+            os.makedirs(os.path.dirname(blob.name), exist_ok=True)
+            blob.download_to_filename(blob.name)
 
 def load_model(model_name: str = "latest", source_folder: str = "models"):
     source_path = os.path.join(source_folder, model_name)
@@ -41,6 +43,16 @@ def load_model(model_name: str = "latest", source_folder: str = "models"):
     model = DistilBertForSequenceClassification.from_pretrained(source_path, num_labels=2)
     model.to(device)
     return model
+
+def load_csv(file_name: str = "train.csv", source_folder: str = "data/processed/csv_files/medium_data"):
+    #source_path = os.path.join(source_folder, file_name)
+
+    # make directory if not exists oneline
+    os.makedirs(source_folder, exist_ok=True)
+    download_gcs_folder(source_folder, speficic_file=file_name)
+    df = pd.read_csv(os.path.join(source_folder, file_name))
+    return df
+
 
 @app.get("/")
 def read_root():
@@ -54,10 +66,10 @@ async def process_string(text: str, model_name: str = "latest"):
     # check if model exists
     model = load_model(model_name = model_name)
 
-    return predict_string(model, text, device)
+    return predict_string()
 
 @app.post("/process_csv/")
-async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
+async def process_csv(file: UploadFile = File(...), model_name: str = "latest", true_label_provided: bool = False):
     temp_file_path = "tempfile.csv"
     with open(temp_file_path, 'wb') as buffer:
         content = await file.read()  # Read the file content
@@ -86,3 +98,9 @@ async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
     return FileResponse("results/predictions.csv", media_type="text/csv", filename="predictions.csv")
 
 # Instrumentator().instrument(app).expose(app)
+
+if __name__ == "__main__":
+    #load_csv("data/processed/csv_files/medium_data",speficic_file="train.csv")
+    df = load_csv(file_name="train.csv", source_folder="data/processed/csv_files/medium_data")
+    print("Done")
+   
