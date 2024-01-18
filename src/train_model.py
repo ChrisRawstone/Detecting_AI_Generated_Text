@@ -11,7 +11,6 @@ import wandb
 from src.predict_model import predict
 from src.visualizations.visualize import plot_confusion_matrix_sklearn
 import logging
-import colorlog
 from transformers.utils import logging as transformer_logging
 from src.utils import upload_to_gcs
 
