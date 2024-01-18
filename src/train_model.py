@@ -7,7 +7,6 @@ from transformers import DistilBertForSequenceClassification, Trainer, TrainingA
 from hydra.utils import get_original_cwd
 import hydra
 import omegaconf
-from omegaconf import OmegaConf
 import wandb
 from src.predict_model import predict
 from src.visualizations.visualize import plot_confusion_matrix_sklearn

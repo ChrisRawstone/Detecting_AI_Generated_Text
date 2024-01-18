@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Service</title>
+    <style>
+
+        /* Reset some default styles for cross-browser consistency */
+body, h1, form {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #333;
+}
+h3 {
+    text-align: center;
+    margin: 20px 0;
+    color: #333;
+}
+
+#textForm {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+input[type="submit"] {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#textPredictionResult {
+    font-size: 16px;
+    margin-top: 20px;
+    color: #333;
+}
+
+a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+#predictionOutput {
+    width: 37%; /* Adjust the width as needed */
+    margin: 20px auto; /* Centers the element and provides some space above and below */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center; /* Center text within the textarea */
+    display: block; /* Ensures the element is block-level for margin auto to work */
+}
+
+
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to AI TextGuard!</h1>
+    <form id="textForm">
+        <label for="textInput">Enter your text below to see if it is AI generated:</label><br>
+        <textarea id="textInput" name="textInput" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="Predict">
+    </form>
+    <p id="textPredictionResult"></p>
+
+    <!-- Add a textarea for displaying prediction output -->
+    <textarea id="predictionOutput" name="predictionOutput" rows="4" cols="50" readonly></textarea><br>
+
+    <a href="static/predict_csv_files.html">Go here to test a CSV file</a>
+
+    <script>
+        document.getElementById("textForm").addEventListener("submit", function(event){
+            event.preventDefault();
+            const text = document.getElementById("textInput").value;
+            fetch('/predict_string/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({text: text}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const predictionOutput = document.getElementById("predictionOutput");
+                predictionOutput.value = JSON.stringify(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+    </script>
+</body>
+</html>
