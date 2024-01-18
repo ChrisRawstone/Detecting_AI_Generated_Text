@@ -29,3 +29,9 @@ dvc-gdrive>=3.0.1
 coverage
 hydra_colorlog
 python-multipart
+click
+markdown
+evidently
+nltk
+matplotlib
+hydra_colorlog==1.2.0

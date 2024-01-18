@@ -81,7 +81,11 @@ async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
     # Read the CSV into a DataFrame
     df = pd.read_csv(temp_file_path)
 
+<<<<<<< HEAD
     model = load_model(model_name=model_name)
+=======
+    model = load_model(model_name = model_name, device = device)
+>>>>>>> master
 
     # Make predictions
     predictions_df = predict_csv(model, df, device)
