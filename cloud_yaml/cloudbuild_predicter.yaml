@@ -11,6 +11,8 @@ steps:
             '-f', 
             'dockerfiles/base_image.dockerfile'
         ]
+  env:
+      - "DOCKER_BUILDKIT=1"
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/elite-totem-410916/base_image:latest']
 
