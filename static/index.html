@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Prediction Service</title>
+    <link rel="icon" type="image/png" href="static/logo.png"> <!-- Favicon link -->
     <style>
 
         /* Reset some default styles for cross-browser consistency */
@@ -92,6 +93,11 @@ a:hover {
     text-align: center; /* Center text within the textarea */
     display: block; /* Ensures the element is block-level for margin auto to work */
 }
+.footer-logo {
+            display: block;
+            margin: 20px auto; /* Center the logo */
+            max-width: 100px; /* Adjust the size as needed */
+        }
 
 
     </style>
@@ -110,6 +116,8 @@ a:hover {
     <textarea id="predictionOutput" name="predictionOutput" rows="4" cols="50" readonly></textarea><br>
 
     <a href="static/predict_csv_files.html">Go here to test a CSV file</a>
+
+    <img src="static/logo.png" alt="Logo" class="footer-logo">
 
     <script>
         document.getElementById("textForm").addEventListener("submit", function(event){

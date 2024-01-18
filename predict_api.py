@@ -10,6 +10,7 @@ from src.predict_model import predict_string, predict_csv
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from src.utils import load_model
 
 app = FastAPI()
 bucket_name = "ai-detection-bucket"
@@ -33,26 +34,6 @@ async def read_root(request: Request):
         html_content = f.read()
     return HTMLResponse(content=html_content)
 
-def download_gcs_folder(source_folder: str):
-    """Downloads a folder from the bucket."""
-    storage_client = storage.Client.create_anonymous_client()
-    bucket = storage_client.bucket(bucket_name)
-
-    blobs = bucket.list_blobs(prefix=source_folder)  # Get list of files
-    for blob in blobs:
-        os.makedirs(os.path.dirname(blob.name), exist_ok=True)
-        blob.download_to_filename(blob.name)
-
-
-def load_model(model_name: str = "latest", source_folder: str = "models"):
-    source_path = os.path.join(source_folder, model_name)
-
-    if not os.path.exists(f"models/{model_name}"):
-        download_gcs_folder(source_path)
-
-    model = DistilBertForSequenceClassification.from_pretrained(source_path, num_labels=2)
-    model.to(device)
-    return model
 
 @app.get("/")
 def read_root():
@@ -64,7 +45,7 @@ async def process_string(data: TextModel, model_name: str = "latest"):
     Inference endpoint          
     """
     # check if model exists
-    model = load_model(model_name = model_name)
+    model = load_model(model_name = model_name, device = device)
 
     result = predict_string(model, data.text, device)
 
@@ -73,12 +54,18 @@ async def process_string(data: TextModel, model_name: str = "latest"):
     probabilities = result["probabilities"]
 
     # Check if the prediction is 1 (human) or 0 (AI)
-    prediction_label = "human" if prediction == 1 else "AI"
+    prediction_label = "human" if prediction == 0 else "AI"
 
     # Get the probability for being human
-    human_probability = probabilities[1] * 100  # Convert to percentage
+    human_probability = probabilities[0] * 100  # Convert to percentage
 
-    return f"This input is {prediction_label} with {human_probability:.2f}% probability"
+
+    if prediction_label == "human":
+        probability = human_probability
+    else:
+        probability = 100-human_probability
+
+    return f"This input is {prediction_label} with {probability:.2f}% probability"
 
 @app.post("/process_csv/")
 async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
