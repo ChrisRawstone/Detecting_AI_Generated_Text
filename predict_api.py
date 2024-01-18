@@ -4,7 +4,6 @@ import torch
 from datetime import datetime
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
-from transformers import DistilBertForSequenceClassification
 from google.cloud import storage
 from src.predict_model import predict_string, predict_csv
 # from prometheus_fastapi_instrumentator import Instrumentator
@@ -18,41 +17,6 @@ elif torch.cuda.is_available():
     device = torch.device("cuda")
 else:
     device = torch.device("cpu")
-
-def download_gcs_folder(source_folder: str, speficic_file: str=''):
-    """Downloads a folder from the bucket."""
-    storage_client = storage.Client.create_anonymous_client()
-    bucket = storage_client.bucket(bucket_name)
-
-    if speficic_file:
-        blob = bucket.blob(os.path.join(source_folder, speficic_file))
-        os.makedirs(os.path.dirname(blob.name), exist_ok=True)
-        blob.download_to_filename(blob.name)
-    else:
-        blobs = bucket.list_blobs(prefix=source_folder)  # Get list of files
-        for blob in blobs:
-            os.makedirs(os.path.dirname(blob.name), exist_ok=True)
-            blob.download_to_filename(blob.name)
-
-def load_model(model_name: str = "latest", source_folder: str = "models"):
-    source_path = os.path.join(source_folder, model_name)
-
-    if not os.path.exists(f"models/{model_name}"):
-        download_gcs_folder(source_path)
-
-    model = DistilBertForSequenceClassification.from_pretrained(source_path, num_labels=2)
-    model.to(device)
-    return model
-
-def load_csv(file_name: str = "train.csv", source_folder: str = "data/processed/csv_files/medium_data"):
-    #source_path = os.path.join(source_folder, file_name)
-
-    # make directory if not exists oneline
-    os.makedirs(source_folder, exist_ok=True)
-    download_gcs_folder(source_folder, speficic_file=file_name)
-    df = pd.read_csv(os.path.join(source_folder, file_name))
-    return df
-
 
 @app.get("/")
 def read_root():
