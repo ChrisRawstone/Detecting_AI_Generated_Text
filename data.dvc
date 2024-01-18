@@ -38,6 +38,27 @@ outs:
       remote_storage:
         etag: 08eea5b2bfc7e483031001
         version_id: '1705499165496046'
+  - relpath: processed/csv_files/medium_data/test.csv
+    md5: 099c9f8ad538220972d2084a4d45e035
+    size: 440943
+    cloud:
+      remote_storage:
+        etag: 08a6d19dd7cfe683031001
+        version_id: '1705570082449574'
+  - relpath: processed/csv_files/medium_data/train.csv
+    md5: ccedf19b2a642b95f313afb3171a9da9
+    size: 3554944
+    cloud:
+      remote_storage:
+        etag: 08d0efa2d8cfe683031001
+        version_id: '1705570084632528'
+  - relpath: processed/csv_files/medium_data/validation.csv
+    md5: 492697f227cfe6a193a7938dd12a0398
+    size: 444782
+    cloud:
+      remote_storage:
+        etag: 08d8cdf8d6cfe683031001
+        version_id: '1705570081842904'
   - relpath: processed/csv_files/small_data/test.csv
     md5: d9b7a2048a4687d8b43990f4f8999cb5
     size: 21252

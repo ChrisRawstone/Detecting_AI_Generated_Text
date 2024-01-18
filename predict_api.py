@@ -20,6 +20,7 @@ else:
     device = torch.device("cpu")
 
 
+
 def download_gcs_folder(source_folder: str):
     """Downloads a folder from the bucket."""
     storage_client = storage.Client.create_anonymous_client()
@@ -33,7 +34,10 @@ def download_gcs_folder(source_folder: str):
 
 def load_model(model_name: str = "latest", source_folder: str = "models"):
     source_path = os.path.join(source_folder, model_name)
-    download_gcs_folder(source_path)
+
+    if not os.path.exists(f"models/{model_name}"):
+        download_gcs_folder(source_path)
+
     model = DistilBertForSequenceClassification.from_pretrained(source_path, num_labels=2)
     model.to(device)
     return model
@@ -43,14 +47,14 @@ def read_root():
     return {"Hello": "World"}
 
 @app.post("/predict_string/") 
-async def predict_string(text: str, model_name: str = "latest"):
+async def process_string(text: str, model_name: str = "latest"):
     """
     Inference endpoint          
     """
+    # check if model exists
     model = load_model(model_name = model_name)
 
     return predict_string()
-
 
 @app.post("/process_csv/")
 async def process_csv(file: UploadFile = File(...), model_name: str = "latest", true_label_provided: bool = False):
@@ -88,13 +92,3 @@ async def process_csv(file: UploadFile = File(...), model_name: str = "latest", 
     return FileResponse("results/predictions.csv", media_type="text/csv", filename="predictions.csv")
 
 # Instrumentator().instrument(app).expose(app)
-
-
-
- 
-
-
-
-
-# use this command to run the post request
-# curl -X 'POST' "http://127.0.0.1:8000/predict/?text=some%20random%20text"
