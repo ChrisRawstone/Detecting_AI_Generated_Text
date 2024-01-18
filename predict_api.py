@@ -110,6 +110,6 @@ async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
     blob = bucket.blob(gcs_file_path)
     blob.upload_from_filename(local_predictions_file)
 
-    return FileResponse("results/predictions.csv", media_type="text/csv", filename="predictions.csv")
+    return FileResponse(local_predictions_file, media_type="text/csv", filename="predictions.csv")
 
 # Instrumentator().instrument(app).expose(app)

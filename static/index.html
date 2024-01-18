@@ -2,23 +2,114 @@
 <html>
 <head>
     <title>Prediction Service</title>
+    <style>
+
+        /* Reset some default styles for cross-browser consistency */
+body, h1, form {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #333;
+}
+h3 {
+    text-align: center;
+    margin: 20px 0;
+    color: #333;
+}
+
+#textForm {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+input[type="submit"] {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#textPredictionResult {
+    font-size: 16px;
+    margin-top: 20px;
+    color: #333;
+}
+
+a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+#predictionOutput {
+    width: 37%; /* Adjust the width as needed */
+    margin: 20px auto; /* Centers the element and provides some space above and below */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center; /* Center text within the textarea */
+    display: block; /* Ensures the element is block-level for margin auto to work */
+}
+
+
+    </style>
 </head>
 <body>
-    <h1>Text Prediction</h1>
+
+    <h1>Welcome to AI TextGuard!</h1>
     <form id="textForm">
-        <label for="textInput">Enter text:</label><br>
+        <label for="textInput">Enter your text below to see if it is AI generated:</label><br>
         <textarea id="textInput" name="textInput" rows="4" cols="50"></textarea><br>
         <input type="submit" value="Predict">
     </form>
     <p id="textPredictionResult"></p>
 
-    <h1>CSV Prediction</h1>
-    <form id="csvForm">
-        <label for="csvInput">Upload CSV file:</label>
-        <input type="file" id="csvInput" name="csvInput"><br>
-        <input type="submit" value="Upload and Predict">
-    </form>
-    <p id="csvPredictionResult"></p>
+    <!-- Add a textarea for displaying prediction output -->
+    <textarea id="predictionOutput" name="predictionOutput" rows="4" cols="50" readonly></textarea><br>
+
+    <a href="static/predict_csv_files.html">Go here to test a CSV file</a>
 
     <script>
         document.getElementById("textForm").addEventListener("submit", function(event){
@@ -33,37 +124,14 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("textPredictionResult").innerText = JSON.stringify(data);
+                const predictionOutput = document.getElementById("predictionOutput");
+                predictionOutput.value = JSON.stringify(data);
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
         });
 
-        document.getElementById("csvForm").addEventListener("submit", function(event){
-            event.preventDefault();
-            const formData = new FormData();
-            formData.append("file", document.getElementById("csvInput").files[0]);
-            fetch('/process_csv/', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.blob())
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = 'predictions.csv';
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                alert('Your file has been downloaded!');
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        });
     </script>
 </body>
 </html>

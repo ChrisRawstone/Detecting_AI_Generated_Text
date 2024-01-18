@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My HTML Template</title>
+</head>
+<body>
+    <h1>CSV Prediction</h1>
+    <form id="csvForm">
+        <label for="csvInput">Upload CSV file:</label>
+        <input type="file" id="csvInput" name="csvInput"><br>
+        <input type="submit" value="Upload and Predict">
+    </form>
+    <p id="csvPredictionResult"></p>
+
+</body>
+</html>
+
+
+<script>
+document.getElementById("csvForm").addEventListener("submit", function(event){
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("file", document.getElementById("csvInput").files[0]);
+    fetch('/process_csv/', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'predictions.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        alert('Your file has been downloaded!');
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+</script>
