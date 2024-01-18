@@ -138,11 +138,7 @@ def train(config):
     class_names = ["Human", "AI Generated"]
     if wandb_enabled:
         wandb_log_metrics(all_predictions, class_names)
-       
-    plot_confusion_matrix_sklearn(all_predictions['label'],all_predictions['prediction'],class_names,
-                                  save_path=os.path.join(PROJECT_ROOT, "reports/figures"),
-                                  name=f"confusion_matrix_{parameters.gcp_args.model_name}.png")  # Saves to reports/figures
-    
+        
     # Save the model
     
     
