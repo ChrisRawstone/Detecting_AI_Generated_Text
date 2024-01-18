@@ -50,53 +50,53 @@ end of the project.
 
 ### Week 1
 
-* [ ] Create a git repository
-* [ ] Make sure that all team members have write access to the github repository
-* [ ] Create a dedicated environment for you project to keep track of your packages
-* [ ] Create the initial file structure using cookiecutter
-* [ ] Fill out the `make_dataset.py` file such that it downloads whatever data you need and
-* [ ] Add a model file and a training script and get that running
-* [ ] Remember to fill out the `requirements.txt` file with whatever dependencies that you are using
-* [ ] Remember to comply with good coding practices (`pep8`) while doing the project
-* [ ] Do a bit of code typing and remember to document essential parts of your code
-* [ ] Setup version control for your data or part of your data
-* [ ] Construct one or multiple docker files for your code
-* [ ] Build the docker files locally and make sure they work as intended
-* [ ] Write one or multiple configurations files for your experiments
-* [ ] Used Hydra to load the configurations and manage your hyperparameters
+* [X] Create a git repository
+* [X] Make sure that all team members have write access to the github repository
+* [X] Create a dedicated environment for you project to keep track of your packages
+* [X] Create the initial file structure using cookiecutter
+* [X] Fill out the `make_dataset.py` file such that it downloads whatever data you need and
+* [X] Add a model file and a training script and get that running
+* [X] Remember to fill out the `requirements.txt` file with whatever dependencies that you are using
+* [X] Remember to comply with good coding practices (`pep8`) while doing the project
+* [X] Do a bit of code typing and remember to document essential parts of your code
+* [X] Setup version control for your data or part of your data
+* [X] Construct one or multiple docker files for your code
+* [X] Build the docker files locally and make sure they work as intended
+* [X] Write one or multiple configurations files for your experiments
+* [X] Used Hydra to load the configurations and manage your hyperparameters
 * [ ] When you have something that works somewhat, remember at some point to to some profiling and see if
       you can optimize your code
-* [ ] Use Weights & Biases to log training progress and other important metrics/artifacts in your code. Additionally,
+* [X] Use Weights & Biases to log training progress and other important metrics/artifacts in your code. Additionally,
       consider running a hyperparameter optimization sweep.
-* [ ] Use Pytorch-lightning (if applicable) to reduce the amount of boilerplate in your code
+* [X] Use Pytorch-lightning (if applicable) to reduce the amount of boilerplate in your code
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code
-* [ ] Write unit tests related to model construction and or model training
-* [ ] Calculate the coverage ().
-* [ ] Get some continuous integration running on the github repository
-* [ ] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
-* [ ] Create a trigger workflow for automatically building your docker images
-* [ ] Get your model training in GCP using either the Engine or Vertex AI
-* [ ] Create a FastAPI application that can do inference using your model
+* [X] Write unit tests related to the data part of your code
+* [X] Write unit tests related to model construction and or model training
+* [X] Calculate the coverage ().
+* [X] Get some continuous integration running on the github repository
+* [X] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
+* [X] Create a trigger workflow for automatically building your docker images
+* [X] Get your model training in GCP using either the Engine or Vertex AI
+* [X] Create a FastAPI application that can do inference using your model
 * [ ] If applicable, consider deploying the model locally using torchserve
-* [ ] Deploy your model in GCP using either Functions or Run as the backend
+* [X] Deploy your model in GCP using either Functions or Run as the backend
 
 ### Week 3
 
-* [ ] Check how robust your model is towards data drifting
-* [ ] Setup monitoring for the system telemetry of your deployed model
-* [ ] Setup monitoring for the performance of your deployed model
+* [X] Check how robust your model is towards data drifting
+* [X] Setup monitoring for the system telemetry of your deployed model
+* [X] Setup monitoring for the performance of your deployed model
 * [ ] If applicable, play around with distributed data loading
 * [ ] If applicable, play around with distributed model training
 * [ ] Play around with quantization, compilation and pruning for you trained models to increase inference speed
 
 ### Additional
 
-* [ ] Revisit your initial project description. Did the project turn out as you wanted?
-* [ ] Make sure all group members have a understanding about all parts of the project
-* [ ] Uploaded all your code to github
+* [X] Revisit your initial project description. Did the project turn out as you wanted?
+* [X] Make sure all group members have a understanding about all parts of the project
+* [X] Uploaded all your code to github
 
 ## Group information
 
@@ -148,10 +148,7 @@ For our NLP project, we chose to use the third-party framework: The Huggingface 
 >
 > Answer:
 
-We used Conda for managing our dependencies. We auto-generated the list of dependencies using the command `pipreqs` which wrote to the requirements.txt file which was later uploaded to the github repository. Other packages like dvc was manually checked in our development environment and added to the requirements. To get a complete copy of our development environment, one would simply have to run the following commands in a new python 3.11 environment:
-conda create -n projenv python=3.11
-conda activate projenv
-pip install -r requirements.txt
+In our project, we used Conda to effectively manage the dependencis in our project application. The essential list of dependencies was auto-generated through the `pipreqs` command, which compiled all necessary packages into the requirements.txt file. This file was then diligently uploaded to our GitHub repository for easy access and version control. Additionally, we manually included packages like DVC, ensuring they were accurately represented in our development environment. If a new team member were to replicate our environment, they would simply need to execute a series of straightforward commands in a fresh Python 3.11 environment. Initially, they should create a new Conda environment using `conda create -n detectai python=3.11`, followed by activating it with `conda activate detectai`. The final step involves installing all required dependencies using `pip install -r requirements.txt`. This process guarantees a consistent and fully functional development setup, which would be an exact copu of our original environment.
 
 ### Question 5
 
@@ -196,7 +193,7 @@ In our project, we implemented code quality and format rules using the tools PEP
 >
 > Answer:
 
-In total we have implemented 4 tests. We are testing data processing with two tests and testing the training of the model as well as testing the prediction of the model. The most critical part of our application was to test that the model trains file and saves a model. This is because we are using the framework Transformer we expect that the framework are in charge of testing that the model works correctly. Thereby, we don't do additional testing here but focus on testing that our application outputs the correct from the different files. We have written our unit tests using either pytest.raises or assert statements.
+In total we have implemented 4 tests. We are testing data processing with two tests as well as testing the training and the prediction of a model. The most critical part of our application was to test that the model trains and saves a model. Because we are using the framework Transformer we expect that the framework are in charge of testing that the model works correctly. Thereby, we don't do additional testing here but focus on testing that our application outputs the correct from the different files. We have written our unit tests using either pytest.raises or assert statements.
 
 ### Question 8
 
@@ -211,7 +208,7 @@ In total we have implemented 4 tests. We are testing data processing with two te
 >
 > Answer:
 
-The total code coverage of our application code is 43%. The tests covers our source code. We are far from 100% coverage of our code since we chose not to make test on the framework that we are using. Even if we were close to a 100% code coverage this would still not mean that our code was totally bug free. The aim with our tests was to control that we used the correct data, trained and stored a latest model and saved prediction in the expected format.
+The total code coverage of our application is XX%. We are far from 100% coverage of our code, because we primarily focused on testing our source code, excluding making unit tests on the framework. Even if we were close to a 100% code coverage this would still not be an absolute indicator that our codebase was totally bug-free. High coverage can give a false sense of security, as it doesn't always cover edge cases or guarantee test quality. Our testing strategy aimed for testing critical functionalities like accurate data handling, model training, and prediction formatting. These were areas that our codebase handles so this is what is vital for our application to test.
 
 ### Question 9
 
@@ -226,7 +223,7 @@ The total code coverage of our application code is 43%. The tests covers our sou
 >
 > Answer:
 
-In our project we made use of branches as each member in our group had a branch. We also employed a "develop" branch as an intermediate stage before integrating changes into the master branch. The process involved that all team members pushed their updates to the develop branch or merging it with their own branches. Throughout the project when we confirmed everything was functioning correctly, we merged the develop branch into the master branch. We did not make use of pull requests primarily due to the scale and collaborative style of our team. Our project, being relatively small and with a closely-knit team, allowed for direct communication and immediate feedback on changes. This setup enabled us to discuss and implement changes without the need for the formal review process typically associated with pull requests. However, in larger projects or in environments with distributed teams, pull requests can be incredibly beneficial. They provide a structured way to review and discuss proposed changes, ensure code quality, and maintain a history of decisions and modifications. Additionally the use of pull requests can be used to make sure that all code going into production (master branch) is reviewed which is a huge benefit in large projcts.
+In our project we made use of branches as each member in our group had a branch. We also employed a "develop" branch as an intermediate stage before integrating changes into the master branch. The process involved that all team members merged their updates to the develop branch. Throughout the project, when we confirmed everything was functioning correctly, we merged the develop branch into the master branch. We did not make use of pull requests primarily due to the scale and collaborative style of our team. Being a relatively small team of four people allowed us to directly communicate and get immediate feedback on our code. This setup enabled us to discuss and implement changes without the need for the formal review process typically associated with pull requests. However, in larger projects or in environments with distributed teams, we can see that pull requests can be incredibly beneficial. They provide a structured way to review and discuss proposed changes, ensure code quality, and maintain a history of decisions and modifications. Additionally the use of pull requests can be used to make sure that all code going into production (master branch) is reviewed.
 
 ### Question 10
 
@@ -241,7 +238,7 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 10 fill here ---
+We did use DVC in our project. As we used Google Cloud Storage to store data it presented some challenges. DVC was included for its version control capabilities and to ensure that all data we were handling was consistently up to date. It required a careful balance to track changes effectively on GCS while leveraging DVC’s features. Despite these initial complexities, DVC played a crucial role in managing our datasets, especially for storing different versions of the dataset, small in size, all data as well as storing tokenized version of the data. It wasn't a smooth start, but DVC eventually became an integral part of our data management strategy.
 
 ### Question 11
 
@@ -257,7 +254,7 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 11 fill here ---
+We have organized our CI in just one file. We are doing unittesting with one workflow that will test both data handling, saving the trained model and saving the predictions. The workflow is triggered when pushing to the master branch. As we intended, our workflow should catch when something was pushed to the master branch and didn't work. An example of our triggered workflow can be seen here: <https://github.com/ChrisRawstone/Detecting_AI_Generated_Text/actions>
 
 ## Running code and tracking experiments
 
@@ -276,7 +273,8 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 12 fill here ---
+We configured our experiments by using the Hydra configuration tool. In the src/config folder we placed config files with the aim of structuring the hyparameters of our model in a reproducible way. This means that when using this kind of setup we can easily configure our experiment and systematically save the hyperparameters along with the experiments. A way to run an experiment is:
+`python train_model.py experiment = experiment_1`. Here, the config file is called experiment_1. The default is in `train_model.py` defined to be the debug configurations.
 
 ### Question 13
 
@@ -291,7 +289,7 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 13 fill here ---
+As said, we made use of config files. When we want to run a new experiment we first define the setup of the hyperparameters we want to test in a config file. Then we can train the model. To reproduce an experiment we can simply use any previous config. This method secures that no information is lost when running experiments and that our experiments are fully reproducible. The performance of each model configuration is furthermore saved to Weights and Biases.
 
 ### Question 14
 
@@ -308,9 +306,9 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
-![Confusion matrix](figures/confusion_matrix_debug.png)
+![experiment_1cpu](figures/wandb.png)
 
---- question 14 fill here ---
+In our project, we used Weights and Biases to track key metrics like training loss, ROC curves, confusion matrices, and predicted vs. actual labels. Monitoring the training loss helped us understand our model's learning progress - although we should have plotted the validation loss along side to check for overfitting. The ROC curve was crucial for assessing the trade-offs in classification performance at different thresholds. The confusion matrix provided clear insights into correct and incorrect predictions, highlighting potential biases or weaknesses in our model. Comparing predicted and actual labels allowed us to directly observe and fine-tune our model's predictions. If we further should have optimized our model we could look more into these metrics.
 
 ### Question 15
 
@@ -325,22 +323,25 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 15 fill here ---
+For our project, we developed three distinct images, each serving a specialized purpose. The first is designed for training, responsible for training the model and logging to WandB for effective monitoring. To initiate this training image, one can either kickstart the process by executing the submit_vertex_job.py script or, if running locally, fire up the Docker container using the command docker run -e WANDB_API_KEY=<API_KEY_HERE> trainer:latest.
+
+The second image, tailored for deployment, takes the trained model and facilitates its deployment, making it ready for real-time predictions. This is achieved by launching Cloud Run, leveraging the capabilities of FASTAPI to ensure smooth and responsive deployment.
+
+Lastly, our third Docker image is for data drift analysis. This image, also hosted on Cloud Run using FASTAPI, generates insightful reports based on predictions stored in the bucket. Clicking on Cloud Run triggers the creation of these reports, providing valuable insights into the model's performance and any potential drift.
+
+All Docker images are seamlessly built and orchestrated within the Google Cloud environment, offering a streamlined and efficient workflow for training, deploying, and analyzing the performance of our machine learning model.
+ 
 
 ### Question 16
 
 > **When running into bugs while trying to run your experiments, how did you perform debugging? Additionally, did you**
 > **try to profile your code or do you think it is already perfect?**
 >
-> Answer length: 100-200 words.
->
-> Example:
-> *Debugging method was dependent on group member. Some just used ... and others used ... . We did a single profiling*
-> *run of our main code at some point that showed ...*
+> We used debugging extensively everytime we had a bug locally. When we were confronted on a bug. 
 >
 > Answer:
 
---- question 16 fill here ---
+We employed debugging extensively throughout our project whenever we encountered bugs, both locally and in cloud or virtual machine environments. Each time a bug arose, we began by analyzing the error message. If the message wasn't clear enough, we utilized the built-in debugger tool to systematically trace through the lines and functions we suspected might be causing the issue. We acknowledge that our code is neither perfectly written nor fully optimized. To improve efficiency, we focused on optimizing our code in specific areas, such as managing our model more effectively. Instead of repeatedly saving and loading the model in an unstructured manner, we optimized by loading and using it directly from memory, which enhanced the code's performance and reduced unnecessary overhead. RAASTEEN!
 
 ## Working in the cloud
 
@@ -357,7 +358,7 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 17 fill here ---
+In our project, we used a variety of Google Cloud Platform (GCP) services, each tailored to meet specific needs in or project pipeline. Compute Engine, our primary computing resource, was used for running our applications and handling extensive data processing tasks efficiently. For data storage, we leveraged Cloud Storage, ensuring secure and accessible storage solutions for all our data, including various project outcomes, in a well-organized bucket. Cloud Build revolutionized our software development cycle by automating and streamlining the build, test, and deployment processes, thereby enhancing efficiency and minimizing errors. Additionally, Vertex AI played a crucial role in our machine learning project as it offered a robust and integrated platform, simplifying the complexities of training, deploying, and managing AI models, and significantly accelerating our ML workflow.
 
 ### Question 18
 
@@ -372,7 +373,8 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 18 fill here ---
+We utilized a GPU compute engine equipped with T4 GPUs, essential for tasks demanding CUDA GPU capabilities. This powerful setup was crucial for debugging processes that required GPU acceleration. Furthermore, the compute engine played a pivotal role in large-scale model training, a task unfeasible on our local machines. The high-performance hardware significantly accelerated our training processes. What would typically take 30 hours on standard setups was remarkably reduced to just 1.5 hours, showcasing the efficiency and power of the compute engine in handling intensive computational tasks. If we had more time we would have liked to experiment with running docker files with GPU as this would be perfect practice for using A GPU with docker in the real world.
+
 
 ### Question 19
 
@@ -381,7 +383,15 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 19 fill here ---
+We have one bucket with multiple folders: data, models, reports and predictions. 
+
+![Folder_structure_in_bucket](figures/buckets2.png)
+![Data_in_bucket](figures/buckets6.png)
+![Models_in_bucket](figures/buckets3.png)
+![Reports_in_bucket](figures/buckets4.png)
+![Predictions_in_bucket](figures/buckets5.png)
+
+Our Data in GCS is version controlled using DVC. 
 
 ### Question 20
 
@@ -399,7 +409,8 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 21 fill here ---
+![GCP_cloud_build_history](figures/cloudbuild.png)
+![Total_runs_on_cloud_build](figures/cloudbuild_2.png)
 
 ### Question 22
 
@@ -415,7 +426,7 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 22 fill here ---
+We successfully implemented our model both on local systems and in the cloud. Initially, we set up the model locally to facilitate rapid debugging. Once it functioned correctly in that environment, we transferred it to a compute engine. The compute engine proved advantageous, particularly for a more interactive training process with extensive datasets, since we encountered challenges with direct operations on Vertex AI. After ensuring smooth operation, we utilized Vertex AI, but only with CPU capabilities. Unfortunately, we couldn't leverage GPU resources on Vertex AI due to quota restrictions.
 
 ### Question 23
 
@@ -430,7 +441,7 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 23 fill here ---
+In our project, we implemented monitoring for our deployed model, focusing mosly on data drifting and a little on system performance. We used Evidently AI for data monitoring, particularly for tracking data drifting. This allowed us to monitor changes in data distribution, ensuring our model's ongoing accuracy with new data. Over time, we could have used our data drifting reports to proactively maintain the model performance for evolving data patterns. For system monitoring, we loosely experimented with setting up Google Cloud Storage alerts and Service Level Objectives (SLOs). Over time the alerts would have kept us informed of critical events or anomalies in our data storage system, enabling quick responses to potential issues. The key would have been to balance making the right amount of alerts of the most critical issues. For longterm health of our application it would be a good idea to do at least more system monitoring.
 
 ### Question 24
 
@@ -444,11 +455,7 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 24 fill here ---
-
-## Overall discussion of project
-
-> In the following section we would like you to think about the general structure of your project.
+Our total credit amount spent is $35, a sum even less than what a single group member had at their disposal. We take pride in managing our resources efficiently, achieving significant milestones while staying within budget constraints. Remarkably, we successfully trained our model on both Vertex AI and Compute Engine with GPU for optimal performance.Noteworthy achievements include deploying our model and implementing Data Drift on Cloud Run. While navigating these tasks, a substantial portion of our expenses was allocated to Google Storage. This was primarily due to the construction of numerous containers, each averaging around 3 GB in size, which we didn't delete.
 
 ### Question 25
 
@@ -479,7 +486,7 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 26 fill here ---
+The primary challenges encountered during the project revolved around the utilization of DVC (Data Version Control). This tool caused significant technical challenges, manifesting in various issues that delayed our progress. Additionally, the integration of Hydra with WandB Sweep for hyperparameter tunning proved to be a challenging task, and despite our efforts, we were unable to successfully execute it. It's worth noting that this aspect was not deemed a top priority at the time, why we didn't put much effort to make it work. Another noteworthy difficulty appeared in configuring the Vertex WandB key ID. Initially, attempts to set it through the args statement proved to not be possible, prompting us to explore alternative solutions. Eventually, a workaround was implemented in the form of a script utilizing argparser to successfully handle the WandB key ID. To streamline our workflow and avoid further challenges, a decision was made to make our storage bucket public. This strategic move aimed to avoid the complexities associated with authentication processes that would have otherwise demanded considerable time and resources.
 
 ### Question 27
 
@@ -496,4 +503,13 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
---- question 27 fill here ---
+All memebers in the group have equally contributed to the project, where most tasks where developed in pairs of two or more. In the following, we will state, how were most responsible for each task. 
+Student s204155 have been responsible 
+
+Student s204088
+
+Student s204090
+
+Student s204148
+
+

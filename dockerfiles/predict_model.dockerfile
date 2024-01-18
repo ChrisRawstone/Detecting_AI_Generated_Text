@@ -10,11 +10,11 @@ COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt --no-cache-dir
 
-RUN pip install fastapi
-RUN pip install pydantic
-RUN pip install uvicorn
-RUN pip install evidently
-RUN pip install python-multipart
+# RUN pip install fastapi
+# RUN pip install pydantic
+# RUN pip install uvicorn
+# RUN pip install evidently
+# RUN pip install python-multipart
 
 COPY src/ src/
 COPY static/ static/

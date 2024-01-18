@@ -13,10 +13,10 @@ import nltk
 nltk.download("words")
 nltk.download("wordnet")
 nltk.download("omw-1.4")
-from utils import upload_to_gcs, download_gcs_folder
+from src.utils import upload_to_gcs, download_gcs_folder
 
 
-def data_drift(reference_data: pd.DataFrame, current_data:pd.DataFrame, column_mapping: ColumnMapping):
+def data_drift(reference_data: pd.DataFrame, current_data: pd.DataFrame, column_mapping: ColumnMapping):
     """
     Analyzes data drift between a reference dataset and a current dataset, generating three types of reports:
     1. Data Drift Report: Compares numerical and categorical distributions using Kolmogorov-Smirnov (KS) and Population
@@ -49,10 +49,12 @@ def data_drift(reference_data: pd.DataFrame, current_data:pd.DataFrame, column_m
 
     target_drift_report = Report(metrics=[TargetDriftPreset()])
     target_drift_report.run(reference_data=reference_data, current_data=current_data, column_mapping=column_mapping)
-    return data_drift_report, data_quality_report, target_drift_report
+    save_reports(data_drift_report, data_quality_report, target_drift_report, column_mapping,reference_data, current_data)
+    #return data_drift_report, data_quality_report, target_drift_report
 
 
-def save_reports(data_drift_report: Report, data_quality_report: Report, target_drift_report: Report, column_mapping: ColumnMapping):
+def save_reports(
+    data_drift_report: Report, data_quality_report: Report, target_drift_report: Report, column_mapping: ColumnMapping, reference_data: pd.DataFrame, current_data: pd.DataFrame):
     """
     Saves three data drift analysis reports to HTML files and uploads them to Google Cloud Storage (GCS).
 
@@ -61,6 +63,7 @@ def save_reports(data_drift_report: Report, data_quality_report: Report, target_
     - data_quality_report (Report): The data quality analysis report evaluating various metrics for both datasets.
     - target_drift_report (Report): The target drift analysis report focusing on detecting drift in the target variable.
     - column_mapping (ColumnMapping): An object providing mapping information between columns in the datasets.
+    
 
     The HTML files are saved to the local directory 'src/data_drifting' and are named:
     - 'report_data_drift_report.html'
@@ -78,7 +81,7 @@ def save_reports(data_drift_report: Report, data_quality_report: Report, target_
     save_reports(data_drift_report, data_quality_report, target_drift_report, column_mapping)
     """
 
-    base_directory = "src/data_drifting"
+    base_directory = "reports"
     os.makedirs(base_directory, exist_ok=True)
 
     reports = [data_drift_report, data_quality_report, target_drift_report]
@@ -89,7 +92,7 @@ def save_reports(data_drift_report: Report, data_quality_report: Report, target_
         report.run(reference_data=reference_data, current_data=current_data, column_mapping=column_mapping)
         report.save_html(html_file_path)
         upload_to_gcs(
-            "src/data_drifting",
+            "reports",
             bucket_name="ai-detection-bucket",
             gcs_path="reports",
             file_name=f"report_{name}.html",
@@ -124,10 +127,10 @@ def classification_report(reference_data: pd.DataFrame, current_data: pd.DataFra
     """
     classification_report = Report(metrics=[ClassificationPreset()])
     classification_report.run(reference_data=reference_data, current_data=current_data, column_mapping=column_mapping)
-    html_file_path = os.path.join("src/data_drifting", "report_classification_report.html")
+    html_file_path = os.path.join("reports", "report_classification_report.html")
     classification_report.save_html(html_file_path)
     upload_to_gcs(
-        "src/data_drifting",
+        "reports",
         bucket_name="ai-detection-bucket",
         gcs_path="reports",
         file_name="report_classification_report.html",
@@ -146,9 +149,8 @@ if __name__ == "__main__":
     reference_data["prediction"] = reference_data["label"]
 
     current_data = pd.read_csv("inference_predictions/predictions_20240117_170932.csv")
-    current_data["label"] = current_data["predictions"]
-    current_data["prediction"] = current_data["predictions"]
-
+    current_data["label"] = current_data["prediction"]
+            
     column_mapping = ColumnMapping(target="label", text_features=["text"])
     data_drift_report, data_quality_report, target_drift_report = data_drift(
         reference_data, current_data, column_mapping

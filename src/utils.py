@@ -6,11 +6,14 @@ import wandb
 import logging
 import colorlog
 from google.cloud import storage
+from datetime import datetime
 from src.visualizations.visualize import plot_confusion_matrix_sklearn
+
 TEST_ROOT = os.path.dirname(__file__)  # root of test folder
 PROJECT_ROOT = os.path.dirname(TEST_ROOT)
 
 log = logging.getLogger(__name__)
+
 
 def upload_to_gcs(local_model_dir: str, bucket_name: str, gcs_path: str, file_name: str, specific_file: str = ""):
     """
@@ -136,6 +139,44 @@ def load_csv(file_name: str = "train.csv", source_folder: str = "data/processed/
     df = pd.read_csv(os.path.join(source_folder, file_name))
     return df
 
+def download_latest_added_file(bucket_name: str="ai-detection-bucket",source_folder: str="inference_predictions"):
+    # Initialize a client
+    storage_client = storage.Client.create_anonymous_client()
+
+    # Get the bucket
+    bucket = storage_client.get_bucket(bucket_name)
+    blobs = list(bucket.list_blobs(prefix=source_folder))  
+    blob_names_list = [blob.name for blob in blobs]    
+    blob_names_list = [name for name in blob_names_list if not name.endswith('/')]
+    def get_timestamp(filename):
+    # Extract the timestamp from the filename
+        
+        # remove csv extension
+        filename = filename.split(".")[0]        
+        timestamp_str = '_'.join(filename.split("_")[-2:])
+        return datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S")
+
+    sorted_files= sorted(blob_names_list, key=get_timestamp, reverse=True)
+    latest_file = sorted_files[0]
+    # Download the file to a destination
+    blob = bucket.blob(latest_file)
+    os.makedirs(os.path.dirname(latest_file), exist_ok=True)
+    blob.download_to_filename(latest_file)
+    # return the path to the latest file
+
+    return latest_file
+
+if __name__ == "__main__":
+    test=download_latest_added_file()
+
+
+
+    
+    
+        
+
+
+
 def enable_wandb(parameters):
     """
     Initializes Weights and Biases (wandb) for experiment tracking if enabled.
@@ -164,6 +205,7 @@ def enable_wandb(parameters):
         wandb_enabled = False
 
     return wandb_enabled
+
 
 def compute_metrics(eval_pred):
     """

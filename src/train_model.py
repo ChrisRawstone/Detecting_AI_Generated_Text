@@ -1,18 +1,13 @@
 import os
-import numpy as np
 import torch
-from google.cloud import storage
 from datasets import load_metric, load_from_disk
 from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
-from hydra.utils import get_original_cwd
 import hydra
 import omegaconf
-import wandb
 from src.predict_model import predict
-from src.visualizations.visualize import plot_confusion_matrix_sklearn
 import logging
 from transformers.utils import logging as transformer_logging
-from src.utils import upload_to_gcs
+from src.utils import upload_to_gcs, save_model, enable_wandb, wandb_log_metrics, compute_metrics
 
 log = logging.getLogger(__name__)
 
@@ -25,74 +20,6 @@ metric = load_metric("accuracy")
 
 TEST_ROOT = os.path.dirname(__file__)  # root of test folder
 PROJECT_ROOT = os.path.dirname(TEST_ROOT)
-
-
-def enable_wandb(parameters):
-    wandb_enabled = parameters.general_args.wandb_enabled
-    if wandb_enabled == "True":
-        try:
-            wandb.init(project="MLOps-DetectAIText", entity="teamdp", name=parameters.gcp_args.model_name)
-            wandb_enabled = True
-        except:
-            print("Could not initialize wandb. No API key found.")
-            wandb.init(mode="disabled")
-            wandb_enabled = False
-    else:
-        wandb.init(mode="disabled")
-        wandb_enabled = False
-
-    return wandb_enabled
-
-
-def compute_metrics(eval_pred):
-    logits, labels = eval_pred
-    predictions = np.argmax(logits, axis=-1)
-    accuracy = metric.compute(predictions=predictions, references=labels)
-    log.info(f"Accuracy: {accuracy['accuracy']}")
-    return accuracy
-
-
-def save_model(trainer, parameters):
-    model_dir = PROJECT_ROOT + "/models"
-    trainer.save_model(f"{model_dir}/{parameters.gcp_args.model_name}")
-    trainer.save_model(f"{model_dir}/latest")
-
-    # Upload model to GCS
-    if parameters.gcp_args.push_model_to_gcs == "True":
-        upload_to_gcs(
-            model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, parameters.gcp_args.model_name
-        )
-        upload_to_gcs(model_dir, parameters.gcp_args.gcs_bucket, parameters.gcp_args.gcs_path, "latest")
-
-
-def wandb_log_metrics(all_predictions, class_names):
-    wandb.log(
-        {
-            "accuracy": metric.compute(predictions=all_predictions["prediction"], references=all_predictions["label"])[
-                "accuracy"
-            ]
-        }
-    )
-    wandb.log(
-        {
-            "confusion matrix": wandb.plot.confusion_matrix(
-                probs=None,
-                y_true=all_predictions["label"],
-                preds=all_predictions["prediction"],
-                class_names=class_names,
-            )
-        }
-    )
-    wandb.log(
-        {
-            "roc": wandb.plot.roc_curve(
-                list(all_predictions["label"]), list(all_predictions["probabilities"]), labels=class_names
-            )
-        }
-    )
-    plot_confusion_matrix_sklearn(
-        all_predictions["label"], all_predictions["prediction"], class_names, run=wandb.run
-    )  # Saves to wandb
 
 
 def train(config):

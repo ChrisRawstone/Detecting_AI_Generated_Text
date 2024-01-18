@@ -11,7 +11,7 @@ from src.predict_model import predict_string, predict_csv
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from src.utils import load_model, upload_to_gcs, download_gcs_folder
+from src.utils import load_model
 
 app = FastAPI()
 # bucket_name = "ai-detection-bucket"
@@ -101,6 +101,3 @@ async def process_csv(file: UploadFile = File(...), model_name: str = "experimen
     blob.upload_from_filename(local_predictions_file)
 
     return FileResponse(local_predictions_file, media_type="text/csv", filename="predictions.csv")
-
-
-# Instrumentator().instrument(app).expose(app)
