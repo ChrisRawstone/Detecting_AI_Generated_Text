@@ -1,6 +1,8 @@
 defaults:
     - experiment: debug_hparams
     - _self_
+    - override hydra/job_logging: colorlog
+    - override hydra/hydra_logging: colorlog
 experiment:
   timestamp : ${now:%Y-%m-%d}/${now:%H-%M-%S}
   

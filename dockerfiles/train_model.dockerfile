@@ -22,4 +22,4 @@ WORKDIR /
 
 RUN pip install -e .
 
-ENTRYPOINT ["sh","-c","dvc pull data/processed/tokenized_data/full_data && python src/train_model.py experiment=experiment_1"]
+ENTRYPOINT ["sh","-c","dvc pull data/processed/tokenized_data && python src/train_model.py experiment=experiment_1"]

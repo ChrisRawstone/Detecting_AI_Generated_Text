@@ -11,11 +11,14 @@ training_args:
   weight_decay: 0.01
   logging_dir: './logs'
   logging_steps: 50
+  save_steps: 200
+  eval_steps: 50
+  save_total_limit: 1
 
 general_args:
-  path_train_data: "tokenized_data/full_data/train_dataset_tokenized"
-  path_val_data: "tokenized_data/full_data/val_dataset_tokenized"
-  path_test_data: "tokenized_data/full_data/test_dataset_tokenized"
+  path_train_data: "tokenized_data/medium_data/train_dataset_tokenized"
+  path_val_data: "tokenized_data/medium_data/val_dataset_tokenized"
+  path_test_data: "tokenized_data/medium_data/test_dataset_tokenized"
   wandb_enabled: "True"
 
 gcp_args:
