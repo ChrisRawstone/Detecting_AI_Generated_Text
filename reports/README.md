@@ -472,7 +472,7 @@ Our total credit amount spent is $35, a sum even less than what a single group m
 >
 > Answer:
 
---- question 25 fill here ---
+![Overall_architecture](figures/overview_pipeline.png)
 
 ### Question 26
 
