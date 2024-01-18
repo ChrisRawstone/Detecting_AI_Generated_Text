@@ -13,8 +13,6 @@ RUN pip install -r requirements.txt --no-cache-dir
 COPY src/ src/ 
 COPY reports_api.py reports_api.py
 COPY pyproject.toml pyproject.toml 
-COPY reports/ reports/
-COPY static/ static/
 
 RUN pip install . --no-cache-dir --no-deps
 

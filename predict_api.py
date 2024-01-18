@@ -24,7 +24,7 @@ else:
     device = torch.device("cpu")
 
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/src/static", StaticFiles(directory="src/static"), name="src/static")
 
 
 class TextModel(BaseModel):
@@ -33,7 +33,7 @@ class TextModel(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    with open("static/index.html", "r") as f:
+    with open("src/static/index.html", "r") as f:
         html_content = f.read()
     return HTMLResponse(content=html_content)
 
@@ -44,7 +44,7 @@ def read_root():
 
 
 @app.post("/predict_string/")
-async def process_string(data: TextModel, model_name: str = "latest"):
+async def process_string(data: TextModel, model_name: str = "experiment_1_GPU"):
     """
     Inference endpoint
     """
@@ -72,7 +72,7 @@ async def process_string(data: TextModel, model_name: str = "latest"):
 
 
 @app.post("/process_csv/")
-async def process_csv(file: UploadFile = File(...), model_name: str = "latest"):
+async def process_csv(file: UploadFile = File(...), model_name: str = "experiment_1_GPU"):
     temp_file_path = "tempfile.csv"
     with open(temp_file_path, "wb") as buffer:
         content = await file.read()  # Read the file content

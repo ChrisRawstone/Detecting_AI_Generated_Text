@@ -81,7 +81,7 @@ def save_reports(
     save_reports(data_drift_report, data_quality_report, target_drift_report, column_mapping)
     """
 
-    base_directory = "reports"
+    base_directory = "src/static/reports"
     os.makedirs(base_directory, exist_ok=True)
 
     reports = [data_drift_report, data_quality_report, target_drift_report]
@@ -92,7 +92,7 @@ def save_reports(
         report.run(reference_data=reference_data, current_data=current_data, column_mapping=column_mapping)
         report.save_html(html_file_path)
         upload_to_gcs(
-            "reports",
+            base_directory,
             bucket_name="ai-detection-bucket",
             gcs_path="reports",
             file_name=f"report_{name}.html",
@@ -125,12 +125,15 @@ def classification_report(reference_data: pd.DataFrame, current_data: pd.DataFra
     Example:
     classification_report(reference_data, current_data, column_mapping)
     """
+    base_directory = "src/static/reports"
+    os.makedirs(base_directory, exist_ok=True)
+
     classification_report = Report(metrics=[ClassificationPreset()])
     classification_report.run(reference_data=reference_data, current_data=current_data, column_mapping=column_mapping)
-    html_file_path = os.path.join("reports", "report_classification_report.html")
+    html_file_path = os.path.join(base_directory, "report_classification_report.html")
     classification_report.save_html(html_file_path)
     upload_to_gcs(
-        "reports",
+        base_directory,
         bucket_name="ai-detection-bucket",
         gcs_path="reports",
         file_name="report_classification_report.html",

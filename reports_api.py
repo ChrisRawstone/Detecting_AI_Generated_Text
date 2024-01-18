@@ -24,13 +24,13 @@ download_gcs_folder(source_folder = reference_data_folder, specific_file = "trai
 latest_file_name=download_latest_added_file()
 
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-app.mount("/reports", StaticFiles(directory="reports"), name="reports")
+app.mount("/src/static", StaticFiles(directory="src/static"), name="src/static")
+#app.mount("/reports", StaticFiles(directory="reports"), name="reports")
 
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    with open("static/report.html", "r") as f:
+    with open("src/static/report.html", "r") as f:
         html_content = f.read()
     return HTMLResponse(content=html_content)
 
