@@ -9,6 +9,9 @@ from evidently import ColumnMapping
 from src.utils import download_gcs_folder, download_latest_added_file
 from src.data_drift import data_drift, save_reports, classification_report
 
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
 import pandas as pd
 import os
 
@@ -20,12 +23,23 @@ download_gcs_folder(source_folder = reference_data_folder, specific_file = "trai
 # download the latest inference predictions
 latest_file_name=download_latest_added_file()
 
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/reports", StaticFiles(directory="reports"), name="reports")
+
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    with open("static/report.html", "r") as f:
+        html_content = f.read()
+    return HTMLResponse(content=html_content)
+
 @app.get("/")
 async def root():
     return {"to get a report use the following endpoint": "/get_reports"}
 
 @app.get("/get_reports")
-async def get_reports(report_type: str = "data_drift"):
+async def get_reports():
     """
     Data drift reports endpoint
     """
@@ -36,17 +50,18 @@ async def get_reports(report_type: str = "data_drift"):
     current_data = pd.read_csv(latest_file_name)
     current_data["label"] = current_data["prediction"]
       
-    if report_type == "data_drift":      
-        data_drift(reference_data, current_data)
-        return {"message": "data drift reports generated"}        
+    #if report_type == "data_drift":
+    column_mapping = ColumnMapping(target="label", text_features=["text"])      
+    data_drift(reference_data, current_data, column_mapping)
+        #return {"message": "data drift reports generated"}        
 
-    elif report_type == "classification":
-        column_mapping_classification = ColumnMapping(target="label", text_features=["text"], prediction="prediction")
-        classification_report(reference_data, current_data, column_mapping_classification)
-        return {"message": "classification report generated"}
+    #elif report_type == "classification":
+    column_mapping_classification = ColumnMapping(target="label", text_features=["text"], prediction="prediction")
+    classification_report(reference_data, current_data, column_mapping_classification)
+    #return {"message": "classification report generated"}
         
-    else:
-        return {"message": "report_type must be either data_drift or classification"}
+    #else:
+    #    return {"message": "report_type must be either data_drift or classification"}
 
 
  
