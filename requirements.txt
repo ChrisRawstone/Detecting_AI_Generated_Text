@@ -35,4 +35,4 @@ evidently
 nltk
 matplotlib
 hydra_colorlog==1.2.0
-uvicorn==0.15.0
+uvicorn>=0.22.0
