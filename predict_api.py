@@ -38,7 +38,6 @@ def load_model(model_name: str = "latest", source_folder: str = "models"):
     model.to(device)
     return model
 
-
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -79,6 +78,12 @@ async def process_csv(file: UploadFile = File(...), model_name: str = "latest", 
     gcs_file_path = f"inference_predictions/predictions_{timestamp}.csv"
     blob = bucket.blob(gcs_file_path)
     blob.upload_from_filename(local_predictions_file)
+
+    # do different return depending on if true label provided or not
+    if true_label_provided:
+        # do 
+
+
 
     return FileResponse("results/predictions.csv", media_type="text/csv", filename="predictions.csv")
 
