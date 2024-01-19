@@ -1,7 +1,9 @@
-import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
-import wandb
 import os
+
+import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
+
+import wandb
 
 
 def plot_confusion_matrix_sklearn(y, y_pred, display_labels=None, run=None, save_path=None, name=None):

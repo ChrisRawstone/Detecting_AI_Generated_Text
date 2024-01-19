@@ -1,7 +1,8 @@
 import argparse
+import json
+
 from google.cloud import aiplatform
 from google.protobuf.struct_pb2 import Value
-import json
 
 # Initialize argument parser
 parser = argparse.ArgumentParser(description="Run a training job on Vertex AI with wandb key.")

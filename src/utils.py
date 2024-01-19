@@ -1,12 +1,14 @@
-import os
-import pandas as pd
-import numpy as np
-from datasets import load_metric, load_from_disk
-import wandb
 import logging
-import colorlog
-from google.cloud import storage
+import os
 from datetime import datetime
+
+import colorlog
+import numpy as np
+import pandas as pd
+from datasets import load_from_disk, load_metric
+from google.cloud import storage
+
+import wandb
 from src.visualizations.visualize import plot_confusion_matrix_sklearn
 
 TEST_ROOT = os.path.dirname(__file__)  # root of test folder
@@ -83,7 +85,7 @@ def download_gcs_folder(source_folder: str, specific_file: str = "", bucket_name
     else:
         blobs = bucket.list_blobs(prefix=source_folder)  # Get list of files
         for blob in blobs:
-            if blob.name == source_folder+"/": 
+            if blob.name == source_folder + "/":
                 pass
             else:
                 print(blob.name)
@@ -112,7 +114,7 @@ def load_model(model_name: str = "latest", source_folder: str = "models", device
 
     source_path = os.path.join(source_folder, model_name)
 
-    #create directory if not exists
+    # create directory if not exists
     os.makedirs(f"models/{model_name}", exist_ok=True)
     download_gcs_folder(source_path)
     print("Downloaded model from GCS")
@@ -144,24 +146,26 @@ def load_csv(file_name: str = "train.csv", source_folder: str = "data/processed/
     df = pd.read_csv(os.path.join(source_folder, file_name))
     return df
 
-def download_latest_added_file(bucket_name: str="ai-detection-bucket",source_folder: str="inference_predictions"):
+
+def download_latest_added_file(bucket_name: str = "ai-detection-bucket", source_folder: str = "inference_predictions"):
     # Initialize a client
     storage_client = storage.Client.create_anonymous_client()
 
     # Get the bucket
     bucket = storage_client.get_bucket(bucket_name)
-    blobs = list(bucket.list_blobs(prefix=source_folder))  
-    blob_names_list = [blob.name for blob in blobs]    
-    blob_names_list = [name for name in blob_names_list if not name.endswith('/')]
+    blobs = list(bucket.list_blobs(prefix=source_folder))
+    blob_names_list = [blob.name for blob in blobs]
+    blob_names_list = [name for name in blob_names_list if not name.endswith("/")]
+
     def get_timestamp(filename):
-    # Extract the timestamp from the filename
-        
+        # Extract the timestamp from the filename
+
         # remove csv extension
-        filename = filename.split(".")[0]        
-        timestamp_str = '_'.join(filename.split("_")[-2:])
+        filename = filename.split(".")[0]
+        timestamp_str = "_".join(filename.split("_")[-2:])
         return datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S")
 
-    sorted_files= sorted(blob_names_list, key=get_timestamp, reverse=True)
+    sorted_files = sorted(blob_names_list, key=get_timestamp, reverse=True)
     latest_file = sorted_files[0]
     # Download the file to a destination
     blob = bucket.blob(latest_file)

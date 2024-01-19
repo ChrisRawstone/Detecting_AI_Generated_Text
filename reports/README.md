@@ -129,7 +129,7 @@ end of the project.
 >
 > Answer:
 
-For our NLP project, we chose to use the third-party framework: The Huggingface Transformers framework, which proved to be extremely beneficial. We used the pre-trained model from the framework, in particularly the DistilBertForSequenceClassification model from the transformers package. This model excels in text classification and allowed us to efficiently adapt it to our dataset. We also used the framework's Trainer and TrainingArguments classes to do efficient training of the model. These features simplified the typically complex training processes. Additionally, the integration of WandB for experiment monitoring and Google Cloud Storage for model management was compatible with the Transformers framework. In summary, the Transformers framework provided tools for model training and evaluation. We also used the framework to tokenize the text data. and for the prediction.
+For our NLP project, we chose to use the third-party framework: The Huggingface Transformers framework, which proved to be extremely beneficial. We used the pre-trained model from the framework, in particularly the DistilBert model from the transformers package. This model excels in text classification and allowed us to efficiently adapt it to our dataset. We also used the framework's Trainer and TrainingArguments classes to do efficient training of the model. These features simplified the typically complex training processes. Additionally, the integration of WandB for experiment monitoring and Google Cloud Storage for model management was compatible with the Transformers framework. In summary, the Transformers framework provided tools for model training and evaluation. We also used the framework to tokenize the text data and for the prediction.
 
 ## Coding environment
 
@@ -148,7 +148,7 @@ For our NLP project, we chose to use the third-party framework: The Huggingface 
 >
 > Answer:
 
-In our project, we used Conda to effectively manage the dependencis in our project application. The essential list of dependencies was auto-generated through the `pipreqs` command, which compiled all necessary packages into the requirements.txt file. This file was then diligently uploaded to our GitHub repository for easy access and version control. Additionally, we manually included packages like DVC, ensuring they were accurately represented in our development environment. If a new team member were to replicate our environment, they would simply need to execute a series of straightforward commands in a fresh Python 3.11 environment. Initially, they should create a new Conda environment using `conda create -n detectai python=3.11`, followed by activating it with `conda activate detectai`. The final step involves installing all required dependencies using `pip install -r requirements.txt`. This process guarantees a consistent and fully functional development setup, which would be an exact copu of our original environment.
+In our project, we used Conda to effectively manage the dependencis in our project application. The essential list of dependencies was first auto-generated through the `pipreqs` command, which compiled all necessary packages into the requirements.txt file. This file was then diligently uploaded to our GitHub repository for easy access and version control. Additionally, we manually included packages like DVC, ensuring they were accurately represented in our development environment. If a new team member were to replicate our environment, they would simply need to execute a series of straightforward commands in a fresh Python 3.11 environment. Initially, they should create a new Conda environment using `conda create -n detectai python=3.11`, followed by activating it with `conda activate detectai`. The final step involves installing all required dependencies using `pip install -r requirements.txt`. This process guarantees a consistent and fully functional development setup, which would be an exact copy of our original environment.
 
 ### Question 5
 
@@ -163,7 +163,7 @@ In our project, we used Conda to effectively manage the dependencis in our proje
 > *experiments.*
 > Answer:
 
-Using the cookiecutter template for the mlops course, we have filled out the .github/workflows, data, dockerfiles, reports and tests folders, We have not filled out the docs folder. The notebook folder have we not used for the final project. The source code is contained in the src folder. We have added the folders outputs which contains the logs of the train models and the folder results to store the predictions from the model. We did not fill out the src/models folder as we are using a pretrained model from the transformer framework. We have added scripts to the data folder and the visualization folder.
+Using the cookiecutter template for the mlops course, we have filled out the `.github/workflows`, `data`, `dockerfiles`, `reports` and `tests` folders. We have not filled out the docs folder but documentation for running the application is added in the READme file. The notebook folder have we not used for the final project. The source code is contained in the `src` folder. We have added the folders `outputs` which contains the logs of the train models and the folder `results` to store the predictions from the model. We did not fill out the src/models folder as we are using a pretrained model from the transformer framework. We have added scripts to the `data` folder and the `visualization` folder.
 
 ### Question 6
 
@@ -174,7 +174,7 @@ Using the cookiecutter template for the mlops course, we have filled out the .gi
 >
 > Answer:
 
-In our project, we implemented code quality and format rules using the tools PEP 8 for Python coding standards, and pylint for code analysis. These rules ensure consistency in code style and help in identifying potential errors early. In large projects concepts as PEP8 and code is important as it enhances readability and maintainability. When we are more people involved in developing code, it ensures that everyone follows the same standards, making the codebase easier to understand and later on modify.
+In our project, we implemented code quality and formatting rules following PEP8 for Python coding standards. Additionally, we used the tool Ruff for formatting the code. These rules ensure consistency in code style and help in identifying potential errors early. In large projects it is important to follow the PEP8 pratice as it enhances readability and maintainability. When we are more people involved in developing code, it ensures that everyone follows the same standards, making the codebase easier to understand and later on modify.
 
 ## Version control
 
@@ -193,7 +193,7 @@ In our project, we implemented code quality and format rules using the tools PEP
 >
 > Answer:
 
-In total we have implemented 4 tests. We are testing data processing with two tests as well as testing the training and the prediction of a model. The most critical part of our application was to test that the model trains and saves a model. Because we are using the framework Transformer we expect that the framework are in charge of testing that the model works correctly. Thereby, we don't do additional testing here but focus on testing that our application outputs the correct from the different files. We have written our unit tests using either pytest.raises or assert statements.
+In total we have implemented 4 tests. We are testing data processing with two tests as well as testing the training and the prediction of a model. The most critical part of our application was to test that the model trains and saves a model. Because we are using the framework Transformer we expect that the framework are in charge of testing that the model works correctly. Thereby, we don't do additional testing here but focus on testing that our application outputs the correct from the different files. We have written our unit tests, using the `pytest` package where we utilized both pytest.raises or assert statements.
 
 ### Question 8
 
@@ -208,7 +208,7 @@ In total we have implemented 4 tests. We are testing data processing with two te
 >
 > Answer:
 
-The total code coverage of our application is XX%. We are far from 100% coverage of our code, because we primarily focused on testing our source code, excluding making unit tests on the framework. Even if we were close to a 100% code coverage this would still not be an absolute indicator that our codebase was totally bug-free. High coverage can give a false sense of security, as it doesn't always cover edge cases or guarantee test quality. Our testing strategy aimed for testing critical functionalities like accurate data handling, model training, and prediction formatting. These were areas that our codebase handles so this is what is vital for our application to test.
+The total code coverage of our application is 40%. We are far from 100% coverage of our code, because we primarily focused on testing our source code, excluding making unit tests on the framework. Even if we were close to a 100% code coverage this would still not be an absolute indicator that our codebase was totally bug-free. High coverage can give a false sense of security, as it doesn't always cover edge cases or guarantee test quality. Our testing strategy aimed for testing critical functionalities like accurate data handling, model training, and prediction formatting. These were areas that our codebase handles so this is what is vital for our application to test.
 
 ### Question 9
 
@@ -238,7 +238,7 @@ In our project we made use of branches as each member in our group had a branch.
 >
 > Answer:
 
-We did use DVC in our project. As we used Google Cloud Storage to store data it presented some challenges. DVC was included for its version control capabilities and to ensure that all data we were handling was consistently up to date. It required a careful balance to track changes effectively on GCS while leveraging DVC’s features. Despite these initial complexities, DVC played a crucial role in managing our datasets, especially for storing different versions of the dataset, small in size, all data as well as storing tokenized version of the data. It wasn't a smooth start, but DVC eventually became an integral part of our data management strategy.
+We did use DVC in our project, which is connected to Google Cloud Storage to store data. DVC was included for its version control capabilities and to ensure that all data we were handling was consistently up to date. It required a careful balance to track changes effectively on GCS while leveraging DVC’s features. Despite these initial complexities, DVC could be used to played a crucial role in managing our datasets, especially for storing different versions of the dataset, small in size, all data as well as storing tokenized version of the data. We used the version control so that all team members could quickly be up to date using the same data. It wasn't a smooth start, but DVC eventually became an integral part of our data management strategy.
 
 ### Question 11
 
@@ -254,7 +254,7 @@ We did use DVC in our project. As we used Google Cloud Storage to store data it 
 >
 > Answer:
 
-We have organized our CI in just one file. We are doing unittesting with one workflow that will test both data handling, saving the trained model and saving the predictions. The workflow is triggered when pushing to the master branch. As we intended, our workflow should catch when something was pushed to the master branch and didn't work. An example of our triggered workflow can be seen here: <https://github.com/ChrisRawstone/Detecting_AI_Generated_Text/actions>
+We have organized our CI in just one file. We are doing unittesting with one workflow that will test both data handling, saving the trained model and saving the predictions. The workflow is triggered when pushing to the master branch. As we intended, our workflow should do immediate testing of updates which would prevent potential errors from impacting the stability of the project without us catching the error early on with our tests. An example of our triggered workflow can be seen here on Github actions: <https://github.com/ChrisRawstone/Detecting_AI_Generated_Text/actions>. The tests can also be called locally. We have strived to give good warnings and error messages such as "remember to pull from DVC" if a required dataset is not present on a team member's computer and therefore the training of the model cannot be executed.
 
 ## Running code and tracking experiments
 
@@ -273,8 +273,8 @@ We have organized our CI in just one file. We are doing unittesting with one wor
 >
 > Answer:
 
-We configured our experiments by using the Hydra configuration tool. In the src/config folder we placed config files with the aim of structuring the hyparameters of our model in a reproducible way. This means that when using this kind of setup we can easily configure our experiment and systematically save the hyperparameters along with the experiments. A way to run an experiment is:
-`python train_model.py experiment = experiment_1`. Here, the config file is called experiment_1. The default is in `train_model.py` defined to be the debug configurations.
+We configured our experiments by using the Hydra configuration tool. In the src/config folder we placed config files with the aim of structuring the hyperparameters of our model in a reproducible way. This means that when using this kind of setup we can easily configure our experiment and systematically save the hyperparameters along with the experiments. A way to run an experiment is:
+`python train_model.py experiment = experiment_1`. Here, the config file is called experiment_1 and the model and Wandb will also be save as experiment_1, so we can keep track of experiments, model and logs. The default config file has experiment set to debug_hparams.
 
 ### Question 13
 
@@ -289,7 +289,7 @@ We configured our experiments by using the Hydra configuration tool. In the src/
 >
 > Answer:
 
-As said, we made use of config files. When we want to run a new experiment we first define the setup of the hyperparameters we want to test in a config file. Then we can train the model. To reproduce an experiment we can simply use any previous config. This method secures that no information is lost when running experiments and that our experiments are fully reproducible. The performance of each model configuration is furthermore saved to Weights and Biases.
+As said, we made use of config files. When we want to run a new experiment we first define the exact setup of the hyperparameters we want to test in a new config file. This step is important as it establishes a clear and consistent way for us to conduct each experimental run. Then we can move on to training the model. To reproduce an experiment we can simply use any previously defined config file. This method secures that no information is lost when running experiments and that our experiments are reproducible. The performance of each model configuration and training is furthermore saved to Weights and Biases.
 
 ### Question 14
 
@@ -323,7 +323,7 @@ In our project, we used Weights and Biases to track key metrics like training lo
 >
 > Answer:
 
-For our project, we developed three distinct images, each serving a specialized purpose. The first is designed for training, responsible for training the model and logging to WandB for effective monitoring. To initiate this training image, one can either kickstart the process by executing the submit_vertex_job.py script or, if running locally, fire up the Docker container using the command docker run -e WANDB_API_KEY=<API_KEY_HERE> trainer:latest.
+For our project, we developed three distinct images, each serving a specialized purpose. The first is designed for training, responsible for training the model and logging to WandB for effective monitoring. To initiate this training image, one can either kickstart the process by executing the submit_vertex_job.py script or, if running locally, fire up the Docker container using the command docker run -e WANDB_API_KEY=<API_KEY_HERE> trainer:latest. Here is the dockerfile used to build the train image: <https://github.com/ChrisRawstone/Detecting_AI_Generated_Text/blob/master/dockerfiles/train_model.dockerfile>. 
 
 The second image, tailored for deployment, takes the trained model and facilitates its deployment, making it ready for real-time predictions. This is achieved by launching Cloud Run, leveraging the capabilities of FASTAPI to ensure smooth and responsive deployment.
 
@@ -341,7 +341,7 @@ All Docker images are seamlessly built and orchestrated within the Google Cloud 
 >
 > Answer:
 
-We employed debugging extensively throughout our project whenever we encountered bugs, both locally and in cloud or virtual machine environments. Each time a bug arose, we began by analyzing the error message. If the message wasn't clear enough, we utilized the built-in debugger tool to systematically trace through the lines and functions we suspected might be causing the issue. We acknowledge that our code is neither perfectly written nor fully optimized. To improve efficiency, we focused on optimizing our code in specific areas, such as managing our model more effectively. Instead of repeatedly saving and loading the model in an unstructured manner, we optimized by loading and using it directly from memory, which enhanced the code's performance and reduced unnecessary overhead. RAASTEEN!
+We employed debugging extensively throughout our project whenever we encountered bugs, both locally and in the cloud or virtual machine environments. Each time a bug arose, we began by analyzing the error message. If the message wasn't clear enough, we utilized the built-in debugger tool or the great tool of print-statemento systematically trace through the lines and functions we suspected might be causing the issue. We acknowledge that our code is neither perfectly written nor fully optimized. To improve efficiency, we focused on optimizing our code in specific areas, such as managing our model more effectively. Instead of repeatedly saving and loading the model in an unstructured manner, we optimized by loading and using it directly from memory, which enhanced the code's performance and reduced unnecessary overhead. 
 
 ## Working in the cloud
 
@@ -358,7 +358,18 @@ We employed debugging extensively throughout our project whenever we encountered
 >
 > Answer:
 
-In our project, we used a variety of Google Cloud Platform (GCP) services, each tailored to meet specific needs in or project pipeline. Compute Engine, our primary computing resource, was used for running our applications and handling extensive data processing tasks efficiently. For data storage, we leveraged Cloud Storage, ensuring secure and accessible storage solutions for all our data, including various project outcomes, in a well-organized bucket. Cloud Build revolutionized our software development cycle by automating and streamlining the build, test, and deployment processes, thereby enhancing efficiency and minimizing errors. Additionally, Vertex AI played a crucial role in our machine learning project as it offered a robust and integrated platform, simplifying the complexities of training, deploying, and managing AI models, and significantly accelerating our ML workflow.
+In our project, we used a variety of Google Cloud Platform (GCP) services, each tailored to meet specific needs in or project pipeline.
+
+Compute Engine - used to create Virtual Machines that deployed containers based on our training image.
+
+Cloud Stoage - used fo store our data, model, predictions and reports for data drift in a well-organized bucket.
+
+Vertex AI - played a crucial role in training our model.
+ 
+Cloud Build - for building our images (train, predictions and data drift). 
+
+Cloud Run - for deployment of our model and data drifting.  
+
 
 ### Question 18
 
@@ -373,7 +384,7 @@ In our project, we used a variety of Google Cloud Platform (GCP) services, each 
 >
 > Answer:
 
-We utilized a GPU compute engine equipped with T4 GPUs, essential for tasks demanding CUDA GPU capabilities. This powerful setup was crucial for debugging processes that required GPU acceleration. Furthermore, the compute engine played a pivotal role in large-scale model training, a task unfeasible on our local machines. The high-performance hardware significantly accelerated our training processes. What would typically take 30 hours on standard setups was remarkably reduced to just 1.5 hours, showcasing the efficiency and power of the compute engine in handling intensive computational tasks. If we had more time we would have liked to experiment with running docker files with GPU as this would be perfect practice for using A GPU with docker in the real world.
+We utilized a GPU compute engine equipped with T4 GPUs, essential for tasks demanding CUDA GPU capabilities. This powerful setup was crucial for debugging processes that required GPU acceleration. Furthermore, the compute engine played a pivotal role in large-scale model training, a task unfeasible on our local machines. The high-performance hardware significantly accelerated our training processes. What would typically take 30 hours on standard setups was remarkably reduced to just 1.5 hours, showcasing the efficiency and power of the compute engine in handling intensive computational tasks. If we had more time we would have liked to experiment with running docker files with GPU as this would be perfect practice for deploying a docker with GPU in the real world.
 
 
 ### Question 19
@@ -382,6 +393,7 @@ We utilized a GPU compute engine equipped with T4 GPUs, essential for tasks dema
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
 > Answer:
+
 
 We have one bucket with multiple folders: data, models, reports and predictions. 
 
@@ -394,13 +406,12 @@ We have one bucket with multiple folders: data, models, reports and predictions.
 Our Data in GCS is version controlled using DVC. 
 
 ### Question 20
-
 > **Upload one image of your GCP container registry, such that we can see the different images that you have stored.**
 > **You can take inspiration from [this figure](figures/registry.png).**
 >
 > Answer:
-
---- question 20 fill here ---
+> Answer:
+![Containers](figures/containers.png)-
 
 ### Question 21
 
@@ -424,9 +435,9 @@ Our Data in GCS is version controlled using DVC.
 > *worked. Afterwards we deployed it in the cloud, using ... . To invoke the service an user would call*
 > *`curl -X POST -F "file=@file.json"<weburl>`*
 >
-> Answer:
 
-We successfully implemented our model both on local systems and in the cloud. Initially, we set up the model locally to facilitate rapid debugging. Once it functioned correctly in that environment, we transferred it to a compute engine. The compute engine proved advantageous, particularly for a more interactive training process with extensive datasets, since we encountered challenges with direct operations on Vertex AI. After ensuring smooth operation, we utilized Vertex AI, but only with CPU capabilities. Unfortunately, we couldn't leverage GPU resources on Vertex AI due to quota restrictions.
+We successfully deployed  our model both on local systems and in the cloud. Initially, we set up the model locally to facilitate rapid debugging. We then used cloud run to deploy it in the cloud. We focused more on a small interactive webpage rather that setting up api calls. A use could go to our hosted website to access the application and predict whether a chosen string or a csv file containing texts is human written or written by AI:
+<https://predicter-qkns26jbea-ew.a.run.app/>
 
 ### Question 23
 
@@ -441,7 +452,7 @@ We successfully implemented our model both on local systems and in the cloud. In
 >
 > Answer:
 
-In our project, we implemented monitoring for our deployed model, focusing mosly on data drifting and a little on system performance. We used Evidently AI for data monitoring, particularly for tracking data drifting. This allowed us to monitor changes in data distribution, ensuring our model's ongoing accuracy with new data. Over time, we could have used our data drifting reports to proactively maintain the model performance for evolving data patterns. For system monitoring, we loosely experimented with setting up Google Cloud Storage alerts and Service Level Objectives (SLOs). Over time the alerts would have kept us informed of critical events or anomalies in our data storage system, enabling quick responses to potential issues. The key would have been to balance making the right amount of alerts of the most critical issues. For longterm health of our application it would be a good idea to do at least more system monitoring.
+In our project, we implemented monitoring for our deployed model, focusing mostly on data drifting and a little on system performance. We used Evidently AI for data monitoring, particularly for tracking data drifting. This allowed us to monitor changes in data distribution, ensuring our model's ongoing accuracy with new data. Over time, we could have used our data drifting reports to proactively maintain the model performance for evolving data patterns. For system monitoring (telemetry), we loosely experimented with setting up Google Cloud Storage alerts and Service Level Objectives (SLOs). Over time the alerts would have kept us informed of critical events or anomalies in our data storage system, enabling quick responses to potential issues. The key would have been to balance making the right amount of alerts of the most critical issues. For longterm health of our application it would be a good idea to do at least more system monitoring.
 
 ### Question 24
 
@@ -455,7 +466,7 @@ In our project, we implemented monitoring for our deployed model, focusing mosly
 >
 > Answer:
 
-Our total credit amount spent is $35, a sum even less than what a single group member had at their disposal. We take pride in managing our resources efficiently, achieving significant milestones while staying within budget constraints. Remarkably, we successfully trained our model on both Vertex AI and Compute Engine with GPU for optimal performance.Noteworthy achievements include deploying our model and implementing Data Drift on Cloud Run. While navigating these tasks, a substantial portion of our expenses was allocated to Google Storage. This was primarily due to the construction of numerous containers, each averaging around 3 GB in size, which we didn't delete.
+In total we used $45. We tried to limit our spendings such that we did exceed the gifted educational billing account. However, we did later find it was quite easy to change billing account for a project. The most of the credits were spend on storage and on using the compute engine. A substantial portion of our expenses was allocated to Google Storage. This was primarily due to the construction of numerous containers, each averaging around 3 GB in size, which we learned that we should remember to delete if not used. 
 
 ### Question 25
 
@@ -471,6 +482,8 @@ Our total credit amount spent is $35, a sum even less than what a single group m
 > *Whenever we commit code and puch to github, it auto triggers ... and ... . From there the diagram shows ...*
 >
 > Answer:
+
+In our system's architecture, development begins locally where we integrate Hydra for dynamic configuration and Weights & Biases for experiment tracking. Code commits to the master branch will trigger GitHub Actions for continuous integration and running tests. Docker containers encapsulate our environment, ensuring consistency. Training occurs on Vertex AI, leveraging cloud scalability for machine learning tasks. Model and data versioning are handled by DVC, ensuring reproducibility while our data is stored on GCP. The architecture culminates in deployment via FastAPI, providing a responsive website hosted through cloud. 
 
 ![Overall_architecture](figures/overview_pipeline.png)
 
@@ -503,13 +516,12 @@ The primary challenges encountered during the project revolved around the utiliz
 >
 > Answer:
 
-All memebers in the group have equally contributed to the project, where most tasks where developed in pairs of two or more. In the following, we will state, how were most responsible for each task. 
-Student s204155 have been responsible 
+All memebers in the group have equally contributed to the project, where most tasks where developed in pairs of two or more. 
 
-Student s204088
+CI & Unit testing: s204088, s204090
 
-Student s204090
+Model training: s204155, s204148
 
-Student s204148
+Model Deployment: s204090, s204148
 
-
+Data Drifting: s204090, s204155, s204088

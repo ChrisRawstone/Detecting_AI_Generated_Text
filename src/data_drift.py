@@ -1,19 +1,17 @@
 import os
+
+import nltk
 import pandas as pd
 from evidently import ColumnMapping
-from evidently.report import Report
-from evidently.metric_preset import DataDriftPreset
-from evidently.metric_preset import DataQualityPreset
-from evidently.metric_preset import ClassificationPreset
-from evidently.metric_preset import TargetDriftPreset
+from evidently.metric_preset import ClassificationPreset, DataDriftPreset, DataQualityPreset, TargetDriftPreset
 from evidently.metrics import *
+from evidently.report import Report
 from evidently.tests import *
-import nltk
 
 nltk.download("words")
 nltk.download("wordnet")
 nltk.download("omw-1.4")
-from src.utils import upload_to_gcs, download_gcs_folder
+from src.utils import download_gcs_folder, upload_to_gcs
 
 
 def data_drift(reference_data: pd.DataFrame, current_data: pd.DataFrame, column_mapping: ColumnMapping):
@@ -49,12 +47,20 @@ def data_drift(reference_data: pd.DataFrame, current_data: pd.DataFrame, column_
 
     target_drift_report = Report(metrics=[TargetDriftPreset()])
     target_drift_report.run(reference_data=reference_data, current_data=current_data, column_mapping=column_mapping)
-    save_reports(data_drift_report, data_quality_report, target_drift_report, column_mapping,reference_data, current_data)
-    #return data_drift_report, data_quality_report, target_drift_report
+    save_reports(
+        data_drift_report, data_quality_report, target_drift_report, column_mapping, reference_data, current_data
+    )
+    # return data_drift_report, data_quality_report, target_drift_report
 
 
 def save_reports(
-    data_drift_report: Report, data_quality_report: Report, target_drift_report: Report, column_mapping: ColumnMapping, reference_data: pd.DataFrame, current_data: pd.DataFrame):
+    data_drift_report: Report,
+    data_quality_report: Report,
+    target_drift_report: Report,
+    column_mapping: ColumnMapping,
+    reference_data: pd.DataFrame,
+    current_data: pd.DataFrame,
+):
     """
     Saves three data drift analysis reports to HTML files and uploads them to Google Cloud Storage (GCS).
 
@@ -63,7 +69,7 @@ def save_reports(
     - data_quality_report (Report): The data quality analysis report evaluating various metrics for both datasets.
     - target_drift_report (Report): The target drift analysis report focusing on detecting drift in the target variable.
     - column_mapping (ColumnMapping): An object providing mapping information between columns in the datasets.
-    
+
 
     The HTML files are saved to the local directory 'src/data_drifting' and are named:
     - 'report_data_drift_report.html'
@@ -153,7 +159,7 @@ if __name__ == "__main__":
 
     current_data = pd.read_csv("inference_predictions/predictions_20240117_170932.csv")
     current_data["label"] = current_data["prediction"]
-            
+
     column_mapping = ColumnMapping(target="label", text_features=["text"])
     data_drift_report, data_quality_report, target_drift_report = data_drift(
         reference_data, current_data, column_mapping

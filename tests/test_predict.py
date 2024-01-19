@@ -1,6 +1,8 @@
-import pytest
 import os.path
+
+import pytest
 from datasets import load_from_disk
+
 from src.predict_model import predict
 from src.utils import load_model
 
@@ -14,7 +16,7 @@ def test_predict_model():
     model = load_model()
     tokenized_dataset = load_from_disk("data/processed/tokenized_data/small_data/test_dataset_tokenized")
 
-    predictions_dataframe = predict(model, tokenized_dataset, 'cpu')
+    predictions_dataframe = predict(model, tokenized_dataset, "cpu")
 
     assert "text" in predictions_dataframe.columns, "text not found in predictions_dataframe.columns"
     assert "prediction" in predictions_dataframe.columns, "prediction not found in predictions_dataframe.columns"

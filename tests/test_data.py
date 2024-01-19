@@ -1,11 +1,12 @@
-import sys
-import pytest
 import os.path
+import sys
+
 import pandas as pd
+import pytest
 from mypaths import PROJECT_ROOT
 
 sys.path.append(PROJECT_ROOT)
-from src.data.make_dataset import make_dataset, get_data
+from src.data.make_dataset import get_data, make_dataset
 
 
 def test_get_data():

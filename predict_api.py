@@ -1,16 +1,17 @@
 import os
+from datetime import datetime
+
 import pandas as pd
 import torch
-from datetime import datetime
-from fastapi import FastAPI, UploadFile, File, Request
-from fastapi.responses import FileResponse
-from google.cloud import storage
-from src.predict_model import predict_string, predict_csv
+from fastapi import FastAPI, File, Request, UploadFile
 
 # from prometheus_fastapi_instrumentator import Instrumentator
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from google.cloud import storage
 from pydantic import BaseModel
+
+from src.predict_model import predict_csv, predict_string
 from src.utils import load_model
 
 app = FastAPI()
@@ -47,7 +48,7 @@ def read_root():
 async def process_string(data: TextModel, model_name: str = "experiment_1_GPU"):
     """
     Inference endpoint
-    """    
+    """
     # check if model exists
     model = load_model(model_name=model_name, device=device)
 
@@ -81,7 +82,7 @@ async def process_csv(file: UploadFile = File(...), model_name: str = "experimen
     # Read the CSV into a DataFrame
     df = pd.read_csv(temp_file_path)
 
-    model = load_model(model_name = model_name, device = device)
+    model = load_model(model_name=model_name, device=device)
 
     # Make predictions
     predictions_df = predict_csv(model, df, device)

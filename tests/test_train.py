@@ -1,10 +1,12 @@
 import os
 import sys
-import pytest
-from mypaths import PROJECT_ROOT
+
 import hydra
+import pytest
 from hydra import compose, initialize
+from mypaths import PROJECT_ROOT
 from omegaconf import OmegaConf
+
 from src.train_model import train
 
 hydra_logger = hydra.utils.log

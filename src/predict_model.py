@@ -1,11 +1,11 @@
 import os
-import pandas as pd
-import datasets
-import torch
-from transformers import DistilBertForSequenceClassification
-from datasets import load_from_disk
 from typing import Dict
-from transformers import DistilBertTokenizerFast
+
+import datasets
+import pandas as pd
+import torch
+from datasets import load_from_disk
+from transformers import DistilBertForSequenceClassification, DistilBertTokenizerFast
 
 
 def predict_string(model: torch.nn.Module, text: str, device) -> Dict:

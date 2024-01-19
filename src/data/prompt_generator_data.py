@@ -1,14 +1,15 @@
-import pandas as pd
-import random
-import logging
-from rich.logging import RichHandler
 import json
+import logging
+import random
+
+import pandas as pd
 from openai import OpenAI
+from rich.logging import RichHandler
 from tenacity import (
     retry,
     stop_after_attempt,
     wait_random_exponential,
-)  # for exponential backoff
+)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

@@ -1,13 +1,15 @@
+import logging
 import os
-import torch
-from datasets import load_metric, load_from_disk
-from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
+
 import hydra
 import omegaconf
-from src.predict_model import predict
-import logging
+import torch
+from datasets import load_from_disk, load_metric
+from transformers import DistilBertForSequenceClassification, Trainer, TrainingArguments
 from transformers.utils import logging as transformer_logging
-from src.utils import upload_to_gcs, save_model, enable_wandb, wandb_log_metrics, compute_metrics
+
+from src.predict_model import predict
+from src.utils import compute_metrics, enable_wandb, save_model, upload_to_gcs, wandb_log_metrics
 
 log = logging.getLogger(__name__)
 

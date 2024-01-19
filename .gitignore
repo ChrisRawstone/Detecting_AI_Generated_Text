@@ -197,3 +197,4 @@ models/*
 !models/*latest*
 /models
 kaggle
+tempfile.csv
