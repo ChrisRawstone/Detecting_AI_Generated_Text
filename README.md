@@ -75,14 +75,8 @@ Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
 
-To start a custom job on vertex AI:
-```
-gcloud ai custom-jobs create \
-    --region=europe-west1 \
-    --display-name=test-run \
-    --config=config_cpu.yaml \
-    --args="-e WANDB_API_KEY=<your-api-key>"
-```
+
+
 
 To build docker container:
 
@@ -95,21 +89,7 @@ To run docker container:
 docker run -e WANDB_API_KEY=<your-api-key> trainer:latest 
 ```
 
-```
-python submit_vertex_job.py --wandb_key <your-api-key>
-```
-
-To build docker container:
-
-```
-docker build -f dockerfiles/train_model.dockerfile . -t trainer:latest
-```
-
-To run docker container:
-```
-docker run -e WANDB_API_KEY=<your-api-key> trainer:latest 
-```
-
+To run vertex AI with wandb
 ```
 python submit_vertex_job.py --wandb_key <your-api-key>
 ```
