@@ -254,7 +254,7 @@ We did use DVC in our project, which is connected to Google Cloud Storage to sto
 >
 > Answer:
 
-We have organized our CI in just one file. We are doing unittesting with one workflow that will test both data handling, saving the trained model and saving the predictions. The workflow is triggered when pushing to the master branch. As we intended, our workflow should do immediate testing of updates which would prevent potential errors from impacting the stability of the project without us catching the error early on with our tests. An example of our triggered workflow can be seen here on Github actions: <https://github.com/ChrisRawstone/Detecting_AI_Generated_Text/actions>. The tests can also be called locally. We have strived to give good warnings and error messages such as "remember to pull from DVC" if a required dataset is not present on a team member's computer and therefore the training of the model cannot be executed.
+We have organized our CI in just one file. We are doing unittesting with one workflow that will test both data handling, loading a trained model and checking the format of the saved predictions is as expected. The workflow is triggered when pushing to the master branch. As we intended, our workflow should do immediate testing of updates which would prevent potential errors from impacting the stability of the project without us catching the error early on with our tests. An example of our triggered workflow can be seen here on Github actions: <https://github.com/ChrisRawstone/Detecting_AI_Generated_Text/actions>. The tests can also be called locally. We have strived to give good warnings and error messages such as "remember to pull from DVC" if a required dataset is not present on a team member's computer and therefore the training of the model cannot be executed.
 
 ## Running code and tracking experiments
 
@@ -323,14 +323,7 @@ In our project, we used Weights and Biases to track key metrics like training lo
 >
 > Answer:
 
-For our project, we developed three distinct images, each serving a specialized purpose. The first is designed for training, responsible for training the model and logging to WandB for effective monitoring. To initiate this training image, one can either kickstart the process by executing the submit_vertex_job.py script or, if running locally, fire up the Docker container using the command docker run -e WANDB_API_KEY=<API_KEY_HERE> trainer:latest. Here is the dockerfile used to build the train image: <https://github.com/ChrisRawstone/Detecting_AI_Generated_Text/blob/master/dockerfiles/train_model.dockerfile>. 
-
-The second image, tailored for deployment, takes the trained model and facilitates its deployment, making it ready for real-time predictions. This is achieved by launching Cloud Run, leveraging the capabilities of FASTAPI to ensure smooth and responsive deployment.
-
-Lastly, our third Docker image is for data drift analysis. This image, also hosted on Cloud Run using FASTAPI, generates insightful reports based on predictions stored in the bucket. Clicking on Cloud Run triggers the creation of these reports, providing valuable insights into the model's performance and any potential drift.
-
-All Docker images are seamlessly built and orchestrated within the Google Cloud environment, offering a streamlined and efficient workflow for training, deploying, and analyzing the performance of our machine learning model.
- 
+For our project, we developed three distinct images, each serving a specialized purpose. The first is designed for training, responsible for training the model and logging to WandB for effective monitoring. To initiate this training image, one can either kickstart the process by executing the submit_vertex_job.py script or, if running locally, fire up the Docker container using the command docker run -e WANDB_API_KEY=<API_KEY_HERE> trainer:latest. Here is the dockerfile used to build the train image: <https://github.com/ChrisRawstone/Detecting_AI_Generated_Text/blob/master/dockerfiles/train_model.dockerfile>. The second image, tailored for deployment, takes the trained model and facilitates its deployment, making it ready for real-time predictions. This is achieved by launching Cloud Run, leveraging the capabilities of FASTAPI to ensure smooth and responsive deployment. Lastly, our third Docker image is for data drift analysis. This image, also hosted on Cloud Run using FASTAPI, generates insightful reports based on predictions stored in the bucket. Clicking on Cloud Run triggers the creation of these reports, providing valuable insights into the model's performance and any potential drift. All Docker images are seamlessly built and orchestrated within the Google Cloud environment, offering a streamlined and efficient workflow for training, deploying, and analyzing the performance of our machine learning model.
 
 ### Question 16
 
@@ -358,18 +351,7 @@ We employed debugging extensively throughout our project whenever we encountered
 >
 > Answer:
 
-In our project, we used a variety of Google Cloud Platform (GCP) services, each tailored to meet specific needs in or project pipeline.
-
-Compute Engine - used to create Virtual Machines that deployed containers based on our training image.
-
-Cloud Stoage - used fo store our data, model, predictions and reports for data drift in a well-organized bucket.
-
-Vertex AI - played a crucial role in training our model.
- 
-Cloud Build - for building our images (train, predictions and data drift). 
-
-Cloud Run - for deployment of our model and data drifting.  
-
+In our project, we used a variety of Google Cloud Platform (GCP) services, each tailored to meet specific needs in or project pipeline. Compute Engine - used to create Virtual Machines that deployed containers based on our training image. Cloud Stoage - used fo store our data, model, predictions and reports for data drift in a well-organized bucket. Vertex AI - played a crucial role in training our model. Cloud Build - for building our images (train, predictions and data drift). Cloud Run - for deployment of our model and data drifting.
 
 ### Question 18
 
@@ -386,14 +368,12 @@ Cloud Run - for deployment of our model and data drifting.
 
 We utilized a GPU compute engine equipped with T4 GPUs, essential for tasks demanding CUDA GPU capabilities. This powerful setup was crucial for debugging processes that required GPU acceleration. Furthermore, the compute engine played a pivotal role in large-scale model training, a task unfeasible on our local machines. The high-performance hardware significantly accelerated our training processes. What would typically take 30 hours on standard setups was remarkably reduced to just 1.5 hours, showcasing the efficiency and power of the compute engine in handling intensive computational tasks. If we had more time we would have liked to experiment with running docker files with GPU as this would be perfect practice for deploying a docker with GPU in the real world.
 
-
 ### Question 19
 
 > **Insert 1-2 images of your GCP bucket, such that we can see what data you have stored in it.**
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
 > Answer:
-
 
 We have one bucket with multiple folders: data, models, reports and predictions. 
 
@@ -410,7 +390,7 @@ Our Data in GCS is version controlled using DVC.
 > **You can take inspiration from [this figure](figures/registry.png).**
 >
 > Answer:
-> Answer:
+
 ![Containers](figures/containers.png)-
 
 ### Question 21
@@ -421,7 +401,7 @@ Our Data in GCS is version controlled using DVC.
 > Answer:
 
 ![GCP_cloud_build_history](figures/cloudbuild.png)
-![Total_runs_on_cloud_build](figures/cloudbuild_2.png)
+![Total_runs_on_cloud_build](figures/cloudbuild_2-png.png)
 
 ### Question 22
 
@@ -435,6 +415,7 @@ Our Data in GCS is version controlled using DVC.
 > *worked. Afterwards we deployed it in the cloud, using ... . To invoke the service an user would call*
 > *`curl -X POST -F "file=@file.json"<weburl>`*
 >
+> Answer:
 
 We successfully deployed  our model both on local systems and in the cloud. Initially, we set up the model locally to facilitate rapid debugging. We then used cloud run to deploy it in the cloud. We focused more on a small interactive webpage rather that setting up api calls. A use could go to our hosted website to access the application and predict whether a chosen string or a csv file containing texts is human written or written by AI:
 <https://predicter-qkns26jbea-ew.a.run.app/>
@@ -516,12 +497,4 @@ The primary challenges encountered during the project revolved around the utiliz
 >
 > Answer:
 
-All memebers in the group have equally contributed to the project, where most tasks where developed in pairs of two or more. 
-
-CI & Unit testing: s204088, s204090
-
-Model training: s204155, s204148
-
-Model Deployment: s204090, s204148
-
-Data Drifting: s204090, s204155, s204088
+All memebers in the group have equally contributed to the project, where most tasks where developed in pairs of two or more. CI & Unit testing: s204088, s204090. Model training: s204155, s204148. Model Deployment: s204090, s204148. Data Drifting: s204090, s204155, s204088.
