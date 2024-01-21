@@ -91,7 +91,7 @@ def get_AugmenteddataforLLM(path: str):
         )
     return AugmenteddataforLLM_essays[["text", "label"]]
 
-def DAIGHTv4(path: str):
+def DAIGTv4(path: str):
     """This function gets the generated data from the raw folder from the DAIGHTv4 DATASET
     Args:
         path (string): Path to the raw folder
@@ -101,16 +101,16 @@ def DAIGHTv4(path: str):
 
 
 
-    DAIGHTv4_essays = pd.DataFrame()
+    DAIGTv4_essays = pd.DataFrame()
     if not os.path.exists(path):
         raise FileNotFoundError("No generated data found. Please run DVC pull.")
-    for name in ["daight_magic_generations.csv", "train_v4_drcat_01.csv"]:
-        DAIGHTv4_essays = pd.concat(
-            [DAIGHTv4_essays, pd.read_csv(path + f"DAIGHTv4/{name}")]
+    for name in ["daigt_magic_generations.csv", "train_v4_drcat_01.csv"]:
+        DAIGTv4_essays = pd.concat(
+            [DAIGTv4_essays, pd.read_csv(path + f"DAIGTv4/{name}")]
         )
-    return DAIGHTv4_essays[["text", "label"]]
+    return DAIGTv4_essays[["text", "label"]]
 
-def DAIGHTv2(path: str):
+def DAIGTv2(path: str):
     """This function gets the generated data from the raw folder from the DAIGHTv2 DATASET
     Args:
         path (string): Path to the raw folder
@@ -119,14 +119,14 @@ def DAIGHTv2(path: str):
     """
 
 
-    DAIGHTv2_essays = pd.DataFrame()
+    DAIGTv2_essays = pd.DataFrame()
     if not os.path.exists(path):
         raise FileNotFoundError("No generated data found. Please run DVC pull.")
     for name in ["train_v2_drcat_02.csv"]:
-        DAIGHTv2_essays = pd.concat(
-            [DAIGHTv2_essays, pd.read_csv(path + f"DAIGHTv2/{name}")]
+        DAIGTv2_essays = pd.concat(
+            [DAIGTv2_essays, pd.read_csv(path + f"DAIGTv2/{name}")]
         )
-    return DAIGHTv2_essays[["text", "label"]]
+    return DAIGTv2_essays[["text", "label"]]
 
 def get_daigt_extended(path: str):
     """This function gets the generated data from the raw folder from the DAIGHTv2 DATASET
@@ -144,6 +144,8 @@ def get_daigt_extended(path: str):
         daigt_extended = pd.concat(
             [daigt_extended, pd.read_csv(path + f"Daigt_extended/{name}")]
         )
+    daigt_extended = daigt_extended.rename(columns={"generated": "label"})
+    
     return daigt_extended[["text", "label"]]
 
 
@@ -161,8 +163,8 @@ def get_data(sample_size: int = None, path: str = "data/raw/"):
     generated_essays = get_data_generated_data_first_iteration(path)
     # DAIGTProperTrainDataset_essays = get_DAIGTProperTrainDataset(path)
     AugmenteddataforLLM_essays = get_AugmenteddataforLLM(path)
-    DAIGHTv2_essays = DAIGHTv2(path)
-    DAIGHTv4_essays = DAIGHTv4(path)
+    DAIGTv2_essays = DAIGTv2(path)
+    DAIGTv4_essays = DAIGTv4(path)
     daigt_extended = get_daigt_extended(path)
 
 
@@ -170,7 +172,7 @@ def get_data(sample_size: int = None, path: str = "data/raw/"):
     all_essays = pd.concat([original_essays, generated_essays])
     # all_essays = pd.concat([all_essays, DAIGTProperTrainDataset_essays])
     all_essays = pd.concat([all_essays, AugmenteddataforLLM_essays])
-    all_essays = pd.concat([all_essays, DAIGHTv2_essays])
+    all_essays = pd.concat([all_essays, DAIGTv2_essays])
     all_essays = pd.concat([all_essays, daigt_extended])
 
     # Reset the index
