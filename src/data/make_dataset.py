@@ -230,14 +230,14 @@ def make_dataset(sample_size):
     X_train, X_test, X_val = get_data(sample_size)
 
     # Load datasets
-    # train_dataset = Dataset.from_pandas(X_train)
-    # val_dataset = Dataset.from_pandas(X_val)
-    # test_dataset = Dataset.from_pandas(X_test)
+    train_dataset = Dataset.from_pandas(X_train)
+    val_dataset = Dataset.from_pandas(X_val)
+    test_dataset = Dataset.from_pandas(X_test)
 
     # Tokenize datasets
-    # train_dataset = train_dataset.map(tokenize_and_format, batched=True)
-    # val_dataset = val_dataset.map(tokenize_and_format, batched=True)
-    # test_dataset = test_dataset.map(tokenize_and_format, batched=True)
+    train_dataset = train_dataset.map(tokenize_and_format, batched=True)
+    val_dataset = val_dataset.map(tokenize_and_format, batched=True)
+    test_dataset = test_dataset.map(tokenize_and_format, batched=True)
 
     if sample_size is None:
         X_train.to_csv("data/processed/csv_files/full_data/train.csv", index=False)
