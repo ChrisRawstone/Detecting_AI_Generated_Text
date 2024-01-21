@@ -303,12 +303,12 @@ outs:
         etag: 08e0fce6bfc7e483031001
         version_id: '1705499166359136'
   - relpath: raw/.DS_Store
-    md5: ad4e66c0a8218e96023bcaabf521fae3
-    size: 6148
+    md5: 6badd61b277ca6dc698939bb20eb1ce0
+    size: 10244
     cloud:
       remote_storage:
-        etag: 08d7e886a7a3e283031001
-        version_id: '1705420731298903'
+        etag: 0880b4cce2b2ee83031001
+        version_id: '1705837199563264'
   - relpath: raw/AugmenteddataforLLM/final_test.csv
     md5: e0f41e776bba51dbec3ca6edb088c8d8
     size: 193716380
@@ -323,6 +323,27 @@ outs:
       remote_storage:
         etag: 08e4d6f7c1a3e283031001
         version_id: '1705420787673956'
+  - relpath: raw/DAIGHTv2/train_v2_drcat_02.csv
+    md5: df3047e59f65015b0a68ece21de0e6e3
+    size: 101908038
+    cloud:
+      remote_storage:
+        etag: 08dee68be9b2ee83031001
+        version_id: '1705837213184862'
+  - relpath: raw/DAIGHTv4/daigt_magic_generations.csv
+    md5: f27217b7f32e44339f2f06fca8d59bc8
+    size: 15850840
+    cloud:
+      remote_storage:
+        etag: 08d696d7e4b2ee83031001
+        version_id: '1705837203934038'
+  - relpath: raw/DAIGHTv4/train_v4_drcat_01.csv
+    md5: f82f5077e109aadbe860874e13f1d4fb
+    size: 173997507
+    cloud:
+      remote_storage:
+        etag: 08c1dcf8e9b2ee83031001
+        version_id: '1705837214969409'
   - relpath: raw/DAIGTProperTrainDataset/train_drcat_01.csv
     md5: 5a06ee87471577ea226ba8f9b010013b
     size: 74014730
@@ -351,6 +372,83 @@ outs:
       remote_storage:
         etag: 08f1b4e8b1a3e283031001
         version_id: '1705420753869425'
+  - relpath: raw/Daigt_Extended/concatenated.csv
+    md5: 8c166618939afcb476010684fb6fd9fd
+    size: 125784259
+    cloud:
+      remote_storage:
+        etag: 0898b795e9b2ee83031001
+        version_id: '1705837213342616'
+  - relpath: raw/GPT4/ai_generated_train_essays.csv
+    md5: 4101800a2e0663102d627a5d2babfa8f
+    size: 1797451
+    cloud:
+      remote_storage:
+        etag: 08ffe081e3b2ee83031001
+        version_id: '1705837200437375'
+  - relpath: raw/GPT4/ai_generated_train_essays_gpt-4.csv
+    md5: 0ffddc2f05fb6f2613f926d44109cd88
+    size: 610035
+    cloud:
+      remote_storage:
+        etag: 088083f7e2b2ee83031001
+        version_id: '1705837200261504'
+  - relpath: raw/Mistal7B/Mistral7B_CME_v1.csv
+    md5: 604ad12dab5704071ee53bfeedc369a7
+    size: 1767564
+    cloud:
+      remote_storage:
+        etag: 08b7df86e3b2ee83031001
+        version_id: '1705837200519095'
+  - relpath: raw/Mistal7B/Mistral7B_CME_v2.csv
+    md5: 3fb25c1a6f7c452c4bcb8475e54fa5d8
+    size: 3387127
+    cloud:
+      remote_storage:
+        etag: 08f3a1a2e3b2ee83031001
+        version_id: '1705837200969971'
+  - relpath: raw/Mistal7B/Mistral7B_CME_v3.csv
+    md5: 5ba0fab69a1514b458c852fab25a9c93
+    size: 4995437
+    cloud:
+      remote_storage:
+        etag: 089194b8e3b2ee83031001
+        version_id: '1705837201328657'
+  - relpath: raw/Mistal7B/Mistral7B_CME_v4.csv
+    md5: 7c8bf57302e8ed305ad075a99b82c1ef
+    size: 6781409
+    cloud:
+      remote_storage:
+        etag: 08dec0f9e3b2ee83031001
+        version_id: '1705837202399326'
+  - relpath: raw/Mistal7B/Mistral7B_CME_v5.csv
+    md5: 122367fa1bd180bdd4399cdea76b366f
+    size: 8655568
+    cloud:
+      remote_storage:
+        etag: 088dff94e4b2ee83031001
+        version_id: '1705837202849677'
+  - relpath: raw/Mistal7B/Mistral7B_CME_v6.csv
+    md5: 2d2ab0e65e5595371841094f2ffd817f
+    size: 10549171
+    cloud:
+      remote_storage:
+        etag: 08b3aeafe4b2ee83031001
+        version_id: '1705837203281715'
+  - relpath: raw/Mistal7B/Mistral7B_CME_v7.csv
+    md5: 1de1cb3a902c03fa1c53477a835cff02
+    size: 12398288
+    cloud:
+      remote_storage:
+        etag: 089aefbde4b2ee83031001
+        version_id: '1705837203519386'
+  - relpath: raw/Mistal7B/Mistral7B_CME_v7_15_percent_corruption.csv
+    md5: 9584a2ae733e34a3a007a22fe76143bf
+    size: 12398221
+    cloud:
+      remote_storage:
+        etag: 08e8febce4b2ee83031001
+        version_id: '1705837203505000'
   - relpath: raw/generated_data/AI_Generated_df1.csv
     md5: 3541042ac2f8bd6cdc267f66969538b9
     size: 891845

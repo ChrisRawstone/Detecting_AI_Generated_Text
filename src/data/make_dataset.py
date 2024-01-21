@@ -91,6 +91,61 @@ def get_AugmenteddataforLLM(path: str):
         )
     return AugmenteddataforLLM_essays[["text", "label"]]
 
+def DAIGHTv4(path: str):
+    """This function gets the generated data from the raw folder from the DAIGHTv4 DATASET
+    Args:
+        path (string): Path to the raw folder
+    Returns:
+        pd.DataFrame: Generated essays
+    """
+
+
+
+    DAIGHTv4_essays = pd.DataFrame()
+    if not os.path.exists(path):
+        raise FileNotFoundError("No generated data found. Please run DVC pull.")
+    for name in ["daight_magic_generations.csv", "train_v4_drcat_01.csv"]:
+        DAIGHTv4_essays = pd.concat(
+            [DAIGHTv4_essays, pd.read_csv(path + f"DAIGHTv4/{name}")]
+        )
+    return DAIGHTv4_essays[["text", "label"]]
+
+def DAIGHTv2(path: str):
+    """This function gets the generated data from the raw folder from the DAIGHTv2 DATASET
+    Args:
+        path (string): Path to the raw folder
+    Returns:
+        pd.DataFrame: Generated essays
+    """
+
+
+    DAIGHTv2_essays = pd.DataFrame()
+    if not os.path.exists(path):
+        raise FileNotFoundError("No generated data found. Please run DVC pull.")
+    for name in ["train_v2_drcat_02.csv"]:
+        DAIGHTv2_essays = pd.concat(
+            [DAIGHTv2_essays, pd.read_csv(path + f"DAIGHTv2/{name}")]
+        )
+    return DAIGHTv2_essays[["text", "label"]]
+
+def get_daigt_extended(path: str):
+    """This function gets the generated data from the raw folder from the DAIGHTv2 DATASET
+    Args:
+        path (string): Path to the raw folder
+    Returns:
+        pd.DataFrame: Generated essays
+    """
+
+
+    daigt_extended = pd.DataFrame()
+    if not os.path.exists(path):
+        raise FileNotFoundError("No generated data found. Please run DVC pull.")
+    for name in ["concatenated.csv"]:
+        daigt_extended = pd.concat(
+            [daigt_extended, pd.read_csv(path + f"Daigt_extended/{name}")]
+        )
+    return daigt_extended[["text", "label"]]
+
 
 def get_data(sample_size: int = None, path: str = "data/raw/"):
     """This function gets the generated and human data from the raw folder, concats them and splits them into train and test
@@ -104,25 +159,28 @@ def get_data(sample_size: int = None, path: str = "data/raw/"):
 
     original_essays = get_data_original_data(path)
     generated_essays = get_data_generated_data_first_iteration(path)
-    DAIGTProperTrainDataset_essays = get_DAIGTProperTrainDataset(path)
+    # DAIGTProperTrainDataset_essays = get_DAIGTProperTrainDataset(path)
     AugmenteddataforLLM_essays = get_AugmenteddataforLLM(path)
+    DAIGHTv2_essays = DAIGHTv2(path)
+    DAIGHTv4_essays = DAIGHTv4(path)
+    daigt_extended = get_daigt_extended(path)
+
 
     # Concat all the dataframes
     all_essays = pd.concat([original_essays, generated_essays])
-    all_essays = pd.concat([all_essays, DAIGTProperTrainDataset_essays])
-    # all_essays = pd.concat([all_essays, AugmenteddataforLLM_essays])
-    data_drift_essays = AugmenteddataforLLM_essays
+    # all_essays = pd.concat([all_essays, DAIGTProperTrainDataset_essays])
+    all_essays = pd.concat([all_essays, AugmenteddataforLLM_essays])
+    all_essays = pd.concat([all_essays, DAIGHTv2_essays])
+    all_essays = pd.concat([all_essays, daigt_extended])
 
     # Reset the index
-    data_drift_essays.reset_index(inplace=True, drop=True)
     all_essays.reset_index(inplace=True, drop=True)
 
     # create key from index
     all_essays["key"] = all_essays.index
     all_essays["label"] = all_essays["label"].astype(int)
 
-    data_drift_essays["key"] = data_drift_essays.index
-    data_drift_essays["label"] = data_drift_essays["label"].astype(int)
+
 
     # Sample the data if needed
     if sample_size:
@@ -132,7 +190,7 @@ def get_data(sample_size: int = None, path: str = "data/raw/"):
     X_train, X_temp = train_test_split(all_essays[["text", "label"]], test_size=0.2, random_state=42)
     X_val, X_test = train_test_split(X_temp, test_size=0.5, random_state=42)
 
-    return X_train, X_test, X_val, data_drift_essays
+    return X_train, X_test, X_val
 
 
 
@@ -167,50 +225,34 @@ def make_dataset(sample_size):
     """
 
     # Get the data
-    X_train, X_test, X_val, data_drift_essays = get_data(sample_size)
+    X_train, X_test, X_val = get_data(sample_size)
 
     # Load datasets
-    train_dataset = Dataset.from_pandas(X_train)
-    val_dataset = Dataset.from_pandas(X_val)
-    test_dataset = Dataset.from_pandas(X_test)
+    # train_dataset = Dataset.from_pandas(X_train)
+    # val_dataset = Dataset.from_pandas(X_val)
+    # test_dataset = Dataset.from_pandas(X_test)
 
     # Tokenize datasets
-    train_dataset = train_dataset.map(tokenize_and_format, batched=True)
-    val_dataset = val_dataset.map(tokenize_and_format, batched=True)
-    test_dataset = test_dataset.map(tokenize_and_format, batched=True)
+    # train_dataset = train_dataset.map(tokenize_and_format, batched=True)
+    # val_dataset = val_dataset.map(tokenize_and_format, batched=True)
+    # test_dataset = test_dataset.map(tokenize_and_format, batched=True)
 
 
 
     if sample_size is None:
-        # Save the datasets
-        train_dataset.save_to_disk("data/processed/tokenized_data/full_data/train_dataset_tokenized")
-        val_dataset.save_to_disk("data/processed/tokenized_data/full_data/val_dataset_tokenized")
-        test_dataset.save_to_disk("data/processed/tokenized_data/full_data/test_dataset_tokenized")
-
         X_train.to_csv("data/processed/csv_files/full_data/train.csv", index=False)
         X_test.to_csv("data/processed/csv_files/full_data/test.csv", index=False)
         X_val.to_csv("data/processed/csv_files/full_data/validation.csv", index=False)
     
-    if sample_size == 2000:
-        train_dataset.save_to_disk("data/processed/tokenized_data/medium_data/train_dataset_tokenized")
-        val_dataset.save_to_disk("data/processed/tokenized_data/medium_data/val_dataset_tokenized")
-        test_dataset.save_to_disk("data/processed/tokenized_data/medium_data/test_dataset_tokenized")
-
-        X_train.to_csv("data/processed/csv_files/medium_data/train.csv", index=False)
-        X_test.to_csv("data/processed/csv_files/medium_data/test.csv", index=False)
-        X_val.to_csv("data/processed/csv_files/medium_data/validation.csv", index=False)
 
 
     else:
-        train_dataset.save_to_disk("data/processed/tokenized_data/small_data/train_dataset_tokenized")
-        val_dataset.save_to_disk("data/processed/tokenized_data/small_data/val_dataset_tokenized")
-        test_dataset.save_to_disk("data/processed/tokenized_data/small_data/test_dataset_tokenized")
+
 
         X_train.to_csv("data/processed/csv_files/small_data/train.csv", index=False)
         X_test.to_csv("data/processed/csv_files/small_data/test.csv", index=False)
         X_val.to_csv("data/processed/csv_files/small_data/validation.csv", index=False)
 
-        data_drift_essays.to_csv("data/processed/csv_files/data_drift_files/data_drift_essays.csv", index=False)
 
     
         
