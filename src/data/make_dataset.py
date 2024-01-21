@@ -244,6 +244,10 @@ def make_dataset(sample_size):
         X_test.to_csv("data/processed/csv_files/full_data/test.csv", index=False)
         X_val.to_csv("data/processed/csv_files/full_data/validation.csv", index=False)
 
+        train_dataset.save_to_disk("data/processed/tokenized_data/full_data/train_dataset_tokenized")
+        val_dataset.save_to_disk("data/processed/tokenized_data/full_data/val_dataset_tokenized")
+        test_dataset.save_to_disk("data/processed/tokenized_data/full_data/test_dataset_tokenized")
+
 
     else:
 
