@@ -105,25 +105,25 @@ def get_data(sample_size: int = None, path: str = "data/raw/"):
 
     original_essays = get_data_original_data(path)
     generated_essays = get_data_generated_data_first_iteration(path)
-    DAIGTProperTrainDataset_essays = get_DAIGTProperTrainDataset(path)
-    AugmenteddataforLLM_essays = get_AugmenteddataforLLM(path)
+    # DAIGTProperTrainDataset_essays = get_DAIGTProperTrainDataset(path)
+    # AugmenteddataforLLM_essays = get_AugmenteddataforLLM(path)
 
     # Concat all the dataframes
     all_essays = pd.concat([original_essays, generated_essays])
-    all_essays = pd.concat([all_essays, DAIGTProperTrainDataset_essays])
+    # all_essays = pd.concat([all_essays, DAIGTProperTrainDataset_essays])
     # all_essays = pd.concat([all_essays, AugmenteddataforLLM_essays])
-    data_drift_essays = AugmenteddataforLLM_essays
+    # data_drift_essays = AugmenteddataforLLM_essays
 
     # Reset the index
-    data_drift_essays.reset_index(inplace=True, drop=True)
+    # data_drift_essays.reset_index(inplace=True, drop=True)
     all_essays.reset_index(inplace=True, drop=True)
 
     # create key from index
     all_essays["key"] = all_essays.index
     all_essays["label"] = all_essays["label"].astype(int)
 
-    data_drift_essays["key"] = data_drift_essays.index
-    data_drift_essays["label"] = data_drift_essays["label"].astype(int)
+    # data_drift_essays["key"] = data_drift_essays.index
+    # data_drift_essays["label"] = data_drift_essays["label"].astype(int)
 
     # Sample the data if needed
     if sample_size:
@@ -133,7 +133,7 @@ def get_data(sample_size: int = None, path: str = "data/raw/"):
     X_train, X_temp = train_test_split(all_essays[["text", "label"]], test_size=0.2, random_state=42)
     X_val, X_test = train_test_split(X_temp, test_size=0.5, random_state=42)
 
-    return X_train, X_test, X_val, data_drift_essays
+    return X_train, X_test, X_val
 
 
 def tokenize_and_format(data: Dataset):
@@ -167,7 +167,7 @@ def make_dataset(sample_size):
     """
 
     # Get the data
-    X_train, X_test, X_val, data_drift_essays = get_data(sample_size)
+    X_train, X_test, X_val = get_data(sample_size)
 
     # Load datasets
     train_dataset = Dataset.from_pandas(X_train)
@@ -207,7 +207,7 @@ def make_dataset(sample_size):
         X_test.to_csv("data/processed/csv_files/small_data/test.csv", index=False)
         X_val.to_csv("data/processed/csv_files/small_data/validation.csv", index=False)
 
-        data_drift_essays.to_csv("data/processed/csv_files/data_drift_files/data_drift_essays.csv", index=False)
+        # data_drift_essays.to_csv("data/processed/csv_files/data_drift_files/data_drift_essays.csv", index=False)
 
 
 if __name__ == "__main__":
